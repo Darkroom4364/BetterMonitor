@@ -47,7 +47,8 @@ class CLIRequestHandler {
       case .set:
         result = self.handleSet(userInfo: userInfo)
       }
-      self.postReply(replyId: replyId, result: ["success": true, "data": result])
+      let hasErrors = result.contains { $0["error"] != nil }
+      self.postReply(replyId: replyId, result: ["success": !hasErrors, "data": result])
     }
   }
 
@@ -151,7 +152,7 @@ class CLIRequestHandler {
         property.rawValue: valueInt,
       ]
       if !success {
-        result["error"] = "Failed to set \(property.rawValue)"
+        result["error"] = "Failed to set \(property.rawValue) — DDC unavailable or software-only display"
       }
       return result
     }

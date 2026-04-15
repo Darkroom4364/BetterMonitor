@@ -111,7 +111,7 @@ struct CLICommand {
       --json                    Output as JSON
       --help                    Show this help
     """
-    fputs(usage + "\n", stderr)
+    print(usage)
   }
 
   static func printError(_ message: String) {
