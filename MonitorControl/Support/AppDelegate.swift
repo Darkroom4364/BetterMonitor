@@ -29,6 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   var startupActionWriteCounter: Int = 0
   var audioPlayer: AVAudioPlayer?
   let updaterController = SPUStandardUpdaterController(startingUpdater: false, updaterDelegate: UpdaterDelegate(), userDriverDelegate: nil)
+  var cliRequestHandler: CLIRequestHandler?
 
   var settingsPaneStyle: Settings.Style {
     if !DEBUG_MACOS10, #available(macOS 11.0, *) {
@@ -64,6 +65,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     self.setMenu()
     CGDisplayRegisterReconfigurationCallback({ _, _, _ in app.displayReconfigured() }, nil)
     self.configure(firstrun: true)
+    self.cliRequestHandler = CLIRequestHandler()
     DisplayManager.shared.createGammaActivityEnforcer()
     self.updaterController.startUpdater()
   }
