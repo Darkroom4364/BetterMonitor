@@ -60,7 +60,7 @@ struct CLICommand {
         }
       case "--help", "-h":
         printUsage()
-        return nil
+        exit(0)
       default:
         positional.append(args[i])
       }

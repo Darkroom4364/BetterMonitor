@@ -33,7 +33,8 @@ class CLIRequestHandler {
     guard let userInfo = notification.userInfo,
           let actionString = userInfo[CLIKey.action] as? String,
           let action = CLIAction(rawValue: actionString),
-          let replyId = userInfo[CLIKey.replyId] as? String
+          let replyId = userInfo[CLIKey.replyId] as? String,
+          UUID(uuidString: replyId) != nil
     else {
       return
     }
@@ -164,7 +165,8 @@ class CLIRequestHandler {
       let displayId = UInt32(displayIdNumber.uint32Value)
       return allDisplays.filter { $0.identifier == displayId }
     }
-    if let displayName = userInfo[CLIKey.displayName] as? String {
+    if let displayName = userInfo[CLIKey.displayName] as? String,
+       !displayName.trimmingCharacters(in: .whitespaces).isEmpty {
       let lowered = displayName.lowercased()
       return allDisplays.filter {
         $0.name.lowercased().contains(lowered) ||
