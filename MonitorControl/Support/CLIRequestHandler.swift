@@ -180,6 +180,7 @@ class CLIRequestHandler {
     guard let jsonData = try? JSONSerialization.data(withJSONObject: result),
           let jsonString = String(data: jsonData, encoding: .utf8)
     else {
+      os_log("CLI reply serialization failed for replyId: %{public}@", type: .error, replyId)
       return
     }
     DistributedNotificationCenter.default().postNotificationName(
