@@ -58,6 +58,11 @@
 		F06792F6200A745F0066C438 /* MonitorControlHelper.app in [Login] Copy Helper to start at Login */ = {isa = PBXBuildFile; fileRef = F06792E7200A73460066C438 /* MonitorControlHelper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F0A489C4279C71B200BEDFD6 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A489C3279C71B200BEDFD6 /* OnboardingViewController.swift */; };
 		FE4E0896249D584C003A50BB /* OSDUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4E0895249D584C003A50BB /* OSDUtils.swift */; };
+		CC00010100000000000000A1 /* CLIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B1 /* CLIProtocol.swift */; };
+		CC00010100000000000000A2 /* CLIRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B2 /* CLIRequestHandler.swift */; };
+		CC00010100000000000000A3 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B3 /* main.swift */; };
+		CC00010100000000000000A4 /* CLICommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B4 /* CLICommand.swift */; };
+		CC00010100000000000000A5 /* CLIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B1 /* CLIProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -181,6 +186,11 @@
 		FB5DB28F2AD54C4600306223 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/InternetAccessPolicy.strings"; sourceTree = "<group>"; };
 		FB5DB2902AD54C4600306223 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		FE4E0895249D584C003A50BB /* OSDUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSDUtils.swift; sourceTree = "<group>"; };
+		CC00010100000000000000B1 /* CLIProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLIProtocol.swift; sourceTree = "<group>"; };
+		CC00010100000000000000B2 /* CLIRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLIRequestHandler.swift; sourceTree = "<group>"; };
+		CC00010100000000000000B3 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		CC00010100000000000000B4 /* CLICommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLICommand.swift; sourceTree = "<group>"; };
+		CC00010100000000000000B5 /* monitorcontrol */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = monitorcontrol; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +210,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F06792E4200A73460066C438 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC00010100000000000000C2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -237,6 +254,7 @@
 				28D1DDD1227FB759004CB494 /* Frameworks */,
 				56754EAD1D9A4016007BCDC5 /* MonitorControl */,
 				F06792E8200A73460066C438 /* MonitorControlHelper */,
+				CC00010100000000000000D1 /* MonitorControlCLI */,
 				56754EAC1D9A4016007BCDC5 /* Products */,
 			);
 			indentWidth = 2;
@@ -247,6 +265,7 @@
 			children = (
 				56754EAB1D9A4016007BCDC5 /* MonitorControl.app */,
 				F06792E7200A73460066C438 /* MonitorControlHelper.app */,
+				CC00010100000000000000B5 /* monitorcontrol */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -317,8 +336,19 @@
 				AA16139A26BE772E00DCF027 /* Arm64DDC.swift */,
 				AA4398A826DD55DA00943F16 /* IntelDDC.swift */,
 				FE4E0895249D584C003A50BB /* OSDUtils.swift */,
+				CC00010100000000000000B1 /* CLIProtocol.swift */,
+				CC00010100000000000000B2 /* CLIRequestHandler.swift */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		CC00010100000000000000D1 /* MonitorControlCLI */ = {
+			isa = PBXGroup;
+			children = (
+				CC00010100000000000000B3 /* main.swift */,
+				CC00010100000000000000B4 /* CLICommand.swift */,
+			);
+			path = MonitorControlCLI;
 			sourceTree = "<group>";
 		};
 		F01B0687228221B6008E64DB /* UI */ = {
@@ -421,6 +451,22 @@
 			productReference = F06792E7200A73460066C438 /* MonitorControlHelper.app */;
 			productType = "com.apple.product-type.application";
 		};
+		CC00010100000000000000E1 /* MonitorControlCLI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC00010100000000000000F3 /* Build configuration list for PBXNativeTarget "MonitorControlCLI" */;
+			buildPhases = (
+				CC00010100000000000000C1 /* Sources */,
+				CC00010100000000000000C2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MonitorControlCLI;
+			productName = monitorcontrol;
+			productReference = CC00010100000000000000B5 /* monitorcontrol */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -440,6 +486,10 @@
 					F06792E6200A73460066C438 = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
+					};
+					CC00010100000000000000E1 = {
+						CreatedOnToolsVersion = 15.0;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -484,6 +534,7 @@
 			targets = (
 				56754EAA1D9A4016007BCDC5 /* MonitorControl */,
 				F06792E6200A73460066C438 /* MonitorControlHelper */,
+				CC00010100000000000000E1 /* MonitorControlCLI */,
 			);
 		};
 /* End PBXProject section */
@@ -645,6 +696,8 @@
 				AA25F6CF26E680510087F3A2 /* MenuslidersPrefsViewController.swift in Sources */,
 				AA4398A926DD55DA00943F16 /* IntelDDC.swift in Sources */,
 				6C85EFDA22C941B000227EA1 /* DisplayManager.swift in Sources */,
+				CC00010100000000000000A1 /* CLIProtocol.swift in Sources */,
+				CC00010100000000000000A2 /* CLIRequestHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -653,6 +706,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				F06792EA200A73460066C438 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC00010100000000000000C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC00010100000000000000A3 /* main.swift in Sources */,
+				CC00010100000000000000A4 /* CLICommand.swift in Sources */,
+				CC00010100000000000000A5 /* CLIProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -994,6 +1057,34 @@
 			};
 			name = Release;
 		};
+		CC00010100000000000000F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_NAME = monitorcontrol;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.5;
+			};
+			name = Debug;
+		};
+		CC00010100000000000000F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_NAME = monitorcontrol;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.5;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1020,6 +1111,15 @@
 			buildConfigurations = (
 				F06792F2200A73470066C438 /* Debug */,
 				F06792F3200A73470066C438 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CC00010100000000000000F3 /* Build configuration list for PBXNativeTarget "MonitorControlCLI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC00010100000000000000F1 /* Debug */,
+				CC00010100000000000000F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

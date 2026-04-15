@@ -1,0 +1,31 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build App
+        run: |
+          xcodebuild build \
+            -project MonitorControl.xcodeproj \
+            -scheme MonitorControl \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Build CLI
+        run: |
+          xcodebuild build \
+            -project MonitorControl.xcodeproj \
+            -target MonitorControlCLI \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO
