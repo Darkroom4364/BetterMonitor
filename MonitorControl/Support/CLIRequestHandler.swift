@@ -150,7 +150,7 @@ class CLIRequestHandler {
       var result: [String: Any] = [
         "name": display.name,
         "id": display.identifier,
-        property.rawValue: valueInt,
+        property.rawValue: Int(round(floatValue * 100)),
       ]
       if !success {
         result["error"] = "Failed to set \(property.rawValue) — DDC unavailable or software-only display"

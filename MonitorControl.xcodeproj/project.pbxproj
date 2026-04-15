@@ -1064,8 +1064,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_NAME = monitorcontrol;
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.5;
 			};
 			name = Debug;
@@ -1077,8 +1078,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_NAME = monitorcontrol;
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.5;
 			};
 			name = Release;
