@@ -3,17 +3,18 @@
 <div>
 <h3>MonitorControl</h3>
 <p>Controls your external display brightness and volume and shows native OSD.
-Use menubar extra sliders or the keyboard, including native Apple keys!</p>
-<a href="https://github.com/MonitorControl/MonitorControl/releases"><img src=".github/macos_badge_noborder.png" width="175" alt="Download for macOS"/></a>
+Use menubar extra sliders or the keyboard, including native Apple keys!<br/>
+This fork adds a <strong>CLI tool</strong> for terminal/automation control and a <strong>custom brightness HUD</strong> for macOS 26+.</p>
+<a href="https://github.com/Darkroom4364/MonitorControl/releases"><img src=".github/macos_badge_noborder.png" width="175" alt="Download for macOS"/></a>
 </div>
 
 <br/><br/>
 
 <div align="center">
-<a href="https://github.com/MonitorControl/MonitorControl/releases"><img src="https://img.shields.io/github/downloads/MonitorControl/MonitorControl/total.svg?style=flat" alt="downloads"/></a>
-<a href="https://github.com/MonitorControl/MonitorControl/releases"><img src="https://img.shields.io/github/release-pre/MonitorControl/MonitorControl.svg?style=flat" alt="latest version"/></a>
+<a href="https://github.com/Darkroom4364/MonitorControl/releases"><img src="https://img.shields.io/github/downloads/Darkroom4364/MonitorControl/total.svg?style=flat" alt="downloads"/></a>
+<a href="https://github.com/Darkroom4364/MonitorControl/releases"><img src="https://img.shields.io/github/release-pre/Darkroom4364/MonitorControl.svg?style=flat" alt="latest version"/></a>
 <a href="https://github.com/MonitorControl/MonitorControl/blob/master/License.txt"><img src="https://img.shields.io/github/license/MonitorControl/MonitorControl.svg?style=flat" alt="license"/></a>
-<a href="https://github.com/MonitorControl/MonitorControl"><img src="https://img.shields.io/badge/platform-macOS-blue.svg?style=flat" alt="platform"/></a>
+<a href="https://github.com/Darkroom4364/MonitorControl"><img src="https://img.shields.io/badge/platform-macOS-blue.svg?style=flat" alt="platform"/></a>
 
 <br/>
 <br/>
@@ -29,10 +30,18 @@ Use menubar extra sliders or the keyboard, including native Apple keys!</p>
 
 ## Download
 
-Go to [Releases](https://github.com/MonitorControl/MonitorControl/releases) and download the latest `.dmg`, or you can install via Homebrew:
-```shell
-brew install --cask monitorcontrol
-```
+Go to [Releases](https://github.com/Darkroom4364/MonitorControl/releases) and download the latest `.dmg`.
+
+## Fork additions
+
+- **CLI tool** — control displays from the terminal or scripts:
+  ```sh
+  monitorcontrol list
+  monitorcontrol get brightness --display "LG"
+  monitorcontrol set volume 50 --display 2
+  monitorcontrol set brightness 80 --json
+  ```
+- **macOS 26 brightness HUD** — custom HUD replaces the broken native OSD on macOS Tahoe.
 
 ## Major features
 
@@ -48,8 +57,6 @@ brew install --cask monitorcontrol
 - Dozens of customization options to tweak the inner workings of the app to suit your hardware and needs (don't forget to enable `Show advanced settings` in app Settings).
 - Simple, unobtrusive UI to blend in to the general aesthetics of macOS.
 - Completely FREE.
-
-For additional features, more advanced brightness control with XDR/HDR brightness upscaling and support for more Mac models and displays, check out [BetterDisplay](https://github.com/waydabber/BetterDisplay#readme)!
 
 ### Screenshots (Settings)
 
@@ -94,7 +101,7 @@ Please note that current versions have limited native macOS OSD support on macOS
 
 Notable exceptions for hardware control compatibility:
 
-- DDC control using the built-in HDMI port of the 2018 Intel Mac mini, the built-in HDMI port of all M1 Macs (MacBook Pro 14" and 16", Mac Mini, Mac Studio) and the built-in HDMI port of the entry level M2 Mac mini are not supported. Use USB-C instead or get [BetterDisplay](https://betterdisplay.pro) for full DDC control over HDMI with these Macs as well for free. Software-only dimming is still available for these connections.
+- DDC control using the built-in HDMI port of the 2018 Intel Mac mini, the built-in HDMI port of all M1 Macs (MacBook Pro 14" and 16", Mac Mini, Mac Studio) and the built-in HDMI port of the entry level M2 Mac mini are not supported. Use USB-C instead. Software-only dimming is still available for these connections.
 - Some displays (notably EIZO) use MCCS over USB or an entirely custom protocol for control. These displays are supported with software dimming only.
 - DisplayLink docks and dongles do not allow for DDC control on Macs, only software dimming is available for these connections.
 
@@ -116,7 +123,7 @@ Notable exceptions for hardware control compatibility:
 - Clone the project via this Terminal command:
 
 ```sh
-git clone https://github.com/MonitorControl/MonitorControl.git
+git clone https://github.com/Darkroom4364/MonitorControl.git
 ```
 
 - If you want to clone one of the branches, add `--single-branch --branch [branchname]` after the `clone` option.
@@ -132,7 +139,7 @@ git clone https://github.com/MonitorControl/MonitorControl.git
 
 ## Credits
 
-- [@waydabber](https://github.com/waydabber), maintainer, developer of [BetterDisplay](https://github.com/waydabber/BetterDisplay#readme).
+- [@waydabber](https://github.com/waydabber) - maintainer
 - [@the0neyouseek](https://github.com/the0neyouseek) - honorary maintainer
 - [@JoniVR](https://github.com/JoniVR) - honorary maintainer
 - [@alin23](https://github.com/alin23) - spearheaded M1 DDC support, developer of [Lunar](https://lunar.fyi)
