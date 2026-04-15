@@ -14,6 +14,7 @@ guard let replyId = userInfo[CLIKey.replyId] as? String else {
 class ReplyHandler: NSObject {
   let command: CLICommand
   var receivedReply = false
+  var hasErrors = false
 
   init(command: CLICommand) {
     self.command = command
@@ -30,6 +31,8 @@ class ReplyHandler: NSObject {
       CLICommand.printError("Invalid response from MonitorControl")
       exit(1)
     }
+
+    hasErrors = data.contains { $0["error"] != nil }
 
     if command.jsonOutput {
       if let jsonData = try? JSONSerialization.data(withJSONObject: data, options: .prettyPrinted),
@@ -70,7 +73,7 @@ DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
 
 CFRunLoopRun()
 DistributedNotificationCenter.default().removeObserver(handler)
-exit(0)
+exit(handler.hasErrors ? 1 : 0)
 
 // MARK: - Output Formatting
 

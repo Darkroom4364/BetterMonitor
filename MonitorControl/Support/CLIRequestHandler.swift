@@ -122,19 +122,27 @@ class CLIRequestHandler {
         guard let otherDisplay = display as? OtherDisplay else {
           return ["name": display.name, "error": "Property not available for Apple displays"]
         }
-        otherDisplay.writeDDCValues(command: .audioSpeakerVolume, value: otherDisplay.convValueToDDC(for: .audioSpeakerVolume, from: floatValue))
-        otherDisplay.savePref(floatValue, for: .audioSpeakerVolume)
-        if let slider = otherDisplay.sliderHandler[.audioSpeakerVolume] {
-          slider.setValue(floatValue, displayID: otherDisplay.identifier)
+        if otherDisplay.readPrefAsBool(key: .unavailableDDC, for: .audioSpeakerVolume) || otherDisplay.isSw() {
+          success = false
+        } else {
+          otherDisplay.writeDDCValues(command: .audioSpeakerVolume, value: otherDisplay.convValueToDDC(for: .audioSpeakerVolume, from: floatValue))
+          otherDisplay.savePref(floatValue, for: .audioSpeakerVolume)
+          if let slider = otherDisplay.sliderHandler[.audioSpeakerVolume] {
+            slider.setValue(floatValue, displayID: otherDisplay.identifier)
+          }
         }
       case .contrast:
         guard let otherDisplay = display as? OtherDisplay else {
           return ["name": display.name, "error": "Property not available for Apple displays"]
         }
-        otherDisplay.writeDDCValues(command: .contrast, value: otherDisplay.convValueToDDC(for: .contrast, from: floatValue))
-        otherDisplay.savePref(floatValue, for: .contrast)
-        if let slider = otherDisplay.sliderHandler[.contrast] {
-          slider.setValue(floatValue, displayID: otherDisplay.identifier)
+        if otherDisplay.readPrefAsBool(key: .unavailableDDC, for: .contrast) || otherDisplay.isSw() {
+          success = false
+        } else {
+          otherDisplay.writeDDCValues(command: .contrast, value: otherDisplay.convValueToDDC(for: .contrast, from: floatValue))
+          otherDisplay.savePref(floatValue, for: .contrast)
+          if let slider = otherDisplay.sliderHandler[.contrast] {
+            slider.setValue(floatValue, displayID: otherDisplay.identifier)
+          }
         }
       }
       var result: [String: Any] = [
@@ -151,7 +159,8 @@ class CLIRequestHandler {
 
   private func resolveDisplays(userInfo: [AnyHashable: Any]) -> [Display] {
     let allDisplays = DisplayManager.shared.getAllDisplays()
-    if let displayId = userInfo[CLIKey.displayId] as? UInt32 {
+    if let displayIdNumber = userInfo[CLIKey.displayId] as? NSNumber {
+      let displayId = UInt32(displayIdNumber.uint32Value)
       return allDisplays.filter { $0.identifier == displayId }
     }
     if let displayName = userInfo[CLIKey.displayName] as? String {
