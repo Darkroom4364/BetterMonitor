@@ -14,10 +14,18 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Build
+      - name: Build App
         run: |
           xcodebuild build \
             -project MonitorControl.xcodeproj \
             -scheme MonitorControl \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Build CLI
+        run: |
+          xcodebuild build \
+            -project MonitorControl.xcodeproj \
+            -target MonitorControlCLI \
             -destination 'platform=macOS' \
             CODE_SIGNING_ALLOWED=NO

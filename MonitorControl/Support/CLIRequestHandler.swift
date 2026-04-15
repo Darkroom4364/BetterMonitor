@@ -25,6 +25,10 @@ class CLIRequestHandler {
     os_log("CLI request handler initialized.", type: .info)
   }
 
+  deinit {
+    DistributedNotificationCenter.default().removeObserver(self)
+  }
+
   @objc private func handleRequest(_ notification: Notification) {
     guard let userInfo = notification.userInfo,
           let actionString = userInfo[CLIKey.action] as? String,
@@ -33,16 +37,18 @@ class CLIRequestHandler {
     else {
       return
     }
-    let result: [[String: Any]]
-    switch action {
-    case .list:
-      result = handleList()
-    case .get:
-      result = handleGet(userInfo: userInfo)
-    case .set:
-      result = handleSet(userInfo: userInfo)
+    DispatchQueue.main.async {
+      let result: [[String: Any]]
+      switch action {
+      case .list:
+        result = self.handleList()
+      case .get:
+        result = self.handleGet(userInfo: userInfo)
+      case .set:
+        result = self.handleSet(userInfo: userInfo)
+      }
+      self.postReply(replyId: replyId, result: ["success": true, "data": result])
     }
-    postReply(replyId: replyId, result: ["success": true, "data": result])
   }
 
   private func handleList() -> [[String: Any]] {
@@ -105,10 +111,11 @@ class CLIRequestHandler {
       return [["error": "No matching display found"]]
     }
     return displays.map { display in
+      var success = true
       switch property {
       case .brightness:
-        _ = display.setBrightness(floatValue)
-        if let slider = display.sliderHandler[.brightness] {
+        success = display.setBrightness(floatValue)
+        if success, let slider = display.sliderHandler[.brightness] {
           slider.setValue(floatValue, displayID: display.identifier)
         }
       case .volume:
@@ -130,11 +137,15 @@ class CLIRequestHandler {
           slider.setValue(floatValue, displayID: otherDisplay.identifier)
         }
       }
-      return [
+      var result: [String: Any] = [
         "name": display.name,
         "id": display.identifier,
         property.rawValue: valueInt,
-      ] as [String: Any]
+      ]
+      if !success {
+        result["error"] = "Failed to set \(property.rawValue)"
+      }
+      return result
     }
   }
 
