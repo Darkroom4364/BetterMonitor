@@ -17,15 +17,15 @@ jobs:
       - name: Build App
         run: |
           xcodebuild build \
-            -project MonitorControl.xcodeproj \
-            -scheme MonitorControl \
+            -project BetterMonitor.xcodeproj \
+            -scheme BetterMonitor \
             -destination 'platform=macOS' \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Build CLI
         run: |
           xcodebuild build \
-            -project MonitorControl.xcodeproj \
-            -target MonitorControlCLI \
+            -project BetterMonitor.xcodeproj \
+            -target BetterMonitorCLI \
             -destination 'platform=macOS' \
             CODE_SIGNING_ALLOWED=NO
