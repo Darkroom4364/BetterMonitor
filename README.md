@@ -2,18 +2,17 @@
 
 <div>
 <h3>BetterMonitor</h3>
-<p>Controls your external display brightness and volume and shows native OSD.
-Use menubar extra sliders or the keyboard, including native Apple keys!</p>
-<a href="https://github.com/MonitorControl/MonitorControl/releases"><img src=".github/macos_badge_noborder.png" width="175" alt="Download for macOS"/></a>
+<p>Control your external display brightness, volume and contrast with native OSD support.
+Use menubar sliders, keyboard shortcuts, or the CLI for automation.</p>
+<a href="https://github.com/Darkroom4364/BetterMonitor/releases"><img src=".github/macos_badge_noborder.png" width="175" alt="Download for macOS"/></a>
 </div>
 
 <br/><br/>
 
 <div align="center">
-<a href="https://github.com/MonitorControl/MonitorControl/releases"><img src="https://img.shields.io/github/downloads/MonitorControl/MonitorControl/total.svg?style=flat" alt="downloads"/></a>
-<a href="https://github.com/MonitorControl/MonitorControl/releases"><img src="https://img.shields.io/github/release-pre/MonitorControl/MonitorControl.svg?style=flat" alt="latest version"/></a>
-<a href="https://github.com/MonitorControl/MonitorControl/blob/master/License.txt"><img src="https://img.shields.io/github/license/MonitorControl/MonitorControl.svg?style=flat" alt="license"/></a>
-<a href="https://github.com/MonitorControl/MonitorControl"><img src="https://img.shields.io/badge/platform-macOS-blue.svg?style=flat" alt="platform"/></a>
+<a href="https://github.com/Darkroom4364/BetterMonitor/releases"><img src="https://img.shields.io/github/release-pre/Darkroom4364/BetterMonitor.svg?style=flat" alt="latest version"/></a>
+<a href="https://github.com/Darkroom4364/BetterMonitor/blob/main/License.txt"><img src="https://img.shields.io/github/license/Darkroom4364/BetterMonitor.svg?style=flat" alt="license"/></a>
+<img src="https://img.shields.io/badge/platform-macOS-blue.svg?style=flat" alt="platform"/>
 
 <br/>
 <br/>
@@ -24,34 +23,19 @@ Use menubar extra sliders or the keyboard, including native Apple keys!</p>
 
 <hr>
 
-> [!WARNING]
-> MonitorControl v4.2.0 [may crash](https://github.com/MonitorControl/MonitorControl/issues/1663) on certain configurations running macOS 15 Sequoia or Tahoe. Additionally, this version will not automatically update to the [latest app version](https://github.com/MonitorControl/MonitorControl/releases). To resolve the issue and ensure future updates, please upgrade manually.
+## Features
 
-## Download
+- **Brightness, volume & contrast** control for external displays via DDC
+- **Native OSD** — shows the system brightness/volume overlay
+- **CLI tool** (`bettermonitor`) for scripted and automated control
+- **Multiple protocols** — DDC for external displays, native Apple protocol for built-in displays, gamma/shade for virtual screens
+- **Smooth transitions** and combined hardware + software dimming (dim beyond your display's minimum)
+- **Brightness sync** — replicate ambient light sensor changes from built-in displays to externals
+- **Keyboard shortcuts** — Apple media keys and custom shortcuts
+- **Dozens of settings** — enable `Show advanced settings` to fine-tune for your hardware
+- **Free and open source**
 
-Go to [Releases](https://github.com/MonitorControl/MonitorControl/releases) and download the latest `.dmg`, or you can install via Homebrew:
-```shell
-brew install --cask monitorcontrol
-```
-
-## Major features
-
-- Control your display's brightness, volume and contrast!
-- Shows native OSD for brightness and volume.
-- Supports multiple protocols to adjust brightness: DDC for external displays (brightness, contrast, volume), native Apple protocol for Apple and built-in displays, Gamma table control for software dimming, shade control for AirPlay, Sidecar and Display Link devices and other virtual screens.
-- Supports smooth brightness transitions.
-- Seamlessly combined hardware and software dimming extends dimming beyond the minimum brightness available on your display.
-- Synchronize brightness from built-in and Apple screens - replicate Ambient light sensor and touch bar induced changes to a non-Apple external display!
-- Sync up all your displays using a single slider or keyboard shortcuts.
-- Allows dimming to full black.
-- Support for custom keyboard shortcuts as well as standard brightness and media keys on Apple keyboards.
-- Dozens of customization options to tweak the inner workings of the app to suit your hardware and needs (don't forget to enable `Show advanced settings` in app Settings).
-- Simple, unobtrusive UI to blend in to the general aesthetics of macOS.
-- Completely FREE.
-
-For additional features, more advanced brightness control with XDR/HDR brightness upscaling and support for more Mac models and displays, check out [BetterDisplay](https://github.com/waydabber/BetterDisplay#readme)!
-
-### Screenshots (Settings)
+### Screenshots
 
 <div align="center">
 <img src=".github/pref_1.png" width="392" alt="Screenshot"/>
@@ -60,69 +44,67 @@ For additional features, more advanced brightness control with XDR/HDR brightnes
 <img src=".github/pref_4.png" width="392" alt="Screenshot"/>
 </div>
 
-## How to install and use the app
+## Install
 
-1. [Download the app](https://github.com/MonitorControl/MonitorControl/releases)
-2. Copy the MonitorControl app file from the .dmg file to your Applications folder
-3. Click on the `MonitorControl` app
-4. Add the app to `Accessibility` under `System Settings` » `Privacy & Security` as prompted (this is required only if you wish to use the native Apple keyboard brightness and media keys - if this is not the case, you can safely skip this step).
-5. Use your keyboard or the sliders in the app menu (a brightness symbol in the macOS menubar as shown on the screenshot above) to control your displays.
-6. Open `Settings…` for customization options (enable `Show advanced settings` for even more options).
-7. You can set up custom keyboard shortcuts under the `Keyboard` in Settings (the app uses Apple media keys by default).
-8. If you have any questions, go to [Discussions](https://github.com/MonitorControl/MonitorControl/discussions)!
+Download the latest `.dmg` from [Releases](https://github.com/Darkroom4364/BetterMonitor/releases).
 
-### macOS compatibility
+## CLI
 
-| MonitorControl version | macOS version     |
-| ---------------------- | ----------------- |
-| v4.0.0                 | Catalina 10.15*   |
-| v3.1.1                 | Mojave 10.14      |
-| v2.1.0                 | Sierra 10.12      |
-
-_* With some limitations - full functionality available on macOS 11 Big Sur or newer._
-
-For macOS Sequoia and Tahoe 26 compatibility [v4.3.3 or newer](https://github.com/MonitorControl/MonitorControl/releases) is required!
-
-Please note that current versions have limited native macOS OSD support on macOS Tahoe - although the Control Center brightness or volume OSD appears, the OSD percentage value will not show or update.
-
-### Supported displays
-
-- Most modern LCD displays from all major manufacturers supported implemented DDC/CI protocol via USB-C, DisplayPort, HDMI, DVI or VGA to allow for hardware backlight and volume control.
-- Apple displays and built-in displays are supported using native protocols.
-- LCD and LED Televisions usually do not implement DDC, these are supported using software alternatives to dim the image.
-- DisplayLink, Airplay, Sidecar and other virtual screens are supported via shade (overlay) control.
-
-Notable exceptions for hardware control compatibility:
-
-- DDC control using the built-in HDMI port of the 2018 Intel Mac mini, the built-in HDMI port of all M1 Macs (MacBook Pro 14" and 16", Mac Mini, Mac Studio) and the built-in HDMI port of the entry level M2 Mac mini are not supported. Use USB-C instead or get [BetterDisplay](https://betterdisplay.pro) for full DDC control over HDMI with these Macs as well for free. Software-only dimming is still available for these connections.
-- Some displays (notably EIZO) use MCCS over USB or an entirely custom protocol for control. These displays are supported with software dimming only.
-- DisplayLink docks and dongles do not allow for DDC control on Macs, only software dimming is available for these connections.
-
-## Contributing to the project
-
-- If you want, you can fork the code, make improvements and submit a pull request to improve the app. Accepting a PR is solely in the hands of the maintainer - before making fundamental changes expecting it to be accepted, please consult the maintainer of the project!
-
-## How to build
-
-### Required
-
-- Xcode
-- [Swiftlint](https://github.com/realm/SwiftLint)
-- [SwiftFormat](https://github.com/nicklockwood/SwiftFormat)
-- [BartyCrouch](https://github.com/Flinesoft/BartyCrouch) (for updating localizations)
-
-### Build steps
-
-- Clone the project via this Terminal command:
+BetterMonitor includes a command-line tool for automation:
 
 ```sh
-git clone https://github.com/MonitorControl/MonitorControl.git
+# List all displays
+bettermonitor list
+
+# Get/set brightness
+bettermonitor get brightness
+bettermonitor set brightness 70
+
+# JSON output
+bettermonitor list --json
 ```
 
-- If you want to clone one of the branches, add `--single-branch --branch [branchname]` after the `clone` option.
-- You're all set! Now open the `MonitorControl.xcodeproj` with Xcode! The dependencies will automatically get downloaded once you open the project. If they don't: `File > Packages > Resolve Package Versions`
+The CLI communicates with the running BetterMonitor app — make sure it's open.
 
-### Third party dependencies
+## Getting started
+
+1. Download and copy BetterMonitor to your Applications folder
+2. Launch the app
+3. Grant Accessibility access when prompted (required for keyboard brightness/media keys)
+4. Use your keyboard or the menubar sliders to control displays
+5. Open Settings for customization (enable `Show advanced settings` for more options)
+
+## Supported displays
+
+- **DDC displays** — most modern LCDs from all major manufacturers via USB-C, DisplayPort, HDMI, DVI
+- **Apple & built-in displays** — native protocol support
+- **TVs** — supported via software dimming (most TVs don't implement DDC)
+- **DisplayLink, AirPlay, Sidecar** — shade (overlay) control
+
+**Known limitations:**
+- Built-in HDMI on Apple Silicon Macs does not support DDC. Use USB-C or a Thunderbolt dock instead.
+- EIZO displays using MCCS over USB are limited to software dimming.
+- DisplayLink docks do not support DDC on macOS.
+
+## macOS compatibility
+
+| BetterMonitor | macOS |
+|---|---|
+| Latest | Catalina 10.15+ (full features on Big Sur 11+) |
+
+## Build from source
+
+**Requirements:** Xcode, [SwiftLint](https://github.com/realm/SwiftLint), [SwiftFormat](https://github.com/nicklockwood/SwiftFormat), [BartyCrouch](https://github.com/Flinesoft/BartyCrouch)
+
+```sh
+git clone https://github.com/Darkroom4364/BetterMonitor.git
+cd BetterMonitor
+open BetterMonitor.xcodeproj
+```
+
+Dependencies resolve automatically via SPM.
+
+### Dependencies
 
 - [MediaKeyTap](https://github.com/MonitorControl/MediaKeyTap)
 - [Settings](https://github.com/sindresorhus/Settings)
@@ -132,14 +114,15 @@ git clone https://github.com/MonitorControl/MonitorControl.git
 
 ## Credits
 
-- [@waydabber](https://github.com/waydabber), maintainer, developer of [BetterDisplay](https://github.com/waydabber/BetterDisplay#readme).
-- [@the0neyouseek](https://github.com/the0neyouseek) - honorary maintainer
-- [@JoniVR](https://github.com/JoniVR) - honorary maintainer
-- [@alin23](https://github.com/alin23) - spearheaded M1 DDC support, developer of [Lunar](https://lunar.fyi)
-- [@mathew-kurian](https://github.com/mathew-kurian/) (original developer)
-- [@Tyilo](https://github.com/Tyilo/) (fork)
-- [@Bensge](https://github.com/Bensge/) - (used some code from his project [NativeDisplayBrightness](https://github.com/Bensge/NativeDisplayBrightness))
-- [@nhurden](https://github.com/nhurden/) (for the original MediaKeyTap)
-- [@kfix](https://github.com/kfix/ddcctl) (for ddcctl)
-- [@reitermarkus](https://github.com/reitermarkus) (for Intel DDC support)
-- [javierocasio](https://www.deviantart.com/javierocasio) (app icon background)
+BetterMonitor is a fork of [MonitorControl](https://github.com/MonitorControl/MonitorControl) with added CLI support, automation features, and active development.
+
+Original MonitorControl contributors:
+- [@waydabber](https://github.com/waydabber) — maintainer, developer of [BetterDisplay](https://github.com/waydabber/BetterDisplay)
+- [@the0neyouseek](https://github.com/the0neyouseek), [@JoniVR](https://github.com/JoniVR) — honorary maintainers
+- [@alin23](https://github.com/alin23) — M1 DDC support, developer of [Lunar](https://lunar.fyi)
+- [@mathew-kurian](https://github.com/mathew-kurian/) — original developer
+- [Full contributor list](https://github.com/MonitorControl/MonitorControl/graphs/contributors)
+
+## License
+
+[MIT](License.txt)

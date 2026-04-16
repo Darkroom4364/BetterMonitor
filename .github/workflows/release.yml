@@ -1,10 +1,9 @@
-name: Build
+name: Release
 
 on:
   push:
-    branches: [main, dev]
-  pull_request:
-    branches: [main, dev]
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -20,12 +19,16 @@ jobs:
             -project BetterMonitor.xcodeproj \
             -scheme BetterMonitor \
             -destination 'platform=macOS' \
+            -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO
 
-      - name: Build CLI
+      - name: Archive App
         run: |
-          xcodebuild build \
-            -project BetterMonitor.xcodeproj \
-            -target BetterMonitorCLI \
-            -destination 'platform=macOS' \
-            CODE_SIGNING_ALLOWED=NO
+          cd build/Build/Products/Release
+          zip -r BetterMonitor.zip BetterMonitor.app
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/Build/Products/Release/BetterMonitor.zip
+          generate_release_notes: true

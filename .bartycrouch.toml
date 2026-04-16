@@ -8,7 +8,7 @@ ignoreEmptyStrings = true
 unstripped = true
 
 [update.code]
-codePaths = ["./MonitorControl"]
+codePaths = ["./BetterMonitor"]
 localizablePaths = ["."]
 defaultToKeys = true
 additive = true
@@ -16,7 +16,7 @@ unstripped = true
 plistArguments = true
 
 [update.transform]
-codePaths = ["./MonitorControl"]
+codePaths = ["./BetterMonitor"]
 localizablePaths = ["."]
 transformer = "foundation"
 supportedLanguageEnumPath = "."
