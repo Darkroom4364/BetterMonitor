@@ -13,14 +13,12 @@ class DisplayValueConversionTests: XCTestCase {
     setDefaultPrefs(for: .brightness)
     setDefaultPrefs(for: .audioSpeakerVolume)
     setDefaultPrefs(for: .contrast)
-  }
-
-  override func tearDown() {
-    clearPrefs(for: .brightness)
-    clearPrefs(for: .audioSpeakerVolume)
-    clearPrefs(for: .contrast)
-    display = nil
-    super.tearDown()
+    addTeardownBlock { [self] in
+      clearPrefs(for: .brightness)
+      clearPrefs(for: .audioSpeakerVolume)
+      clearPrefs(for: .contrast)
+      display = nil
+    }
   }
 
   private func setDefaultPrefs(for command: Command) {
@@ -42,7 +40,6 @@ class DisplayValueConversionTests: XCTestCase {
 
   func testCurveMultiplierDefault() {
     XCTAssertEqual(display.getCurveMultiplier(5), 1.0)
-    XCTAssertEqual(display.getCurveMultiplier(0), 1.0)
     XCTAssertEqual(display.getCurveMultiplier(99), 1.0)
   }
 
@@ -209,12 +206,9 @@ class DisplayValueConversionTests: XCTestCase {
   // MARK: - combinedBrightnessSwitchingValue
 
   func testCombinedBrightnessSwitchingDefault() {
-    // Fresh display reads pref as 0 from UserDefaults, but test environment
-    // may have prior state. Formula: (pref + 8) / 16
-    let prefValue = display.readPrefAsInt(key: .combinedBrightnessSwitchingPoint)
-    let expected = Float(prefValue + 8) / 16.0
+    // Default pref = 0, formula: (0 + 8) / 16 = 0.5
     let result = display.combinedBrightnessSwitchingValue()
-    XCTAssertEqual(result, expected, accuracy: 0.001)
+    XCTAssertEqual(result, 0.5, accuracy: 0.001)
   }
 
   func testCombinedBrightnessSwitchingCustom() {

@@ -44,12 +44,16 @@ class CLICommandParsingTests: XCTestCase {
   func testParseSetBrightnessZero() {
     let cmd = CLICommand.parse(["bettermonitor", "set", "brightness", "0"])
     XCTAssertNotNil(cmd)
+    XCTAssertEqual(cmd?.action, .set)
+    XCTAssertEqual(cmd?.property, .brightness)
     XCTAssertEqual(cmd?.value, 0)
   }
 
   func testParseSetBrightnessMax() {
     let cmd = CLICommand.parse(["bettermonitor", "set", "brightness", "100"])
     XCTAssertNotNil(cmd)
+    XCTAssertEqual(cmd?.action, .set)
+    XCTAssertEqual(cmd?.property, .brightness)
     XCTAssertEqual(cmd?.value, 100)
   }
 
@@ -65,6 +69,7 @@ class CLICommandParsingTests: XCTestCase {
   func testJsonFlagAfterCommand() {
     let cmd = CLICommand.parse(["bettermonitor", "list", "--json"])
     XCTAssertNotNil(cmd)
+    XCTAssertEqual(cmd?.action, .list)
     XCTAssertTrue(cmd?.jsonOutput ?? false)
   }
 
@@ -85,6 +90,8 @@ class CLICommandParsingTests: XCTestCase {
   func testDisplayFlagAfterCommand() {
     let cmd = CLICommand.parse(["bettermonitor", "get", "brightness", "--display", "LG"])
     XCTAssertNotNil(cmd)
+    XCTAssertEqual(cmd?.action, .get)
+    XCTAssertEqual(cmd?.property, .brightness)
     XCTAssertEqual(cmd?.displayName, "LG")
   }
 
@@ -146,45 +153,39 @@ class CLICommandParsingTests: XCTestCase {
   // MARK: - userInfo serialization
 
   func testUserInfoContainsAction() {
-    let cmd = CLICommand.parse(["bettermonitor", "list"])!
-    let info = cmd.userInfo
-    XCTAssertEqual(info[CLIKey.action] as? String, "list")
+    guard let cmd = CLICommand.parse(["bettermonitor", "list"]) else { return XCTFail("parse returned nil") }
+    XCTAssertEqual(cmd.userInfo[CLIKey.action] as? String, "list")
   }
 
   func testUserInfoContainsReplyId() {
-    let cmd = CLICommand.parse(["bettermonitor", "list"])!
-    let info = cmd.userInfo
-    let replyId = info[CLIKey.replyId] as? String
+    guard let cmd = CLICommand.parse(["bettermonitor", "list"]) else { return XCTFail("parse returned nil") }
+    let replyId = cmd.userInfo[CLIKey.replyId] as? String
     XCTAssertNotNil(replyId)
-    XCTAssertNotNil(UUID(uuidString: replyId!))
+    XCTAssertNotNil(replyId.flatMap { UUID(uuidString: $0) })
   }
 
   func testUserInfoContainsProperty() {
-    let cmd = CLICommand.parse(["bettermonitor", "get", "brightness"])!
-    let info = cmd.userInfo
-    XCTAssertEqual(info[CLIKey.property] as? String, "brightness")
+    guard let cmd = CLICommand.parse(["bettermonitor", "get", "brightness"]) else { return XCTFail("parse returned nil") }
+    XCTAssertEqual(cmd.userInfo[CLIKey.property] as? String, "brightness")
   }
 
   func testUserInfoContainsValue() {
-    let cmd = CLICommand.parse(["bettermonitor", "set", "volume", "75"])!
-    let info = cmd.userInfo
-    XCTAssertEqual(info[CLIKey.value] as? Int, 75)
+    guard let cmd = CLICommand.parse(["bettermonitor", "set", "volume", "75"]) else { return XCTFail("parse returned nil") }
+    XCTAssertEqual(cmd.userInfo[CLIKey.value] as? Int, 75)
   }
 
   func testUserInfoContainsDisplayName() {
-    let cmd = CLICommand.parse(["bettermonitor", "--display", "Dell", "list"])!
-    let info = cmd.userInfo
-    XCTAssertEqual(info[CLIKey.displayName] as? String, "Dell")
+    guard let cmd = CLICommand.parse(["bettermonitor", "--display", "Dell", "list"]) else { return XCTFail("parse returned nil") }
+    XCTAssertEqual(cmd.userInfo[CLIKey.displayName] as? String, "Dell")
   }
 
   func testUserInfoContainsDisplayId() {
-    let cmd = CLICommand.parse(["bettermonitor", "--display", "999", "list"])!
-    let info = cmd.userInfo
-    XCTAssertEqual(info[CLIKey.displayId] as? UInt32, 999)
+    guard let cmd = CLICommand.parse(["bettermonitor", "--display", "999", "list"]) else { return XCTFail("parse returned nil") }
+    XCTAssertEqual(cmd.userInfo[CLIKey.displayId] as? UInt32, 999)
   }
 
   func testUserInfoOmitsNilFields() {
-    let cmd = CLICommand.parse(["bettermonitor", "list"])!
+    guard let cmd = CLICommand.parse(["bettermonitor", "list"]) else { return XCTFail("parse returned nil") }
     let info = cmd.userInfo
     XCTAssertNil(info[CLIKey.property])
     XCTAssertNil(info[CLIKey.value])

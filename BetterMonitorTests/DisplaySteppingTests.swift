@@ -5,7 +5,6 @@ import XCTest
 
 class DisplaySteppingTests: XCTestCase {
   var display: OtherDisplay!
-  let prefsId = "(Test00@0)"
 
   override func setUp() {
     super.setUp()
@@ -84,18 +83,15 @@ class DisplaySteppingTests: XCTestCase {
   // MARK: - calcNewValue: near-chiclet snapping
 
   func testStepUpFromNearChiclet() {
-    // Value slightly below a chiclet boundary — should snap up
-    // Chiclet 8 = 0.5, value at 0.49 (distance < 0.25 threshold)
-    // chiclet = 0.49 * 16 = 7.84, ceil = 8, distance to floor(7.84) = 0.84 > 0.75
-    // So nextFilledChiclet = 8 + 1 = 9
+    // 0.49 → chiclet 7.84, distance 0.84 > 0.75 threshold → skips to chiclet 9
     let result = display.calcNewValue(currentValue: 0.49, isUp: true, isSmallIncrement: false)
-    XCTAssertGreaterThanOrEqual(result, 0.5)
+    XCTAssertEqual(result, 9.0 / 16.0, accuracy: 0.001)
   }
 
   func testStepDownFromNearChiclet() {
-    // Value slightly above a chiclet boundary — should snap down
+    // 0.51 → chiclet 8.16, distance 0.16 < 0.25 threshold → skips to chiclet 7
     let result = display.calcNewValue(currentValue: 0.51, isUp: false, isSmallIncrement: false)
-    XCTAssertLessThanOrEqual(result, 0.5)
+    XCTAssertEqual(result, 7.0 / 16.0, accuracy: 0.001)
   }
 
   // MARK: - swBrightnessTransform
@@ -135,11 +131,10 @@ class DisplaySteppingTests: XCTestCase {
 
   func testSwBrightnessTransformWithZeroAllowed() {
     prefs.set(true, forKey: PrefKey.allowZeroSwBrightness.rawValue)
+    addTeardownBlock { prefs.removeObject(forKey: PrefKey.allowZeroSwBrightness.rawValue) }
     // lowThreshold = 0.0
     // transform(0) = 0 * 1 + 0 = 0
     let result = display.swBrightnessTransform(value: 0)
     XCTAssertEqual(result, 0, accuracy: 0.001)
-
-    prefs.removeObject(forKey: PrefKey.allowZeroSwBrightness.rawValue)
   }
 }
