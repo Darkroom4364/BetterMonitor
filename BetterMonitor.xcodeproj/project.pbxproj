@@ -55,7 +55,7 @@
 		F03A8DF21FFBAA6F0034DC27 /* OtherDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A8DF11FFBAA6F0034DC27 /* OtherDisplay.swift */; };
 		F0445D3820023E710025AE82 /* MainPrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0445D3720023E710025AE82 /* MainPrefsViewController.swift */; };
 		F06792EA200A73460066C438 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06792E9200A73460066C438 /* main.swift */; };
-		F06792F6200A745F0066C438 /* MonitorControlHelper.app in [Login] Copy Helper to start at Login */ = {isa = PBXBuildFile; fileRef = F06792E7200A73460066C438 /* MonitorControlHelper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F06792F6200A745F0066C438 /* BetterMonitorHelper.app in [Login] Copy Helper to start at Login */ = {isa = PBXBuildFile; fileRef = F06792E7200A73460066C438 /* BetterMonitorHelper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F0A489C4279C71B200BEDFD6 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A489C3279C71B200BEDFD6 /* OnboardingViewController.swift */; };
 		FE4E0896249D584C003A50BB /* OSDUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4E0895249D584C003A50BB /* OSDUtils.swift */; };
 		CC00010100000000000000A1 /* CLIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B1 /* CLIProtocol.swift */; };
@@ -72,7 +72,7 @@
 			dstPath = Contents/Library/LoginItems;
 			dstSubfolderSpec = 1;
 			files = (
-				F06792F6200A745F0066C438 /* MonitorControlHelper.app in [Login] Copy Helper to start at Login */,
+				F06792F6200A745F0066C438 /* BetterMonitorHelper.app in [Login] Copy Helper to start at Login */,
 			);
 			name = "[Login] Copy Helper to start at Login";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -90,7 +90,7 @@
 		2FBCCED52853930200C06A13 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		2FBCCED62853930200C06A13 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InternetAccessPolicy.strings; sourceTree = "<group>"; };
 		2FBCCED72853930200C06A13 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		56754EAB1D9A4016007BCDC5 /* MonitorControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MonitorControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		56754EAB1D9A4016007BCDC5 /* BetterMonitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56754EAE1D9A4016007BCDC5 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = main.swift; sourceTree = "<group>"; };
 		56754EB01D9A4016007BCDC5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6C85EFD922C941B000227EA1 /* DisplayManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayManager.swift; sourceTree = "<group>"; };
@@ -99,7 +99,7 @@
 		6CC260F5256AD8F900613714 /* Preferences+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Preferences+Extension.swift"; sourceTree = "<group>"; };
 		6CDA0FCE26485A8300F52125 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6CDA0FD026485AA100F52125 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
-		6CF93A782707981300BA219D /* MonitorControlDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MonitorControlDebug.entitlements; sourceTree = "<group>"; };
+		6CF93A782707981300BA219D /* BetterMonitorDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BetterMonitorDebug.entitlements; sourceTree = "<group>"; };
 		8C1741842707B91100E88D53 /* InternetAccessPolicy.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = InternetAccessPolicy.plist; sourceTree = "<group>"; };
 		8C1741892707B91F00E88D53 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InternetAccessPolicy.strings; sourceTree = "<group>"; };
 		8C17418B2707B92200E88D53 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InternetAccessPolicy.strings"; sourceTree = "<group>"; };
@@ -177,10 +177,10 @@
 		F01B068F228221B7008E64DB /* SliderHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliderHandler.swift; sourceTree = "<group>"; };
 		F03A8DF11FFBAA6F0034DC27 /* OtherDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherDisplay.swift; sourceTree = "<group>"; };
 		F0445D3720023E710025AE82 /* MainPrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPrefsViewController.swift; sourceTree = "<group>"; };
-		F06792E7200A73460066C438 /* MonitorControlHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MonitorControlHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F06792E7200A73460066C438 /* BetterMonitorHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterMonitorHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F06792E9200A73460066C438 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		F06792F0200A73470066C438 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F06792F1200A73470066C438 /* MonitorControlHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MonitorControlHelper.entitlements; sourceTree = "<group>"; };
+		F06792F1200A73470066C438 /* BetterMonitorHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BetterMonitorHelper.entitlements; sourceTree = "<group>"; };
 		F0A489C3279C71B200BEDFD6 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		FB5DB28E2AD54C4600306223 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Main.strings"; sourceTree = "<group>"; };
 		FB5DB28F2AD54C4600306223 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/InternetAccessPolicy.strings"; sourceTree = "<group>"; };
@@ -190,7 +190,7 @@
 		CC00010100000000000000B2 /* CLIRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLIRequestHandler.swift; sourceTree = "<group>"; };
 		CC00010100000000000000B3 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		CC00010100000000000000B4 /* CLICommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLICommand.swift; sourceTree = "<group>"; };
-		CC00010100000000000000B5 /* monitorcontrol */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = monitorcontrol; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC00010100000000000000B5 /* bettermonitor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bettermonitor; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,9 +252,9 @@
 			children = (
 				AAB2F646273ED127004AB5A4 /* Misc */,
 				28D1DDD1227FB759004CB494 /* Frameworks */,
-				56754EAD1D9A4016007BCDC5 /* MonitorControl */,
-				F06792E8200A73460066C438 /* MonitorControlHelper */,
-				CC00010100000000000000D1 /* MonitorControlCLI */,
+				56754EAD1D9A4016007BCDC5 /* BetterMonitor */,
+				F06792E8200A73460066C438 /* BetterMonitorHelper */,
+				CC00010100000000000000D1 /* BetterMonitorCLI */,
 				56754EAC1D9A4016007BCDC5 /* Products */,
 			);
 			indentWidth = 2;
@@ -263,17 +263,17 @@
 		56754EAC1D9A4016007BCDC5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				56754EAB1D9A4016007BCDC5 /* MonitorControl.app */,
-				F06792E7200A73460066C438 /* MonitorControlHelper.app */,
-				CC00010100000000000000B5 /* monitorcontrol */,
+				56754EAB1D9A4016007BCDC5 /* BetterMonitor.app */,
+				F06792E7200A73460066C438 /* BetterMonitorHelper.app */,
+				CC00010100000000000000B5 /* bettermonitor */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		56754EAD1D9A4016007BCDC5 /* MonitorControl */ = {
+		56754EAD1D9A4016007BCDC5 /* BetterMonitor */ = {
 			isa = PBXGroup;
 			children = (
-				6CF93A782707981300BA219D /* MonitorControlDebug.entitlements */,
+				6CF93A782707981300BA219D /* BetterMonitorDebug.entitlements */,
 				8C1741842707B91100E88D53 /* InternetAccessPolicy.plist */,
 				F01B0686228221B6008E64DB /* Info.plist */,
 				56754EB01D9A4016007BCDC5 /* Assets.xcassets */,
@@ -285,7 +285,7 @@
 				F01B0687228221B6008E64DB /* UI */,
 				F0445D3620023D5B0025AE82 /* View Controllers */,
 			);
-			path = MonitorControl;
+			path = BetterMonitor;
 			sourceTree = "<group>";
 		};
 		6C6C34F423DB25BF00C0E9CB /* Model */ = {
@@ -342,13 +342,13 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
-		CC00010100000000000000D1 /* MonitorControlCLI */ = {
+		CC00010100000000000000D1 /* BetterMonitorCLI */ = {
 			isa = PBXGroup;
 			children = (
 				CC00010100000000000000B3 /* main.swift */,
 				CC00010100000000000000B4 /* CLICommand.swift */,
 			);
-			path = MonitorControlCLI;
+			path = BetterMonitorCLI;
 			sourceTree = "<group>";
 		};
 		F01B0687228221B6008E64DB /* UI */ = {
@@ -370,14 +370,14 @@
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
-		F06792E8200A73460066C438 /* MonitorControlHelper */ = {
+		F06792E8200A73460066C438 /* BetterMonitorHelper */ = {
 			isa = PBXGroup;
 			children = (
 				F06792F0200A73470066C438 /* Info.plist */,
 				F06792E9200A73460066C438 /* main.swift */,
-				F06792F1200A73470066C438 /* MonitorControlHelper.entitlements */,
+				F06792F1200A73470066C438 /* BetterMonitorHelper.entitlements */,
 			);
-			path = MonitorControlHelper;
+			path = BetterMonitorHelper;
 			sourceTree = "<group>";
 		};
 		F0A489C1279C718400BEDFD6 /* Preferences */ = {
@@ -404,9 +404,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		56754EAA1D9A4016007BCDC5 /* MonitorControl */ = {
+		56754EAA1D9A4016007BCDC5 /* BetterMonitor */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 56754EB81D9A4016007BCDC5 /* Build configuration list for PBXNativeTarget "MonitorControl" */;
+			buildConfigurationList = 56754EB81D9A4016007BCDC5 /* Build configuration list for PBXNativeTarget "BetterMonitor" */;
 			buildPhases = (
 				28D1DE0C227FCFAF004CB494 /* [Format] Run SwiftFormat */,
 				F03A8DF01FFB9D4C0034DC27 /* [Lint] Run SwiftLint */,
@@ -420,7 +420,7 @@
 			);
 			dependencies = (
 			);
-			name = MonitorControl;
+			name = BetterMonitor;
 			packageProductDependencies = (
 				6CD35F52264FFFC6001F1344 /* SimplyCoreAudio */,
 				6CD35F5526500008001F1344 /* MediaKeyTap */,
@@ -428,13 +428,13 @@
 				AA70817B27046B9800CC5625 /* Sparkle */,
 				AAD7DD332CAFF3D90062822F /* Settings */,
 			);
-			productName = MonitorControl.OSX;
-			productReference = 56754EAB1D9A4016007BCDC5 /* MonitorControl.app */;
+			productName = BetterMonitor;
+			productReference = 56754EAB1D9A4016007BCDC5 /* BetterMonitor.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F06792E6200A73460066C438 /* MonitorControlHelper */ = {
+		F06792E6200A73460066C438 /* BetterMonitorHelper */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F06792F4200A73470066C438 /* Build configuration list for PBXNativeTarget "MonitorControlHelper" */;
+			buildConfigurationList = F06792F4200A73470066C438 /* Build configuration list for PBXNativeTarget "BetterMonitorHelper" */;
 			buildPhases = (
 				F06792E3200A73460066C438 /* Sources */,
 				F06792E4200A73460066C438 /* Frameworks */,
@@ -446,14 +446,14 @@
 			);
 			dependencies = (
 			);
-			name = MonitorControlHelper;
-			productName = MonitorControlHelper;
-			productReference = F06792E7200A73460066C438 /* MonitorControlHelper.app */;
+			name = BetterMonitorHelper;
+			productName = BetterMonitorHelper;
+			productReference = F06792E7200A73460066C438 /* BetterMonitorHelper.app */;
 			productType = "com.apple.product-type.application";
 		};
-		CC00010100000000000000E1 /* MonitorControlCLI */ = {
+		CC00010100000000000000E1 /* BetterMonitorCLI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CC00010100000000000000F3 /* Build configuration list for PBXNativeTarget "MonitorControlCLI" */;
+			buildConfigurationList = CC00010100000000000000F3 /* Build configuration list for PBXNativeTarget "BetterMonitorCLI" */;
 			buildPhases = (
 				CC00010100000000000000C1 /* Sources */,
 				CC00010100000000000000C2 /* Frameworks */,
@@ -462,9 +462,9 @@
 			);
 			dependencies = (
 			);
-			name = MonitorControlCLI;
-			productName = monitorcontrol;
-			productReference = CC00010100000000000000B5 /* monitorcontrol */;
+			name = BetterMonitorCLI;
+			productName = bettermonitor;
+			productReference = CC00010100000000000000B5 /* bettermonitor */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -494,7 +494,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 56754EA61D9A4016007BCDC5 /* Build configuration list for PBXProject "MonitorControl" */;
+			buildConfigurationList = 56754EA61D9A4016007BCDC5 /* Build configuration list for PBXProject "BetterMonitor" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -532,9 +532,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				56754EAA1D9A4016007BCDC5 /* MonitorControl */,
-				F06792E6200A73460066C438 /* MonitorControlHelper */,
-				CC00010100000000000000E1 /* MonitorControlCLI */,
+				56754EAA1D9A4016007BCDC5 /* BetterMonitor */,
+				F06792E6200A73460066C438 /* BetterMonitorHelper */,
+				CC00010100000000000000E1 /* BetterMonitorCLI */,
 			);
 		};
 /* End PBXProject section */
@@ -925,7 +925,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = MonitorControl/MonitorControlDebug.entitlements;
+				CODE_SIGN_ENTITLEMENTS = BetterMonitor/BetterMonitorDebug.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -938,7 +938,7 @@
 					"$(PROJECT_DIR)/**",
 					"/System/Library/PrivateFrameworks/**",
 				);
-				INFOPLIST_FILE = MonitorControl/Info.plist;
+				INFOPLIST_FILE = BetterMonitor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -948,7 +948,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = app.bettermonitor.BetterMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "MonitorControl/Support/Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "BetterMonitor/Support/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.5;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
@@ -975,7 +975,7 @@
 					"$(PROJECT_DIR)/**",
 					"/System/Library/PrivateFrameworks/**",
 				);
-				INFOPLIST_FILE = MonitorControl/Info.plist;
+				INFOPLIST_FILE = BetterMonitor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -985,7 +985,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = app.bettermonitor.BetterMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "MonitorControl/Support/Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "BetterMonitor/Support/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.5;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
@@ -1002,7 +1002,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = MonitorControlHelper/MonitorControlHelper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = BetterMonitorHelper/BetterMonitorHelper.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1012,7 +1012,7 @@
 				DEVELOPMENT_TEAM = 299YSU96J7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = MonitorControlHelper/Info.plist;
+				INFOPLIST_FILE = BetterMonitorHelper/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1033,7 +1033,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = MonitorControlHelper/MonitorControlHelper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = BetterMonitorHelper/BetterMonitorHelper.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1043,7 +1043,7 @@
 				DEVELOPMENT_TEAM = 299YSU96J7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = MonitorControlHelper/Info.plist;
+				INFOPLIST_FILE = BetterMonitorHelper/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1088,7 +1088,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		56754EA61D9A4016007BCDC5 /* Build configuration list for PBXProject "MonitorControl" */ = {
+		56754EA61D9A4016007BCDC5 /* Build configuration list for PBXProject "BetterMonitor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				56754EB61D9A4016007BCDC5 /* Debug */,
@@ -1097,7 +1097,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		56754EB81D9A4016007BCDC5 /* Build configuration list for PBXNativeTarget "MonitorControl" */ = {
+		56754EB81D9A4016007BCDC5 /* Build configuration list for PBXNativeTarget "BetterMonitor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				56754EB91D9A4016007BCDC5 /* Debug */,
@@ -1106,7 +1106,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F06792F4200A73470066C438 /* Build configuration list for PBXNativeTarget "MonitorControlHelper" */ = {
+		F06792F4200A73470066C438 /* Build configuration list for PBXNativeTarget "BetterMonitorHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F06792F2200A73470066C438 /* Debug */,
@@ -1115,7 +1115,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CC00010100000000000000F3 /* Build configuration list for PBXNativeTarget "MonitorControlCLI" */ = {
+		CC00010100000000000000F3 /* Build configuration list for PBXNativeTarget "BetterMonitorCLI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CC00010100000000000000F1 /* Debug */,

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "56754EAA1D9A4016007BCDC5"
-               BuildableName = "MonitorControl.app"
-               BlueprintName = "MonitorControl"
-               ReferencedContainer = "container:MonitorControl.xcodeproj">
+               BuildableName = "BetterMonitor.app"
+               BlueprintName = "BetterMonitor"
+               ReferencedContainer = "container:BetterMonitor.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -31,9 +31,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "56754EAA1D9A4016007BCDC5"
-            BuildableName = "MonitorControl.app"
-            BlueprintName = "MonitorControl"
-            ReferencedContainer = "container:MonitorControl.xcodeproj">
+            BuildableName = "BetterMonitor.app"
+            BlueprintName = "BetterMonitor"
+            ReferencedContainer = "container:BetterMonitor.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -54,9 +54,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "56754EAA1D9A4016007BCDC5"
-            BuildableName = "MonitorControl.app"
-            BlueprintName = "MonitorControl"
-            ReferencedContainer = "container:MonitorControl.xcodeproj">
+            BuildableName = "BetterMonitor.app"
+            BlueprintName = "BetterMonitor"
+            ReferencedContainer = "container:BetterMonitor.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "56754EAA1D9A4016007BCDC5"
-            BuildableName = "MonitorControl.app"
-            BlueprintName = "MonitorControl"
-            ReferencedContainer = "container:MonitorControl.xcodeproj">
+            BuildableName = "BetterMonitor.app"
+            BlueprintName = "BetterMonitor"
+            ReferencedContainer = "container:BetterMonitor.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
