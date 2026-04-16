@@ -379,6 +379,7 @@ class OtherDisplay: Display {
 
   public func writeDDCValues(command: Command, value: UInt16) {
     guard app.sleepID == 0, app.reconfigureID == 0, !self.readPrefAsBool(key: .forceSw), !self.readPrefAsBool(key: .unavailableDDC, for: command) else {
+      os_log("writeDDCValues skipped for %{public}@ on %{public}@ (sleep=%{public}@, reconfig=%{public}@)", type: .debug, String(reflecting: command), self.name, String(app.sleepID), String(app.reconfigureID))
       return
     }
     self.writeDDCQueue.async(flags: .barrier) {
@@ -399,6 +400,7 @@ class OtherDisplay: Display {
     guard value != UInt16.max, value != lastValue else {
       return
     }
+    os_log("DDC write: %{public}@ = %{public}@ on %{public}@ (arm64=%{public}@)", type: .debug, String(reflecting: command), String(value), self.name, String(self.arm64ddc))
     self.writeDDCQueue.async(flags: .barrier) {
       self.writeDDCLastSavedValue[command] = value
       self.savePref(true, key: PrefKey.isTouched, for: command)
@@ -421,8 +423,10 @@ class OtherDisplay: Display {
   func readDDCValues(for command: Command, tries: UInt, minReplyDelay delay: UInt64?) -> (current: UInt16, max: UInt16)? {
     var values: (UInt16, UInt16)?
     guard app.sleepID == 0, app.reconfigureID == 0, !self.readPrefAsBool(key: .forceSw), !self.readPrefAsBool(key: .unavailableDDC, for: command) else {
+      os_log("readDDCValues skipped for %{public}@ on %{public}@", type: .debug, String(reflecting: command), self.name)
       return values
     }
+    os_log("DDC read: %{public}@ on %{public}@ (tries=%{public}@, arm64=%{public}@)", type: .debug, String(reflecting: command), self.name, String(tries), String(self.arm64ddc))
     let controlCodes = self.getRemapControlCodes(command: command)
     let controlCode = controlCodes.count == 0 ? command.rawValue : controlCodes[0]
     if Arm64DDC.isArm64 {
@@ -440,6 +444,11 @@ class OtherDisplay: Display {
       DisplayManager.shared.globalDDCQueue.sync {
         values = self.ddc?.read(command: controlCode, tries: tries, minReplyDelay: delay)
       }
+    }
+    if let values = values {
+      os_log("DDC read result: %{public}@ on %{public}@ = current:%{public}@, max:%{public}@", type: .debug, String(reflecting: command), self.name, String(values.0), String(values.1))
+    } else {
+      os_log("DDC read failed: %{public}@ on %{public}@", type: .error, String(reflecting: command), self.name)
     }
     return values
   }

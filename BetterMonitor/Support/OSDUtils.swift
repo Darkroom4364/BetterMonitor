@@ -1,6 +1,7 @@
 //  Copyright © BetterMonitor. @victorchabbert, @JoniVR, @theOneyouseek, @waydabber and others
 
 import Cocoa
+import os.log
 
 class OSDUtils: NSObject {
   enum OSDImage: Int64 {
@@ -23,8 +24,10 @@ class OSDUtils: NSObject {
 
   static func showOsd(displayID: CGDirectDisplayID, command: Command, value: Float, maxValue: Float = 1, roundChiclet: Bool = false, lock: Bool = false) {
     guard let manager = OSDManager.sharedManager() as? OSDManager else {
+      os_log("OSD showOsd failed: OSDManager unavailable for display %{public}@", type: .error, String(displayID))
       return
     }
+    os_log("OSD show: display=%{public}@, command=%{public}@, value=%{public}@", type: .debug, String(displayID), String(reflecting: command), String(value))
     let osdImage = self.getOSDImageByCommand(command: command, value: value)
     let filledChiclets: Int
     let totalChiclets: Int
@@ -41,6 +44,7 @@ class OSDUtils: NSObject {
 
   static func showOsdVolumeDisabled(displayID: CGDirectDisplayID) {
     guard let manager = OSDManager.sharedManager() as? OSDManager else {
+      os_log("OSD showOsdVolumeDisabled failed: OSDManager unavailable", type: .error)
       return
     }
     manager.showImage(22, onDisplayID: displayID, priority: 0x1F4, msecUntilFade: 1000)
@@ -48,6 +52,7 @@ class OSDUtils: NSObject {
 
   static func showOsdMuteDisabled(displayID: CGDirectDisplayID) {
     guard let manager = OSDManager.sharedManager() as? OSDManager else {
+      os_log("OSD showOsdMuteDisabled failed: OSDManager unavailable", type: .error)
       return
     }
     manager.showImage(21, onDisplayID: displayID, priority: 0x1F4, msecUntilFade: 1000)
