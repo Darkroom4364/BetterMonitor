@@ -51,4 +51,4 @@ jobs:
             -project BetterMonitor.xcodeproj \
             -scheme BetterMonitor \
             -destination 'platform=macOS' \
-            CODE_SIGNING_ALLOWED=NO || true
+            CODE_SIGNING_ALLOWED=NO

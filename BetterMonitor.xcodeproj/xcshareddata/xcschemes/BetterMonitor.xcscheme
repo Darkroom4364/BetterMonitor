@@ -37,6 +37,16 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DD00010100000000000000E1"
+               BuildableName = "BetterMonitorTests.xctest"
+               BlueprintName = "BetterMonitorTests"
+               ReferencedContainer = "container:BetterMonitor.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

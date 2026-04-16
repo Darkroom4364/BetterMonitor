@@ -64,6 +64,13 @@
 		CC00010100000000000000A3 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B3 /* main.swift */; };
 		CC00010100000000000000A4 /* CLICommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B4 /* CLICommand.swift */; };
 		CC00010100000000000000A5 /* CLIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B1 /* CLIProtocol.swift */; };
+		DD00010100000000000000A1 /* CLICommandParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B1 /* CLICommandParsingTests.swift */; };
+		DD00010100000000000000A2 /* CLIProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B2 /* CLIProtocolTests.swift */; };
+		DD00010100000000000000A3 /* OSDUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B3 /* OSDUtilsTests.swift */; };
+		DD00010100000000000000A4 /* DisplayValueConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B4 /* DisplayValueConversionTests.swift */; };
+		DD00010100000000000000A5 /* DisplaySteppingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B5 /* DisplaySteppingTests.swift */; };
+		DD00010100000000000000A6 /* CLICommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B4 /* CLICommand.swift */; };
+		DD00010100000000000000A7 /* CLIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B1 /* CLIProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -193,6 +200,12 @@
 		CC00010100000000000000B3 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		CC00010100000000000000B4 /* CLICommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLICommand.swift; sourceTree = "<group>"; };
 		CC00010100000000000000B5 /* bettermonitor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bettermonitor; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD00010100000000000000B1 /* CLICommandParsingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLICommandParsingTests.swift; sourceTree = "<group>"; };
+		DD00010100000000000000B2 /* CLIProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLIProtocolTests.swift; sourceTree = "<group>"; };
+		DD00010100000000000000B3 /* OSDUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSDUtilsTests.swift; sourceTree = "<group>"; };
+		DD00010100000000000000B4 /* DisplayValueConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayValueConversionTests.swift; sourceTree = "<group>"; };
+		DD00010100000000000000B5 /* DisplaySteppingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySteppingTests.swift; sourceTree = "<group>"; };
+		DD00010100000000000000B6 /* BetterMonitorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BetterMonitorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +232,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		CC00010100000000000000C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD00010100000000000000C2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -257,6 +277,7 @@
 				56754EAD1D9A4016007BCDC5 /* BetterMonitor */,
 				F06792E8200A73460066C438 /* BetterMonitorHelper */,
 				CC00010100000000000000D1 /* BetterMonitorCLI */,
+				DD00010100000000000000D1 /* BetterMonitorTests */,
 				56754EAC1D9A4016007BCDC5 /* Products */,
 			);
 			indentWidth = 2;
@@ -268,6 +289,7 @@
 				56754EAB1D9A4016007BCDC5 /* BetterMonitor.app */,
 				F06792E7200A73460066C438 /* BetterMonitorHelper.app */,
 				CC00010100000000000000B5 /* bettermonitor */,
+				DD00010100000000000000B6 /* BetterMonitorTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -404,6 +426,18 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		DD00010100000000000000D1 /* BetterMonitorTests */ = {
+			isa = PBXGroup;
+			children = (
+				DD00010100000000000000B1 /* CLICommandParsingTests.swift */,
+				DD00010100000000000000B2 /* CLIProtocolTests.swift */,
+				DD00010100000000000000B3 /* OSDUtilsTests.swift */,
+				DD00010100000000000000B4 /* DisplayValueConversionTests.swift */,
+				DD00010100000000000000B5 /* DisplaySteppingTests.swift */,
+			);
+			path = BetterMonitorTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -470,6 +504,23 @@
 			productReference = CC00010100000000000000B5 /* bettermonitor */;
 			productType = "com.apple.product-type.tool";
 		};
+		DD00010100000000000000E1 /* BetterMonitorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD00010100000000000000F3 /* Build configuration list for PBXNativeTarget "BetterMonitorTests" */;
+			buildPhases = (
+				DD00010100000000000000C1 /* Sources */,
+				DD00010100000000000000C2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DD00010100000000000000E2 /* PBXTargetDependency */,
+			);
+			name = BetterMonitorTests;
+			productName = BetterMonitorTests;
+			productReference = DD00010100000000000000B6 /* BetterMonitorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -494,6 +545,11 @@
 					CC00010100000000000000E1 = {
 						CreatedOnToolsVersion = 15.0;
 						ProvisioningStyle = Automatic;
+					};
+					DD00010100000000000000E1 = {
+						CreatedOnToolsVersion = 15.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 56754EAA1D9A4016007BCDC5;
 					};
 				};
 			};
@@ -538,6 +594,7 @@
 				56754EAA1D9A4016007BCDC5 /* BetterMonitor */,
 				F06792E6200A73460066C438 /* BetterMonitorHelper */,
 				CC00010100000000000000E1 /* BetterMonitorCLI */,
+				DD00010100000000000000E1 /* BetterMonitorTests */,
 			);
 		};
 /* End PBXProject section */
@@ -723,7 +780,39 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DD00010100000000000000C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD00010100000000000000A1 /* CLICommandParsingTests.swift in Sources */,
+				DD00010100000000000000A2 /* CLIProtocolTests.swift in Sources */,
+				DD00010100000000000000A3 /* OSDUtilsTests.swift in Sources */,
+				DD00010100000000000000A4 /* DisplayValueConversionTests.swift in Sources */,
+				DD00010100000000000000A5 /* DisplaySteppingTests.swift in Sources */,
+				DD00010100000000000000A6 /* CLICommand.swift in Sources */,
+				DD00010100000000000000A7 /* CLIProtocol.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		DD00010100000000000000E3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56754EA31D9A4016007BCDC5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56754EAA1D9A4016007BCDC5;
+			remoteInfo = BetterMonitor;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		DD00010100000000000000E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56754EAA1D9A4016007BCDC5 /* BetterMonitor */;
+			targetProxy = DD00010100000000000000E3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6CDA0FCD26485A8300F52125 /* Main.storyboard */ = {
@@ -1089,6 +1178,40 @@
 			};
 			name = Release;
 		};
+		DD00010100000000000000F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = app.bettermonitor.BetterMonitorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.5;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BetterMonitor.app/Contents/MacOS/BetterMonitor";
+			};
+			name = Debug;
+		};
+		DD00010100000000000000F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = app.bettermonitor.BetterMonitorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.5;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BetterMonitor.app/Contents/MacOS/BetterMonitor";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1124,6 +1247,15 @@
 			buildConfigurations = (
 				CC00010100000000000000F1 /* Debug */,
 				CC00010100000000000000F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD00010100000000000000F3 /* Build configuration list for PBXNativeTarget "BetterMonitorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD00010100000000000000F1 /* Debug */,
+				DD00010100000000000000F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
