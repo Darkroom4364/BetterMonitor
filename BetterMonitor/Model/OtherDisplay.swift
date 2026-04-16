@@ -12,6 +12,7 @@ class OtherDisplay: Display {
   let writeDDCQueue = DispatchQueue(label: "Local write DDC queue")
   var writeDDCNextValue: [Command: UInt16] = [:]
   var writeDDCLastSavedValue: [Command: UInt16] = [:]
+  var inputSourceHandler: InputSourceHandler?
   var pollingCount: Int {
     get {
       switch self.readPrefAsInt(key: .pollingMode) {

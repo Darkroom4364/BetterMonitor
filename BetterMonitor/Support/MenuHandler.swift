@@ -194,6 +194,14 @@ class MenuHandler: NSMenu, NSMenuDelegate {
       let title = NSLocalizedString("Brightness", comment: "Shown in menu")
       addedSliderHandlers.append(self.setupMenuSliderHandler(command: .brightness, display: display, title: title))
     }
+    // Input source dropdown (DDC displays only)
+    if let otherDisplay = display as? OtherDisplay, !otherDisplay.isSw(), !display.readPrefAsBool(key: .unavailableDDC, for: .inputSelect), prefs.bool(forKey: PrefKey.showInputSource.rawValue) {
+      let handler = InputSourceHandler(display: otherDisplay, title: NSLocalizedString("Input Source", comment: "Shown in menu"))
+      let item = NSMenuItem()
+      item.view = handler.view
+      otherDisplay.inputSourceHandler = handler
+      monitorSubMenu.insertItem(item, at: 0)
+    }
     if prefs.integer(forKey: PrefKey.multiSliders.rawValue) != MultiSliders.combine.rawValue {
       self.addDisplayMenuBlock(addedSliderHandlers: addedSliderHandlers, blockName: display.readPrefAsString(key: .friendlyName) != "" ? display.readPrefAsString(key: .friendlyName) : display.name, monitorSubMenu: monitorSubMenu, numOfDisplays: numOfDisplays, asSubMenu: asSubMenu)
     }
