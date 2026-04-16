@@ -18,6 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }()
   var mediaKeyTap = MediaKeyTapManager()
   var keyboardShortcuts = KeyboardShortcutsManager()
+  var hidKeyMonitor = HIDKeyMonitor()
   let coreAudio = SimplyCoreAudio()
   var accessibilityObserver: NSObjectProtocol!
   var statusItemObserver: NSObjectProtocol!
@@ -297,6 +298,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   func updateMediaKeyTap() {
     MediaKeyTap.useAlternateBrightnessKeys = !prefs.bool(forKey: PrefKey.disableAltBrightnessKeys.rawValue)
     self.mediaKeyTap.updateMediaKeyTap()
+    if prefs.bool(forKey: PrefKey.enableHIDKeyMonitor.rawValue) {
+      self.hidKeyMonitor.delegate = self.mediaKeyTap
+      self.hidKeyMonitor.start()
+    } else {
+      self.hidKeyMonitor.stop()
+    }
   }
 
   func setStartAtLogin(enabled: Bool) {
