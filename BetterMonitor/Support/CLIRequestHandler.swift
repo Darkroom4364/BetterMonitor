@@ -36,8 +36,10 @@ class CLIRequestHandler {
           let replyId = userInfo[CLIKey.replyId] as? String,
           UUID(uuidString: replyId) != nil
     else {
+      os_log("CLI request rejected: invalid action or replyId", type: .error)
       return
     }
+    os_log("CLI request received: action=%{public}@, replyId=%{public}@", type: .info, actionString, replyId)
     DispatchQueue.main.async {
       let result: [[String: Any]]
       switch action {
@@ -49,6 +51,7 @@ class CLIRequestHandler {
         result = self.handleSet(userInfo: userInfo)
       }
       let hasErrors = result.contains { $0["error"] != nil }
+      os_log("CLI request completed: action=%{public}@, success=%{public}@", type: .info, actionString, String(!hasErrors))
       self.postReply(replyId: replyId, result: ["success": !hasErrors, "data": result])
     }
   }
@@ -105,9 +108,11 @@ class CLIRequestHandler {
           let property = CLIProperty(rawValue: propertyString),
           let valueInt = userInfo[CLIKey.value] as? Int
     else {
+      os_log("CLI set rejected: invalid property or value", type: .error)
       return [["error": "Invalid property or value"]]
     }
     let floatValue = max(0, min(1, Float(valueInt) / 100.0))
+    os_log("CLI set: %{public}@=%{public}@%%", type: .info, propertyString, String(valueInt))
     let displays = resolveDisplays(userInfo: userInfo)
     if displays.isEmpty {
       return [["error": "No matching display found"]]

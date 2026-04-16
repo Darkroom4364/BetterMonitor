@@ -171,6 +171,7 @@ class Display: Equatable {
 
   func setDirectBrightness(_ to: Float, transient: Bool = false) -> Bool {
     let value = max(min(to, 1), 0)
+    os_log("setDirectBrightness: %{public}@ on %{public}@ (transient=%{public}@)", type: .debug, String(value), self.name, String(transient))
     if self.setSwBrightness(value) {
       if !transient {
         self.savePref(value, for: .brightness)
@@ -212,6 +213,7 @@ class Display: Equatable {
 
   func setSwBrightness(_ value: Float, smooth: Bool = false, noPrefSave: Bool = false) -> Bool {
     self.swBrightnessSemaphore.wait()
+    os_log("setSwBrightness: %{public}@ on %{public}@ (smooth=%{public}@, virtual=%{public}@, avoidGamma=%{public}@)", type: .debug, String(value), self.name, String(smooth), String(self.isVirtual), String(self.readPrefAsBool(key: .avoidGamma)))
     let brightnessValue = min(1, value)
     var currentValue = self.readPrefAsFloat(key: .SwBrightness)
     if !noPrefSave {
