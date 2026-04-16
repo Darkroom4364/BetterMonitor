@@ -1,4 +1,4 @@
-//  Copyright © MonitorControl. @JoniVR, @theOneyouseek, @waydabber and others
+//  Copyright © BetterMonitor. @JoniVR, @theOneyouseek, @waydabber and others
 
 import Cocoa
 import ServiceManagement
@@ -30,19 +30,19 @@ class AboutPrefsViewController: NSViewController, SettingsPane {
   }
 
   @IBAction func openDonate(_: NSButton) {
-    if let url = URL(string: "https://opencollective.com/monitorcontrol/donate") {
+    if let url = URL(string: "https://github.com/Darkroom4364/MonitorControl") {
       NSWorkspace.shared.open(url)
     }
   }
 
   @IBAction func openWebPage(_: NSButton) {
-    if let url = URL(string: "https://monitorcontrol.app") {
+    if let url = URL(string: "https://github.com/Darkroom4364/MonitorControl") {
       NSWorkspace.shared.open(url)
     }
   }
 
   @IBAction func openContributorsPage(_: NSButton) {
-    if let url = URL(string: "https://github.com/MonitorControl/MonitorControl/graphs/contributors") {
+    if let url = URL(string: "https://github.com/Darkroom4364/MonitorControl/graphs/contributors") {
       NSWorkspace.shared.open(url)
     }
   }
@@ -57,7 +57,7 @@ class AboutPrefsViewController: NSViewController, SettingsPane {
   }
 
   func setCopyrightInfo() {
-    let copyright = NSLocalizedString("Copyright Ⓒ MonitorControl, ", comment: "Version")
+    let copyright = NSLocalizedString("Copyright Ⓒ BetterMonitor, ", comment: "Version")
     let year = Calendar.current.component(.year, from: Date())
     self.copyrightLabel.stringValue = "\(copyright) \(year)"
   }

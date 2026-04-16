@@ -1,10 +1,10 @@
-//  Copyright © MonitorControl. @JoniVR, @theOneyouseek, @waydabber and others
+//  Copyright © BetterMonitor. @JoniVR, @theOneyouseek, @waydabber and others
 
 import Foundation
 
 enum CLINotification {
-  static let request = "com.github.MonitorControl.cli.request"
-  static let replyPrefix = "com.github.MonitorControl.cli.reply."
+  static let request = "com.github.BetterMonitor.cli.request"
+  static let replyPrefix = "com.github.BetterMonitor.cli.reply."
 }
 
 enum CLIKey {

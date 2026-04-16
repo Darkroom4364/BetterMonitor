@@ -476,7 +476,7 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 1610;
-				ORGANIZATIONNAME = MonitorControl;
+				ORGANIZATIONNAME = BetterMonitor;
 				TargetAttributes = {
 					56754EAA1D9A4016007BCDC5 = {
 						CreatedOnToolsVersion = 8.0;
@@ -945,7 +945,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MARKETING_VERSION = 4.3.2;
-				PRODUCT_BUNDLE_IDENTIFIER = app.monitorcontrol.MonitorControl;
+				PRODUCT_BUNDLE_IDENTIFIER = app.bettermonitor.BetterMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "MonitorControl/Support/Bridging-Header.h";
@@ -982,7 +982,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MARKETING_VERSION = 4.3.2;
-				PRODUCT_BUNDLE_IDENTIFIER = app.monitorcontrol.MonitorControl;
+				PRODUCT_BUNDLE_IDENTIFIER = app.bettermonitor.BetterMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "MonitorControl/Support/Bridging-Header.h";
@@ -1019,7 +1019,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MARKETING_VERSION = 4.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.monitorcontrol.MonitorControlHelper;
+				PRODUCT_BUNDLE_IDENTIFIER = app.bettermonitor.BetterMonitorHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.5;
@@ -1050,7 +1050,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MARKETING_VERSION = 4.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.monitorcontrol.MonitorControlHelper;
+				PRODUCT_BUNDLE_IDENTIFIER = app.bettermonitor.BetterMonitorHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.5;
@@ -1065,7 +1065,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_NAME = monitorcontrol;
+				PRODUCT_NAME = bettermonitor;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.5;
 			};
@@ -1079,7 +1079,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_NAME = monitorcontrol;
+				PRODUCT_NAME = bettermonitor;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.5;
 			};

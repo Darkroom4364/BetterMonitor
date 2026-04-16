@@ -1,0 +1,2 @@
+Target dependency graph (1 target)
+Target 'MonitorControlCLI' in project 'MonitorControl' (no dependencies)

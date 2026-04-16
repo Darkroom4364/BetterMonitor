@@ -1,4 +1,4 @@
-//  Copyright © MonitorControl. @JoniVR, @theOneyouseek, @waydabber and others
+//  Copyright © BetterMonitor. @JoniVR, @theOneyouseek, @waydabber and others
 //  Adapted from IntelDDC.swift, @reitermarkus
 
 import Foundation

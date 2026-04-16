@@ -1,4 +1,4 @@
-//  Copyright © MonitorControl. @JoniVR, @theOneyouseek, @waydabber and others
+//  Copyright © BetterMonitor. @JoniVR, @theOneyouseek, @waydabber and others
 
 import Cocoa
 import os.log
@@ -131,7 +131,7 @@ class DisplaysPrefsViewController: NSViewController, SettingsPane, NSTableViewDa
         displayImage = "display"
       }
       controlMethod = NSLocalizedString("Hardware (Apple)", comment: "Shown in the Display Settings")
-      controlStatus = NSLocalizedString("This display supports native Apple brightness protocol. This allows macOS to control this display without MonitorControl as well.", comment: "Shown in the Display Settings")
+      controlStatus = NSLocalizedString("This display supports native Apple brightness protocol. This allows macOS to control this display without BetterMonitor as well.", comment: "Shown in the Display Settings")
     }
     return DisplayInfo(displayType: displayType, displayImage: displayImage, controlMethod: controlMethod, controlStatus: controlStatus)
   }

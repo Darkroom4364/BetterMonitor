@@ -1,4 +1,4 @@
-//  Copyright © MonitorControl. @victorchabbert, @JoniVR, @theOneyouseek, @waydabber and others
+//  Copyright © BetterMonitor. @victorchabbert, @JoniVR, @theOneyouseek, @waydabber and others
 
 import Cocoa
 

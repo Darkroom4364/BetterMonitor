@@ -1,4 +1,4 @@
-//  Copyright © MonitorControl. @JoniVR, @theOneyouseek, @waydabber and others
+//  Copyright © BetterMonitor. @JoniVR, @theOneyouseek, @waydabber and others
 
 import Foundation
 
@@ -28,7 +28,7 @@ class ReplyHandler: NSObject {
           let result = try? JSONSerialization.jsonObject(with: resultData) as? [String: Any],
           let data = result["data"] as? [[String: Any]]
     else {
-      CLICommand.printError("Invalid response from MonitorControl")
+      CLICommand.printError("Invalid response from BetterMonitor")
       exit(1)
     }
 
@@ -66,7 +66,7 @@ DistributedNotificationCenter.default().postNotificationName(
 // Run loop with 3-second timeout
 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
   if !handler.receivedReply {
-    CLICommand.printError("MonitorControl app is not running. Please launch MonitorControl first.")
+    CLICommand.printError("BetterMonitor app is not running. Please launch BetterMonitor first.")
     exit(1)
   }
 }

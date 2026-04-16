@@ -1,0 +1,12 @@
+{
+  "/Users/darkroom/Projects/MonitorControl/MonitorControlCLI/main.swift" : {
+    "abi-baseline-json" : "/Users/darkroom/Projects/MonitorControl/build/MonitorControl.build/Release/MonitorControlCLI.build/Objects-normal/x86_64/monitorcontrol.abi.json",
+    "const-values" : "/Users/darkroom/Projects/MonitorControl/build/MonitorControl.build/Release/MonitorControlCLI.build/Objects-normal/x86_64/MonitorControlCLI-primary.swiftconstvalues",
+    "dependencies" : "/Users/darkroom/Projects/MonitorControl/build/MonitorControl.build/Release/MonitorControlCLI.build/Objects-normal/x86_64/MonitorControlCLI-primary.d",
+    "diagnostics" : "/Users/darkroom/Projects/MonitorControl/build/MonitorControl.build/Release/MonitorControlCLI.build/Objects-normal/x86_64/MonitorControlCLI-primary.dia",
+    "objc-header" : "/Users/darkroom/Projects/MonitorControl/build/MonitorControl.build/Release/MonitorControlCLI.build/Objects-normal/x86_64/monitorcontrol-Swift.h",
+    "swiftdoc" : "/Users/darkroom/Projects/MonitorControl/build/MonitorControl.build/Release/MonitorControlCLI.build/Objects-normal/x86_64/monitorcontrol.swiftdoc",
+    "swiftmodule" : "/Users/darkroom/Projects/MonitorControl/build/MonitorControl.build/Release/MonitorControlCLI.build/Objects-normal/x86_64/monitorcontrol.swiftmodule",
+    "swiftsourceinfo" : "/Users/darkroom/Projects/MonitorControl/build/MonitorControl.build/Release/MonitorControlCLI.build/Objects-normal/x86_64/monitorcontrol.swiftsourceinfo"
+  }
+}

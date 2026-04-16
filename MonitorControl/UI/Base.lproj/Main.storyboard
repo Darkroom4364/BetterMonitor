@@ -10,7 +10,7 @@
         <!--Main Prefs View Controller-->
         <scene sceneID="zAg-r8-WQ5">
             <objects>
-                <viewController storyboardIdentifier="MainPrefsVC" id="BGD-tY-Myx" customClass="MainPrefsViewController" customModule="MonitorControl" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainPrefsVC" id="BGD-tY-Myx" customClass="MainPrefsViewController" customModule="BetterMonitor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" horizontalHuggingPriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="COE-Oc-gZs">
                         <rect key="frame" x="0.0" y="0.0" width="730" height="516"/>
                         <subviews>
@@ -314,7 +314,7 @@
         <!--Menusliders Prefs View Controller-->
         <scene sceneID="YU5-7I-f0n">
             <objects>
-                <viewController storyboardIdentifier="MenuslidersPrefsVC" id="tLm-u5-aZ2" customClass="MenuslidersPrefsViewController" customModule="MonitorControl" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MenuslidersPrefsVC" id="tLm-u5-aZ2" customClass="MenuslidersPrefsViewController" customModule="BetterMonitor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="5un-m0-FM4">
                         <rect key="frame" x="0.0" y="0.0" width="730" height="560"/>
                         <subviews>
@@ -707,7 +707,7 @@
         <!--Keyboard Prefs View Controller-->
         <scene sceneID="VuM-5u-zkv">
             <objects>
-                <viewController storyboardIdentifier="KeyboardPrefsVC" id="eJ2-Cv-Vfp" customClass="KeyboardPrefsViewController" customModule="MonitorControl" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="KeyboardPrefsVC" id="eJ2-Cv-Vfp" customClass="KeyboardPrefsViewController" customModule="BetterMonitor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="yCl-jO-kpd">
                         <rect key="frame" x="0.0" y="0.0" width="730" height="676"/>
                         <subviews>
@@ -1207,7 +1207,7 @@
         <scene sceneID="lLH-hh-1EK">
             <objects>
                 <customObject id="rw7-Po-Lxm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-                <viewController storyboardIdentifier="DisplaysPrefsVC" id="2Ei-9P-f0u" customClass="DisplaysPrefsViewController" customModule="MonitorControl" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DisplaysPrefsVC" id="2Ei-9P-f0u" customClass="DisplaysPrefsViewController" customModule="BetterMonitor" sceneMemberID="viewController">
                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="aj0-6l-QE2">
                         <rect key="frame" x="0.0" y="0.0" width="730" height="533"/>
                         <subviews>
@@ -1268,7 +1268,7 @@
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                     <prototypeCellViews>
-                                                        <tableCellView wantsLayer="YES" id="hCY-wr-B84" customClass="DisplaysPrefsCellView" customModule="MonitorControl">
+                                                        <tableCellView wantsLayer="YES" id="hCY-wr-B84" customClass="DisplaysPrefsCellView" customModule="BetterMonitor">
                                                             <rect key="frame" x="17" y="0.0" width="688" height="520"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <subviews>
@@ -1964,7 +1964,7 @@
         <!--About Prefs View Controller-->
         <scene sceneID="Ot2-lL-eIg">
             <objects>
-                <viewController storyboardIdentifier="AboutPrefsVC" id="7uI-eE-yxm" customClass="AboutPrefsViewController" customModule="MonitorControl" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AboutPrefsVC" id="7uI-eE-yxm" customClass="AboutPrefsViewController" customModule="BetterMonitor" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kXT-i4-NNT">
                         <rect key="frame" x="0.0" y="0.0" width="730" height="308"/>
                         <subviews>
@@ -1989,7 +1989,7 @@
                             <textField identifier="softwareNameLabel" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="dtg-g7-hZb">
                                 <rect key="frame" x="247" y="258" width="147" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="MonitorControl" id="1PJ-14-Bvn">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="BetterMonitor" id="1PJ-14-Bvn">
                                     <font key="font" textStyle="title1" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2045,7 +2045,7 @@
                             <button verticalHuggingPriority="750" id="W2f-KE-6PO">
                                 <rect key="frame" x="249" y="138" width="420" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="bevel" title="https://monitorcontrol.app" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="42n-Zy-AqF">
+                                <buttonCell key="cell" type="bevel" title="https://github.com/Darkroom4364/MonitorControl" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="42n-Zy-AqF">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                     <attributedString key="userComments">
@@ -2100,7 +2100,7 @@
         <!--Onboarding View Controller-->
         <scene sceneID="T2v-ah-vo5">
             <objects>
-                <viewController id="WCR-Sv-JAA" customClass="OnboardingViewController" customModule="MonitorControl" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="WCR-Sv-JAA" customClass="OnboardingViewController" customModule="BetterMonitor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="7ij-vC-Tcj">
                         <rect key="frame" x="0.0" y="0.0" width="730" height="655"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -2112,7 +2112,7 @@
                             </imageView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zz2-ed-nlQ">
                                 <rect key="frame" x="22" y="439" width="686" height="31"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Welcome to MonitorControl" id="5J0-BD-top">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Welcome to BetterMonitor" id="5J0-BD-top">
                                     <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2146,7 +2146,7 @@
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="2Mx-eg-r9b">
                                 <rect key="frame" x="70" y="330" width="550" height="16"/>
-                                <textFieldCell key="cell" selectable="YES" title="Ensure MonitorControl is always running when you need it by launching the app at startup." id="nk6-Gh-Mfs">
+                                <textFieldCell key="cell" selectable="YES" title="Ensure BetterMonitor is always running when you need it by launching the app at startup." id="nk6-Gh-Mfs">
                                     <font key="font" textStyle="body" name=".SFNS-Regular"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2154,7 +2154,7 @@
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XWw-qf-xqA">
                                 <rect key="frame" x="70" y="303" width="203" height="18"/>
-                                <buttonCell key="cell" type="check" title="Start MonitorControl at Login" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="JWJ-OY-VtE">
+                                <buttonCell key="cell" type="check" title="Start BetterMonitor at Login" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="JWJ-OY-VtE">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" textStyle="body" name=".SFNS-Regular"/>
                                 </buttonCell>
@@ -2230,8 +2230,8 @@
                                 <rect key="frame" x="70" y="111" width="615" height="32"/>
                                 <textFieldCell key="cell" selectable="YES" id="kBJ-Zf-1k2">
                                     <font key="font" textStyle="body" name=".SFNS-Regular"/>
-                                    <string key="title">MonitorControl needs access to "accessibility" to use macOS native keys to control your display.
-You can enable it by adding MonitorControl in System Settings &gt; Security and Privacy &gt; Accessibility.</string>
+                                    <string key="title">BetterMonitor needs access to "accessibility" to use macOS native keys to control your display.
+You can enable it by adding BetterMonitor in System Settings &gt; Security and Privacy &gt; Accessibility.</string>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -2248,7 +2248,7 @@ You can enable it by adding MonitorControl in System Settings &gt; Security and 
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BWF-bm-wMQ">
                                 <rect key="frame" x="518" y="17" width="195" height="32"/>
-                                <buttonCell key="cell" type="push" title="Start using MonitorControl" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="8WE-da-OZC">
+                                <buttonCell key="cell" type="push" title="Start using BetterMonitor" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="8WE-da-OZC">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                     <string key="keyEquivalent" base64-UTF8="YES">

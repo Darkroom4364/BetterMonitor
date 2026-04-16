@@ -1,4 +1,4 @@
-//  Copyright © MonitorControl. @JoniVR, @theOneyouseek, @waydabber and others
+//  Copyright © BetterMonitor. @JoniVR, @theOneyouseek, @waydabber and others
 
 import Foundation
 
@@ -79,7 +79,7 @@ struct CLICommand {
 
     case .get:
       guard positional.count >= 2, let property = CLIProperty(rawValue: positional[1]) else {
-        printError("Usage: monitorcontrol get <brightness|volume|contrast>")
+        printError("Usage: bettermonitor get <brightness|volume|contrast>")
         return nil
       }
       return CLICommand(action: .get, property: property, value: nil, displayName: displayName, displayId: displayId, jsonOutput: jsonOutput)
@@ -90,7 +90,7 @@ struct CLICommand {
             let value = Int(positional[2]),
             value >= 0, value <= 100
       else {
-        printError("Usage: monitorcontrol set <brightness|volume|contrast> <0-100>")
+        printError("Usage: bettermonitor set <brightness|volume|contrast> <0-100>")
         return nil
       }
       return CLICommand(action: .set, property: property, value: value, displayName: displayName, displayId: displayId, jsonOutput: jsonOutput)
@@ -99,7 +99,7 @@ struct CLICommand {
 
   static func printUsage() {
     let usage = """
-    Usage: monitorcontrol <command> [options]
+    Usage: bettermonitor <command> [options]
 
     Commands:
       list                                      List connected displays

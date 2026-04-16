@@ -1,4 +1,4 @@
-//  Copyright © MonitorControl. @JoniVR, @theOneyouseek, @waydabber and others
+//  Copyright © BetterMonitor. @JoniVR, @theOneyouseek, @waydabber and others
 
 import Cocoa
 import Foundation
@@ -302,7 +302,7 @@ class Display: Equatable {
       DisplayManager.shared.gammaInterferenceWarningShown = true
       let alert = NSAlert()
       alert.messageText = NSLocalizedString("Is f.lux or similar running?", comment: "Shown in the alert dialog")
-      alert.informativeText = NSLocalizedString("An other app seems to change the brightness or colors which causes issues.\n\nTo solve this, you need to quit the other app or disable gamma control for your displays in MonitorControl!", comment: "Shown in the alert dialog")
+      alert.informativeText = NSLocalizedString("An other app seems to change the brightness or colors which causes issues.\n\nTo solve this, you need to quit the other app or disable gamma control for your displays in BetterMonitor!", comment: "Shown in the alert dialog")
       alert.addButton(withTitle: NSLocalizedString("I'll quit the other app", comment: "Shown in the alert dialog"))
       alert.addButton(withTitle: NSLocalizedString("Disable gamma control for my displays", comment: "Shown in the alert dialog"))
       alert.alertStyle = NSAlert.Style.critical
