@@ -27,4 +27,5 @@ enum CLIProperty: String {
   case brightness
   case volume
   case contrast
+  case input
 }

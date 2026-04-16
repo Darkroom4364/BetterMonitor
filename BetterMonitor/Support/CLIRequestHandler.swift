@@ -9,6 +9,7 @@ private extension CLIProperty {
     case .brightness: return .brightness
     case .volume: return .audioSpeakerVolume
     case .contrast: return .contrast
+    case .input: return .inputSelect
     }
   }
 }
@@ -82,21 +83,32 @@ class CLIRequestHandler {
       return [["error": "No matching display found"]]
     }
     return displays.map { display in
-      var value: Float
       switch property {
       case .brightness:
-        value = display.getBrightness()
+        return [
+          "name": display.name,
+          "id": display.identifier,
+          property.rawValue: Int(round(display.getBrightness() * 100)),
+        ] as [String: Any]
       case .volume, .contrast:
         guard let otherDisplay = display as? OtherDisplay else {
           return ["name": display.name, "error": "Property not available for Apple displays"]
         }
-        value = otherDisplay.readPrefAsFloat(for: property.command)
+        return [
+          "name": display.name,
+          "id": display.identifier,
+          property.rawValue: Int(round(otherDisplay.readPrefAsFloat(for: property.command) * 100)),
+        ] as [String: Any]
+      case .input:
+        guard let otherDisplay = display as? OtherDisplay else {
+          return ["name": display.name, "error": "Property not available for Apple displays"]
+        }
+        return [
+          "name": display.name,
+          "id": display.identifier,
+          "input": otherDisplay.readPrefAsInt(for: .inputSelect),
+        ] as [String: Any]
       }
-      return [
-        "name": display.name,
-        "id": display.identifier,
-        property.rawValue: Int(round(value * 100)),
-      ] as [String: Any]
     }
   }
 
@@ -146,12 +158,27 @@ class CLIRequestHandler {
             slider.setValue(floatValue, displayID: otherDisplay.identifier)
           }
         }
+      case .input:
+        guard let otherDisplay = display as? OtherDisplay else {
+          return ["name": display.name, "error": "Property not available for Apple displays"]
+        }
+        if otherDisplay.isSw() {
+          success = false
+        } else {
+          otherDisplay.writeDDCValues(command: .inputSelect, value: UInt16(valueInt))
+          otherDisplay.savePref(valueInt, for: .inputSelect)
+          otherDisplay.inputSourceHandler?.setSelectedInput(UInt16(valueInt))
+        }
       }
       var result: [String: Any] = [
         "name": display.name,
         "id": display.identifier,
-        property.rawValue: Int(round(floatValue * 100)),
       ]
+      if property == .input {
+        result[property.rawValue] = valueInt
+      } else {
+        result[property.rawValue] = Int(round(floatValue * 100))
+      }
       if !success {
         result["error"] = "Failed to set \(property.rawValue) — DDC unavailable or software-only display"
       }
