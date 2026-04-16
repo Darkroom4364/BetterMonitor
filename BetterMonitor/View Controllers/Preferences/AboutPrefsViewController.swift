@@ -30,19 +30,19 @@ class AboutPrefsViewController: NSViewController, SettingsPane {
   }
 
   @IBAction func openDonate(_: NSButton) {
-    if let url = URL(string: "https://github.com/Darkroom4364/MonitorControl") {
+    if let url = URL(string: "https://github.com/Darkroom4364/BetterMonitor") {
       NSWorkspace.shared.open(url)
     }
   }
 
   @IBAction func openWebPage(_: NSButton) {
-    if let url = URL(string: "https://github.com/Darkroom4364/MonitorControl") {
+    if let url = URL(string: "https://github.com/Darkroom4364/BetterMonitor") {
       NSWorkspace.shared.open(url)
     }
   }
 
   @IBAction func openContributorsPage(_: NSButton) {
-    if let url = URL(string: "https://github.com/Darkroom4364/MonitorControl/graphs/contributors") {
+    if let url = URL(string: "https://github.com/Darkroom4364/BetterMonitor/graphs/contributors") {
       NSWorkspace.shared.open(url)
     }
   }
