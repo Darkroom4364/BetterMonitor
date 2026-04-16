@@ -39,6 +39,9 @@ enum PrefKey: String {
   // Show volume sliders
   case hideVolume
 
+  // Show input source selector
+  case showInputSource
+
   // Lower via software after brightness
   case disableCombinedBrightness
 
