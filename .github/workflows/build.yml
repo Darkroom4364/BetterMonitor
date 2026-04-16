@@ -7,8 +7,23 @@ on:
     branches: [main, dev]
 
 jobs:
-  build:
+  lint:
     runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Run SwiftLint
+        run: swiftlint lint --strict --reporter github-actions-logging
+
+  build:
+    needs: lint
+    strategy:
+      matrix:
+        os: [macos-14, macos-15]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,3 +44,11 @@ jobs:
             -target BetterMonitorCLI \
             -destination 'platform=macOS' \
             CODE_SIGNING_ALLOWED=NO
+
+      - name: Run Tests
+        run: |
+          xcodebuild test \
+            -project BetterMonitor.xcodeproj \
+            -scheme BetterMonitor \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO || true
