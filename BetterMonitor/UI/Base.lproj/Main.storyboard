@@ -2045,7 +2045,7 @@
                             <button verticalHuggingPriority="750" id="W2f-KE-6PO">
                                 <rect key="frame" x="249" y="138" width="420" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="bevel" title="https://github.com/Darkroom4364/MonitorControl" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="42n-Zy-AqF">
+                                <buttonCell key="cell" type="bevel" title="https://github.com/Darkroom4364/BetterMonitor" bezelStyle="rounded" alignment="left" imageScaling="proportionallyDown" inset="2" id="42n-Zy-AqF">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                     <attributedString key="userComments">

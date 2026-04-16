@@ -26,8 +26,8 @@
 /* Class = "NSMenuItem"; title = "Show separate controls for each display in menu"; ObjectID = "3eO-bN-ZRl"; */
 "3eO-bN-ZRl.title" = "सूची में प्रत्येक प्रदर्शन के लिए अलग-अलग नियंत्रण दिखाएँ";
 
-/* Class = "NSButtonCell"; title = "https://github.com/Darkroom4364/MonitorControl"; ObjectID = "42n-Zy-AqF"; Note = "#bc-ignore!"; */
-"42n-Zy-AqF.title" = "https://github.com/Darkroom4364/MonitorControl";
+/* Class = "NSButtonCell"; title = "https://github.com/Darkroom4364/BetterMonitor"; ObjectID = "42n-Zy-AqF"; Note = "#bc-ignore!"; */
+"42n-Zy-AqF.title" = "https://github.com/Darkroom4364/BetterMonitor";
 
 /* Class = "NSMenuItem"; title = "Custom keyboard shortcuts"; ObjectID = "4CG-0I-anB"; */
 "4CG-0I-anB.title" = "अनुकूलित कीबोर्ड शॉर्टकट";

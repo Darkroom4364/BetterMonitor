@@ -10,7 +10,7 @@ body:
       options:
         - label: Searched for existing issues
           required: true
-        - label: Read through [the Monitor-Troubleshooting Wiki](https://github.com/Darkroom4364/MonitorControl/wiki/Monitor-Troubleshooting)
+        - label: Read through [the Monitor-Troubleshooting Wiki](https://github.com/Darkroom4364/BetterMonitor/wiki/Monitor-Troubleshooting)
           required: true
         - label: Updated BetterMonitor to the latest version (if applicable)
           required: true
