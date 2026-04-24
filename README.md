@@ -1,4 +1,4 @@
-<img src=".github/Icon-cropped.png" width="200" alt="App icon" align="left"/>
+<img src=".github/BetterMonitorIcon-1.png" width="200" alt="App icon" align="left"/>
 
 <div>
 <h3>BetterMonitor</h3>
