@@ -103,15 +103,22 @@ func formatOutput(action: CLIAction, property: CLIProperty?, data: [[String: Any
       let name = item["name"] as? String ?? "Unknown"
       let propName = property?.rawValue ?? ""
       if let value = item[propName] as? Int {
-        print("\(name): \(propName) = \(value)%")
+        print("\(name): \(propName) = \(formatValue(value, for: property))")
       }
 
     case .set:
       let name = item["name"] as? String ?? "Unknown"
       let propName = property?.rawValue ?? ""
       if let value = item[propName] as? Int {
-        print("\(name): \(propName) set to \(value)%")
+        print("\(name): \(propName) set to \(formatValue(value, for: property))")
       }
     }
   }
+}
+
+func formatValue(_ value: Int, for property: CLIProperty?) -> String {
+  if property == .input {
+    return String(format: "0x%02X (%d)", value, value)
+  }
+  return "\(value)%"
 }

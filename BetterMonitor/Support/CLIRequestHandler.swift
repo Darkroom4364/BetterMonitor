@@ -9,6 +9,7 @@ private extension CLIProperty {
     case .brightness: return .brightness
     case .volume: return .audioSpeakerVolume
     case .contrast: return .contrast
+    case .input: return .inputSelect
     }
   }
 }
@@ -75,28 +76,39 @@ class CLIRequestHandler {
     guard let propertyString = userInfo[CLIKey.property] as? String,
           let property = CLIProperty(rawValue: propertyString)
     else {
-      return [["error": "Invalid property. Use: brightness, volume, contrast"]]
+      return [["error": "Invalid property. Use: brightness, volume, contrast, input"]]
     }
     let displays = resolveDisplays(userInfo: userInfo)
     if displays.isEmpty {
       return [["error": "No matching display found"]]
     }
     return displays.map { display in
-      var value: Float
       switch property {
       case .brightness:
-        value = display.getBrightness()
+        return [
+          "name": display.name,
+          "id": display.identifier,
+          property.rawValue: Int(round(display.getBrightness() * 100)),
+        ] as [String: Any]
       case .volume, .contrast:
         guard let otherDisplay = display as? OtherDisplay else {
           return ["name": display.name, "error": "Property not available for Apple displays"]
         }
-        value = otherDisplay.readPrefAsFloat(for: property.command)
+        return [
+          "name": display.name,
+          "id": display.identifier,
+          property.rawValue: Int(round(otherDisplay.readPrefAsFloat(for: property.command) * 100)),
+        ] as [String: Any]
+      case .input:
+        guard let otherDisplay = display as? OtherDisplay else {
+          return ["name": display.name, "error": "Property not available for Apple displays"]
+        }
+        return [
+          "name": display.name,
+          "id": display.identifier,
+          "input": otherDisplay.readPrefAsInt(for: .inputSelect),
+        ] as [String: Any]
       }
-      return [
-        "name": display.name,
-        "id": display.identifier,
-        property.rawValue: Int(round(value * 100)),
-      ] as [String: Any]
     }
   }
 
@@ -106,6 +118,15 @@ class CLIRequestHandler {
           let valueInt = userInfo[CLIKey.value] as? Int
     else {
       return [["error": "Invalid property or value"]]
+    }
+    let inputValue: UInt16?
+    if property == .input {
+      guard let parsedInputValue = CLIInputSource.uint16Value(valueInt) else {
+        return [["error": "Input source value must be \(CLIInputSource.minValue)-\(CLIInputSource.maxValue)"]]
+      }
+      inputValue = parsedInputValue
+    } else {
+      inputValue = nil
     }
     let floatValue = max(0, min(1, Float(valueInt) / 100.0))
     let displays = resolveDisplays(userInfo: userInfo)
@@ -146,12 +167,27 @@ class CLIRequestHandler {
             slider.setValue(floatValue, displayID: otherDisplay.identifier)
           }
         }
+      case .input:
+        guard let otherDisplay = display as? OtherDisplay else {
+          return ["name": display.name, "error": "Property not available for Apple displays"]
+        }
+        if otherDisplay.isSw() {
+          success = false
+        } else if let inputValue = inputValue {
+          otherDisplay.writeDDCValues(command: .inputSelect, value: inputValue)
+          otherDisplay.savePref(Int(inputValue), for: .inputSelect)
+          otherDisplay.inputSourceHandler?.setSelectedInput(inputValue)
+        }
       }
       var result: [String: Any] = [
         "name": display.name,
         "id": display.identifier,
-        property.rawValue: Int(round(floatValue * 100)),
       ]
+      if property == .input {
+        result[property.rawValue] = inputValue.map { Int($0) } ?? valueInt
+      } else {
+        result[property.rawValue] = Int(round(floatValue * 100))
+      }
       if !success {
         result["error"] = "Failed to set \(property.rawValue) — DDC unavailable or software-only display"
       }
