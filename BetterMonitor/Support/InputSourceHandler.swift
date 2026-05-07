@@ -8,18 +8,23 @@ class InputSourceHandler {
   let title: String
   var view: NSView?
 
+  // MCCS VCP 0x60 standard values. USB-C/Thunderbolt values are vendor-specific.
   static let inputSources: [(name: String, value: UInt16)] = [
-    ("HDMI 1", 5),
-    ("HDMI 2", 6),
-    ("DisplayPort", 4),
-    ("USB-C", 9),
-    ("VGA", 1),
-    ("DVI", 3),
-    ("Mini DisplayPort", 10),
-    ("Thunderbolt", 16),
+    ("HDMI 1", 0x11),
+    ("HDMI 2", 0x12),
+    ("DisplayPort 1", 0x0f),
+    ("DisplayPort 2", 0x10),
+    ("VGA 1", 0x01),
+    ("VGA 2", 0x02),
+    ("DVI 1", 0x03),
+    ("DVI 2", 0x04),
   ]
 
   private var popup: NSPopUpButton?
+
+  private static func customTitle(for value: UInt16) -> String {
+    String(format: "Custom (0x%02X)", value)
+  }
 
   init(display: OtherDisplay, title: String) {
     self.display = display
@@ -45,8 +50,14 @@ class InputSourceHandler {
     }
 
     let savedValue = display.readPrefAsInt(for: .inputSelect)
-    if savedValue > 0, let index = Self.inputSources.firstIndex(where: { $0.value == UInt16(savedValue) }) {
-      popupButton.selectItem(at: index)
+    if let savedInputValue = CLIInputSource.uint16Value(savedValue) {
+      if let index = Self.inputSources.firstIndex(where: { $0.value == savedInputValue }) {
+        popupButton.selectItem(at: index)
+      } else {
+        popupButton.addItem(withTitle: Self.customTitle(for: savedInputValue))
+        popupButton.lastItem?.tag = Int(savedInputValue)
+        popupButton.selectItem(at: popupButton.numberOfItems - 1)
+      }
     }
 
     popupButton.target = self
@@ -57,8 +68,11 @@ class InputSourceHandler {
   }
 
   @objc func inputSourceChanged(_ sender: NSPopUpButton) {
-    guard let selectedItem = sender.selectedItem else { return }
-    let ddcValue = UInt16(selectedItem.tag)
+    guard let selectedItem = sender.selectedItem,
+          let ddcValue = CLIInputSource.uint16Value(selectedItem.tag)
+    else {
+      return
+    }
     os_log("Input source switch: %{public}@ (DDC value %{public}@) on %{public}@", type: .info, selectedItem.title, String(ddcValue), display.name)
     display.writeDDCValues(command: .inputSelect, value: ddcValue)
     display.savePref(Int(ddcValue), for: .inputSelect)
@@ -67,6 +81,12 @@ class InputSourceHandler {
   func setSelectedInput(_ value: UInt16) {
     if let index = Self.inputSources.firstIndex(where: { $0.value == value }) {
       popup?.selectItem(at: index)
+    } else if let popup = popup {
+      if !popup.itemArray.contains(where: { $0.tag == Int(value) }) {
+        popup.addItem(withTitle: Self.customTitle(for: value))
+        popup.lastItem?.tag = Int(value)
+      }
+      popup.selectItem(withTag: Int(value))
     }
   }
 }

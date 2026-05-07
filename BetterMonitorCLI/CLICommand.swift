@@ -86,15 +86,22 @@ struct CLICommand {
 
     case .set:
       guard positional.count >= 3,
-            let property = CLIProperty(rawValue: positional[1]),
-            let value = Int(positional[2])
+            let property = CLIProperty(rawValue: positional[1])
       else {
         printError("Usage: bettermonitor set <brightness|volume|contrast> <0-100>")
         printError("       bettermonitor set input <ddc-value>")
         return nil
       }
+      guard let value = property == .input ? CLIInputSource.parse(positional[2]) : Int(positional[2]) else {
+        printError("Invalid value for \(property.rawValue)")
+        return nil
+      }
       if property != .input, (value < 0 || value > 100) {
         printError("Value must be 0-100 for \(property.rawValue)")
+        return nil
+      }
+      if property == .input, CLIInputSource.uint16Value(value) == nil {
+        printError("Input source value must be \(CLIInputSource.minValue)-\(CLIInputSource.maxValue)")
         return nil
       }
       return CLICommand(action: .set, property: property, value: value, displayName: displayName, displayId: displayId, jsonOutput: jsonOutput)
@@ -109,7 +116,7 @@ struct CLICommand {
       list                                      List connected displays
       get <brightness|volume|contrast|input>     Get current value
       set <brightness|volume|contrast> <0-100>   Set value (percentage)
-      set input <ddc-value>                      Switch input source (DDC code)
+      set input <ddc-value>                      Switch input source (decimal or 0x hex DDC code)
 
     Options:
       --display <name-or-id>    Target a specific display

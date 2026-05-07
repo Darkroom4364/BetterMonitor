@@ -76,7 +76,7 @@ class CLIRequestHandler {
     guard let propertyString = userInfo[CLIKey.property] as? String,
           let property = CLIProperty(rawValue: propertyString)
     else {
-      return [["error": "Invalid property. Use: brightness, volume, contrast"]]
+      return [["error": "Invalid property. Use: brightness, volume, contrast, input"]]
     }
     let displays = resolveDisplays(userInfo: userInfo)
     if displays.isEmpty {
@@ -118,6 +118,15 @@ class CLIRequestHandler {
           let valueInt = userInfo[CLIKey.value] as? Int
     else {
       return [["error": "Invalid property or value"]]
+    }
+    let inputValue: UInt16?
+    if property == .input {
+      guard let parsedInputValue = CLIInputSource.uint16Value(valueInt) else {
+        return [["error": "Input source value must be \(CLIInputSource.minValue)-\(CLIInputSource.maxValue)"]]
+      }
+      inputValue = parsedInputValue
+    } else {
+      inputValue = nil
     }
     let floatValue = max(0, min(1, Float(valueInt) / 100.0))
     let displays = resolveDisplays(userInfo: userInfo)
@@ -164,10 +173,10 @@ class CLIRequestHandler {
         }
         if otherDisplay.isSw() {
           success = false
-        } else {
-          otherDisplay.writeDDCValues(command: .inputSelect, value: UInt16(valueInt))
-          otherDisplay.savePref(valueInt, for: .inputSelect)
-          otherDisplay.inputSourceHandler?.setSelectedInput(UInt16(valueInt))
+        } else if let inputValue = inputValue {
+          otherDisplay.writeDDCValues(command: .inputSelect, value: inputValue)
+          otherDisplay.savePref(Int(inputValue), for: .inputSelect)
+          otherDisplay.inputSourceHandler?.setSelectedInput(inputValue)
         }
       }
       var result: [String: Any] = [
@@ -175,7 +184,7 @@ class CLIRequestHandler {
         "id": display.identifier,
       ]
       if property == .input {
-        result[property.rawValue] = valueInt
+        result[property.rawValue] = inputValue.map { Int($0) } ?? valueInt
       } else {
         result[property.rawValue] = Int(round(floatValue * 100))
       }
