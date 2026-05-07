@@ -30,9 +30,6 @@ enum PrefKey: String {
   // Don't listen to F14/F15
   case disableAltBrightnessKeys
 
-  // Enable HID monitoring for non-Apple keyboards
-  case enableHIDKeyMonitor
-
   // Hide brightness sliders
   case hideBrightness
 
