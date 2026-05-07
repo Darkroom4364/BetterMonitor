@@ -188,17 +188,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
   @objc private func wakeNotification() {
     if self.sleepID != 0 {
-      os_log("Waking up from sleep %{public}@", type: .info, String(self.sleepID))
+      os_log("Waking up from sleep %{public}@, scheduling sober in 3s", type: .info, String(self.sleepID))
       let dispatchedSleepID = self.sleepID
       DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { // Some displays take time to recover...
         self.soberNow(dispatchedSleepID: dispatchedSleepID)
       }
+    } else {
+      os_log("Wake notification received but sleepID is 0, ignoring", type: .debug)
     }
   }
 
   private func soberNow(dispatchedSleepID: Int) {
     if self.sleepID == dispatchedSleepID {
-      os_log("Sober from sleep %{public}@", type: .info, String(self.sleepID))
+      os_log("Sober from sleep %{public}@, reconfigureID=%{public}@, arm64=%{public}@", type: .info, String(self.sleepID), String(self.reconfigureID), String(Arm64DDC.isArm64))
       self.sleepID = 0
       if self.reconfigureID != 0 {
         let dispatchedReconfigureID = self.reconfigureID

@@ -2,6 +2,7 @@
 
 import Foundation
 import IOKit
+import os.log
 
 let ARM64_DDC_7BIT_ADDRESS: UInt8 = 0x37 // This works with DisplayPort devices
 let ARM64_DDC_DATA_ADDRESS: UInt8 = 0x51
@@ -41,6 +42,7 @@ class Arm64DDC: NSObject {
 
   static func getServiceMatches(displayIDs: [CGDirectDisplayID]) -> [Arm64Service] {
     let ioregServicesForMatching = self.getIoregServicesForMatching()
+    os_log("Arm64DDC getServiceMatches: %{public}@ display IDs, %{public}@ IORegistry services found", type: .info, String(displayIDs.count), String(ioregServicesForMatching.count))
     var matchedDisplayServices: [Arm64Service] = []
     var scoredCandidateDisplayServices: [Int: [Arm64Service]] = [:]
     for displayID in displayIDs {
@@ -63,9 +65,11 @@ class Arm64DDC: NSObject {
           takenDisplayIDs.append(candidateDisplayService.displayID)
           takenServiceLocations.append(candidateDisplayService.serviceLocation)
           matchedDisplayServices.append(candidateDisplayService)
+          os_log("Arm64DDC matched displayID %{public}@ to service at location %{public}@ (score: %{public}@, product: %{public}@)", type: .info, String(candidateDisplayService.displayID), String(candidateDisplayService.serviceLocation), String(score), candidateDisplayService.serviceDetails.productName)
         }
       }
     }
+    os_log("Arm64DDC getServiceMatches complete: %{public}@ displays matched", type: .info, String(matchedDisplayServices.count))
     return matchedDisplayServices
   }
 
@@ -73,26 +77,35 @@ class Arm64DDC: NSObject {
     var values: (UInt16, UInt16)?
     var send: [UInt8] = [command]
     var reply = [UInt8](repeating: 0, count: 11)
+    os_log("Arm64DDC read command 0x%{public}02x (service: %{public}@)", type: .debug, command, service != nil ? "valid" : "nil")
     if Self.performDDCCommunication(service: service, send: &send, reply: &reply, writeSleepTime: writeSleepTime, numOfWriteCycles: numOfWriteCycles, readSleepTime: readSleepTime, numOfRetryAttemps: numOfRetryAttemps, retrySleepTime: retrySleepTime) {
       let max = UInt16(reply[6]) * 256 + UInt16(reply[7])
       let current = UInt16(reply[8]) * 256 + UInt16(reply[9])
       values = (current, max)
+      os_log("Arm64DDC read success: command 0x%{public}02x, current=%{public}@, max=%{public}@", type: .debug, command, String(current), String(max))
     } else {
+      os_log("Arm64DDC read failed: command 0x%{public}02x", type: .error, command)
       values = nil
     }
     return values
   }
 
   static func write(service: IOAVService?, command: UInt8, value: UInt16, writeSleepTime: UInt32? = nil, numOfWriteCycles: UInt8? = nil, numOfRetryAttemps: UInt8? = nil, retrySleepTime: UInt32? = nil) -> Bool {
+    os_log("Arm64DDC write command 0x%{public}02x value=%{public}@ (service: %{public}@)", type: .debug, command, String(value), service != nil ? "valid" : "nil")
     var send: [UInt8] = [command, UInt8(value >> 8), UInt8(value & 255)]
     var reply: [UInt8] = []
-    return Self.performDDCCommunication(service: service, send: &send, reply: &reply, writeSleepTime: writeSleepTime, numOfWriteCycles: numOfWriteCycles, numOfRetryAttemps: numOfRetryAttemps, retrySleepTime: retrySleepTime)
+    let success = Self.performDDCCommunication(service: service, send: &send, reply: &reply, writeSleepTime: writeSleepTime, numOfWriteCycles: numOfWriteCycles, numOfRetryAttemps: numOfRetryAttemps, retrySleepTime: retrySleepTime)
+    if !success {
+      os_log("Arm64DDC write failed: command 0x%{public}02x value=%{public}@", type: .error, command, String(value))
+    }
+    return success
   }
 
   static func performDDCCommunication(service: IOAVService?, send: inout [UInt8], reply: inout [UInt8], writeSleepTime: UInt32? = nil, numOfWriteCycles: UInt8? = nil, readSleepTime: UInt32? = nil, numOfRetryAttemps: UInt8? = nil, retrySleepTime: UInt32? = nil) -> Bool {
     let dataAddress = ARM64_DDC_DATA_ADDRESS
     var success = false
     guard service != nil else {
+      os_log("Arm64DDC performDDCCommunication skipped: service is nil", type: .error)
       return success
     }
     var packet: [UInt8] = [UInt8(0x80 | (send.count + 1)), UInt8(send.count)] + send + [0] // Note: the last byte is the place of the checksum, see next line!
@@ -242,6 +255,7 @@ class Arm64DDC: NSObject {
     }
     var ioregService = IOregService()
     guard IORegistryEntryCreateIterator(ioregRoot, "IOService", IOOptionBits(kIORegistryIterateRecursively), &iterator) == KERN_SUCCESS else {
+      os_log("Arm64DDC getIoregServicesForMatching: failed to create IORegistry iterator", type: .error)
       return ioregServicesForMatching
     }
     let keyDCPAVServiceProxy = "DCPAVServiceProxy"
@@ -256,9 +270,11 @@ class Arm64DDC: NSObject {
         ioregService.serviceLocation = serviceLocation
       } else if objectOfInterest.name == keyDCPAVServiceProxy {
         self.setIORegServiceDCPAVServiceProxy(entry: objectOfInterest.entry, ioregService: &ioregService)
+        os_log("Arm64DDC found IORegistry service: product=%{public}@, location=%{public}@, hasAVService=%{public}@", type: .debug, ioregService.productName, ioregService.location, ioregService.service != nil ? "yes" : "no")
         ioregServicesForMatching.append(ioregService)
       }
     }
+    os_log("Arm64DDC getIoregServicesForMatching: found %{public}@ services", type: .debug, String(ioregServicesForMatching.count))
     return ioregServicesForMatching
   }
 
