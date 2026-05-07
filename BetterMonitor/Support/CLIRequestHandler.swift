@@ -133,7 +133,11 @@ class CLIRequestHandler {
       inputValue = nil
     }
     let floatValue = max(0, min(1, Float(valueInt) / 100.0))
-    os_log("CLI set: %{public}@=%{public}@%%", type: .info, propertyString, String(valueInt))
+    if property == .input {
+      os_log("CLI set: %{public}@=%{public}@", type: .info, propertyString, String(valueInt))
+    } else {
+      os_log("CLI set: %{public}@=%{public}@%%", type: .info, propertyString, String(valueInt))
+    }
     let displays = resolveDisplays(userInfo: userInfo)
     if displays.isEmpty {
       return [["error": "No matching display found"]]
