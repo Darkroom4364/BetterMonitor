@@ -52,11 +52,12 @@ enum TahoeHUD {
 
   static func show(displayID: CGDirectDisplayID, kind: Kind, progress: Float, disabled: Bool = false) {
     let run = {
-      guard let screen = DisplayManager.getByDisplayID(displayID: DisplayManager.resolveEffectiveDisplayID(displayID)) else {
+      let effectiveDisplayID = DisplayManager.resolveEffectiveDisplayID(displayID)
+      guard let screen = DisplayManager.getByDisplayID(displayID: effectiveDisplayID) else {
         return
       }
-      let panel = self.panels[displayID] ?? TahoeHUDPanel()
-      self.panels[displayID] = panel
+      let panel = self.panels[effectiveDisplayID] ?? TahoeHUDPanel()
+      self.panels[effectiveDisplayID] = panel
       panel.update(screen: screen, kind: kind, progress: self.normalizedProgress(value: progress, maxValue: 1), disabled: disabled)
     }
     if Thread.isMainThread {
@@ -68,7 +69,7 @@ enum TahoeHUD {
 
   static func closeHUD(for displayID: CGDirectDisplayID) {
     let run = {
-      guard let panel = self.panels.removeValue(forKey: displayID) else {
+      guard let panel = self.panels.removeValue(forKey: DisplayManager.resolveEffectiveDisplayID(displayID)) else {
         return
       }
       panel.cancelAndClose()

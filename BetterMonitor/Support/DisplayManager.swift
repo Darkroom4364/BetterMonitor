@@ -312,8 +312,12 @@ class DisplayManager {
 
   func clearDisplays() {
     if TahoeHUD.shouldUseCustomHUD {
+      var closedDisplayIDs = Set<CGDirectDisplayID>()
       for display in self.displays {
-        TahoeHUD.closeHUD(for: display.identifier)
+        let effectiveDisplayID = DisplayManager.resolveEffectiveDisplayID(display.identifier)
+        if closedDisplayIDs.insert(effectiveDisplayID).inserted {
+          TahoeHUD.closeHUD(for: effectiveDisplayID)
+        }
       }
     }
     self.displays = []
