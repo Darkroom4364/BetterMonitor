@@ -28,6 +28,7 @@ class KeyboardPrefsViewController: NSViewController, SettingsPane {
   @IBOutlet var keyboardBrightness: NSPopUpButton!
   @IBOutlet var keyboardVolume: NSPopUpButton!
   @IBOutlet var disableAltBrightnessKeys: NSButton!
+  @IBOutlet var enableHIDKeyMonitor: NSButton!
 
   @IBOutlet var multiKeyboardBrightness: NSPopUpButton!
   @IBOutlet var multiKeyboardVolume: NSPopUpButton!
@@ -148,6 +149,7 @@ class KeyboardPrefsViewController: NSViewController, SettingsPane {
     self.keyboardBrightness.selectItem(withTag: prefs.integer(forKey: PrefKey.keyboardBrightness.rawValue))
     self.keyboardVolume.selectItem(withTag: prefs.integer(forKey: PrefKey.keyboardVolume.rawValue))
     self.disableAltBrightnessKeys.state = prefs.bool(forKey: PrefKey.disableAltBrightnessKeys.rawValue) ? .on : .off
+    self.enableHIDKeyMonitor.state = prefs.bool(forKey: PrefKey.enableHIDKeyMonitor.rawValue) ? .on : .off
     self.multiKeyboardBrightness.selectItem(withTag: prefs.integer(forKey: PrefKey.multiKeyboardBrightness.rawValue))
     self.multiKeyboardVolume.selectItem(withTag: prefs.integer(forKey: PrefKey.multiKeyboardVolume.rawValue))
     self.useFineScale.state = prefs.bool(forKey: PrefKey.useFineScaleBrightness.rawValue) ? .on : .off
@@ -209,6 +211,17 @@ class KeyboardPrefsViewController: NSViewController, SettingsPane {
     default: break
     }
     self.updateGridLayout()
+    app.updateMediaKeyTap()
+  }
+
+  @IBAction func enableHIDKeyMonitor(_ sender: NSButton) {
+    switch sender.state {
+    case .on:
+      prefs.set(true, forKey: PrefKey.enableHIDKeyMonitor.rawValue)
+    case .off:
+      prefs.set(false, forKey: PrefKey.enableHIDKeyMonitor.rawValue)
+    default: break
+    }
     app.updateMediaKeyTap()
   }
 

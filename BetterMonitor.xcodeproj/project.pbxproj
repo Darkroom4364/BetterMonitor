@@ -69,6 +69,7 @@
 		DD00010100000000000000A3 /* OSDUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B3 /* OSDUtilsTests.swift */; };
 		DD00010100000000000000A4 /* DisplayValueConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B4 /* DisplayValueConversionTests.swift */; };
 		DD00010100000000000000A5 /* DisplaySteppingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B5 /* DisplaySteppingTests.swift */; };
+		DD00010100000000000000A8 /* HIDKeyMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B7 /* HIDKeyMonitorTests.swift */; };
 		DD00010100000000000000A6 /* CLICommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B4 /* CLICommand.swift */; };
 		DD00010100000000000000A7 /* CLIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B1 /* CLIProtocol.swift */; };
 /* End PBXBuildFile section */
@@ -205,6 +206,7 @@
 		DD00010100000000000000B3 /* OSDUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSDUtilsTests.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B4 /* DisplayValueConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayValueConversionTests.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B5 /* DisplaySteppingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySteppingTests.swift; sourceTree = "<group>"; };
+		DD00010100000000000000B7 /* HIDKeyMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDKeyMonitorTests.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B6 /* BetterMonitorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BetterMonitorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -434,6 +436,7 @@
 				DD00010100000000000000B3 /* OSDUtilsTests.swift */,
 				DD00010100000000000000B4 /* DisplayValueConversionTests.swift */,
 				DD00010100000000000000B5 /* DisplaySteppingTests.swift */,
+				DD00010100000000000000B7 /* HIDKeyMonitorTests.swift */,
 			);
 			path = BetterMonitorTests;
 			sourceTree = "<group>";
@@ -789,6 +792,7 @@
 				DD00010100000000000000A3 /* OSDUtilsTests.swift in Sources */,
 				DD00010100000000000000A4 /* DisplayValueConversionTests.swift in Sources */,
 				DD00010100000000000000A5 /* DisplaySteppingTests.swift in Sources */,
+				DD00010100000000000000A8 /* HIDKeyMonitorTests.swift in Sources */,
 				DD00010100000000000000A6 /* CLICommand.swift in Sources */,
 				DD00010100000000000000A7 /* CLIProtocol.swift in Sources */,
 			);

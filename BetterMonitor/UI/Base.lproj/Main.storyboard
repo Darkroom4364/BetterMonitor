@@ -719,6 +719,7 @@
                                     <gridRow height="72" bottomPadding="-6" id="FIZ-Gs-XUq"/>
                                     <gridRow bottomPadding="-13" id="yxK-w1-5wV"/>
                                     <gridRow bottomPadding="-10" id="eGd-bB-47V"/>
+                                    <gridRow bottomPadding="-13" id="hId-0a-r0w"/>
                                     <gridRow height="20" bottomPadding="-13" id="I9B-dr-BOu"/>
                                     <gridRow bottomPadding="-10" id="UIH-jA-Cfi"/>
                                     <gridRow bottomPadding="-13" id="jJT-as-drf"/>
@@ -877,6 +878,19 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                    </gridCell>
+                                    <gridCell row="hId-0a-r0w" column="ZC2-Ja-sIb" id="hId-0b-cL1"/>
+                                    <gridCell row="hId-0a-r0w" column="EiG-65-CTv" id="hId-0c-cL2">
+                                        <button key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hId-0d-bTn">
+                                            <rect key="frame" x="218" y="384" width="472" height="18"/>
+                                            <buttonCell key="cell" type="check" title="Enable media keys on non-Apple keyboards (HID monitoring)" bezelStyle="regularSquare" imagePosition="left" inset="2" id="hId-0e-bCl">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="enableHIDKeyMonitor:" target="eJ2-Cv-Vfp" id="hId-0f-aCt"/>
+                                            </connections>
+                                        </button>
                                     </gridCell>
                                     <gridCell row="I9B-dr-BOu" column="ZC2-Ja-sIb" xPlacement="trailing" yPlacement="center" id="bAf-Bt-a5c">
                                         <textField key="contentView" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tIh-qa-IGb">
@@ -1180,6 +1194,7 @@
                         <outlet property="customVolumeDown" destination="cag-2Q-I9P" id="AuB-3g-Pwa"/>
                         <outlet property="customVolumeUp" destination="rFx-DX-nFb" id="DpG-Xm-lRB"/>
                         <outlet property="disableAltBrightnessKeys" destination="EJp-ld-K4l" id="WzJ-1Q-YT4"/>
+                        <outlet property="enableHIDKeyMonitor" destination="hId-0d-bTn" id="hId-0g-oUt"/>
                         <outlet property="keyboardBrightness" destination="2NF-gh-JBU" id="3Cw-ob-T06"/>
                         <outlet property="keyboardVolume" destination="9oZ-JM-bxD" id="IJ6-6m-q0x"/>
                         <outlet property="multiKeyboardBrightness" destination="led-AW-u5j" id="14B-uk-v7Z"/>

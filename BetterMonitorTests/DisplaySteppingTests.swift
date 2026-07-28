@@ -97,6 +97,9 @@ class DisplaySteppingTests: XCTestCase {
   // MARK: - swBrightnessTransform
 
   func testSwBrightnessTransformForward() {
+    // Explicitly pin the pref this assertion depends on so test order cannot change it.
+    prefs.set(false, forKey: PrefKey.allowZeroSwBrightness.rawValue)
+    addTeardownBlock { prefs.removeObject(forKey: PrefKey.allowZeroSwBrightness.rawValue) }
     // Default: lowThreshold = 0.15
     // transform(0) = 0 * (1 - 0.15) + 0.15 = 0.15
     let result = display.swBrightnessTransform(value: 0)

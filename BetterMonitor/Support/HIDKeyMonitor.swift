@@ -10,6 +10,8 @@ import os.log
 /// doesn't translate to NX_KEYTYPE system events (which MediaKeyTap relies on).
 class HIDKeyMonitor {
   private var manager: IOHIDManager?
+  /// Retained callback context, balanced exactly once in `stop()` (never inside the callback).
+  private var callbackContext: UnsafeMutableRawPointer?
   weak var delegate: MediaKeyTapDelegate?
 
   // HID Consumer Usage IDs
@@ -45,21 +47,38 @@ class HIDKeyMonitor {
       monitor.handleHIDValue(value)
     }
 
-    IOHIDManagerRegisterInputValueCallback(manager, callback, Unmanaged.passUnretained(self).toOpaque())
+    // Retain self for as long as the callback is registered so the context can
+    // never target a released monitor. The retain is balanced once in stop().
+    let context = Unmanaged.passRetained(self).toOpaque()
+    IOHIDManagerRegisterInputValueCallback(manager, callback, context)
+    self.callbackContext = context
     IOHIDManagerScheduleWithRunLoop(manager, CFRunLoopGetMain(), CFRunLoopMode.defaultMode.rawValue)
     let result = IOHIDManagerOpen(manager, IOOptionBits(kIOHIDOptionsTypeNone))
     if result == kIOReturnSuccess {
       os_log("HIDKeyMonitor: started monitoring HID consumer keys", type: .info)
     } else {
       os_log("HIDKeyMonitor: failed to open IOHIDManager (0x%{public}08x)", type: .error, result)
+      self.stop()
     }
   }
 
   func stop() {
     guard let manager = manager else { return }
+    // Unregister and unschedule before closing so no in-flight callback can
+    // fire against a closed manager, and balance the retained context exactly once.
+    IOHIDManagerRegisterInputValueCallback(manager, nil, nil)
+    IOHIDManagerUnscheduleFromRunLoop(manager, CFRunLoopGetMain(), CFRunLoopMode.defaultMode.rawValue)
     IOHIDManagerClose(manager, IOOptionBits(kIOHIDOptionsTypeNone))
     self.manager = nil
+    if let context = self.callbackContext {
+      Unmanaged<HIDKeyMonitor>.fromOpaque(context).release()
+      self.callbackContext = nil
+    }
     os_log("HIDKeyMonitor: stopped", type: .info)
+  }
+
+  deinit {
+    self.stop()
   }
 
   private func handleHIDValue(_ value: IOHIDValue) {

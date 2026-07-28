@@ -88,7 +88,9 @@ class OSDUtilsTests: XCTestCase {
     XCTAssertEqual(OSDUtils.getDistance(fromNearestChiclet: 8.5), 0.5)
   }
 
-  func testDistanceNearChiclet() {
+  // getDistance rounds .towardZero (truncation), not to the truly nearest chiclet:
+  // 8.9 measures distance from chiclet 8 (0.9), not from chiclet 9 (0.1).
+  func testDistanceFromTruncatedChiclet() {
     XCTAssertEqual(OSDUtils.getDistance(fromNearestChiclet: 8.1), 0.1, accuracy: 0.0001)
     XCTAssertEqual(OSDUtils.getDistance(fromNearestChiclet: 8.9), 0.9, accuracy: 0.0001)
   }

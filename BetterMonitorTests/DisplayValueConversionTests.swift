@@ -5,7 +5,6 @@ import XCTest
 
 class DisplayValueConversionTests: XCTestCase {
   var display: OtherDisplay!
-  let prefsId = "(Test00@0)"
 
   override func setUp() {
     super.setUp()
@@ -13,26 +12,28 @@ class DisplayValueConversionTests: XCTestCase {
     setDefaultPrefs(for: .brightness)
     setDefaultPrefs(for: .audioSpeakerVolume)
     setDefaultPrefs(for: .contrast)
+    display.removePref(key: .combinedBrightnessSwitchingPoint)
     addTeardownBlock { [self] in
       clearPrefs(for: .brightness)
       clearPrefs(for: .audioSpeakerVolume)
       clearPrefs(for: .contrast)
+      display.removePref(key: .combinedBrightnessSwitchingPoint)
       display = nil
     }
   }
 
+  // Uses the production preference-key helpers (Display.savePref/removePref)
+  // instead of hand-built key strings, so tests cannot drift from the real key format.
   private func setDefaultPrefs(for command: Command) {
-    let suffix = String(command.rawValue) + prefsId
-    prefs.set(false, forKey: "invertDDC" + suffix)
-    prefs.set(5, forKey: "curveDDC" + suffix) // 5 = default, maps to 1.0
-    prefs.set(0, forKey: "minDDCOverride" + suffix)
-    prefs.set(100, forKey: "maxDDC" + suffix)
+    display.savePref(false, key: .invertDDC, for: command)
+    display.savePref(5, key: .curveDDC, for: command) // 5 = default, maps to 1.0
+    display.savePref(0, key: .minDDCOverride, for: command)
+    display.savePref(100, key: .maxDDC, for: command)
   }
 
   private func clearPrefs(for command: Command) {
-    let suffix = String(command.rawValue) + prefsId
-    for key in ["invertDDC", "curveDDC", "minDDCOverride", "maxDDC"] {
-      prefs.removeObject(forKey: key + suffix)
+    for key in [PrefKey.invertDDC, .curveDDC, .minDDCOverride, .maxDDC] {
+      display.removePref(key: key, for: command)
     }
   }
 
@@ -40,6 +41,7 @@ class DisplayValueConversionTests: XCTestCase {
 
   func testCurveMultiplierDefault() {
     XCTAssertEqual(display.getCurveMultiplier(5), 1.0)
+    XCTAssertEqual(display.getCurveMultiplier(0), 1.0)
     XCTAssertEqual(display.getCurveMultiplier(99), 1.0)
   }
 
@@ -79,8 +81,7 @@ class DisplayValueConversionTests: XCTestCase {
   // MARK: - convValueToDDC with inversion
 
   func testConvValueToDDCInverted() {
-    let suffix = String(Command.brightness.rawValue) + prefsId
-    prefs.set(true, forKey: "invertDDC" + suffix)
+    display.savePref(true, key: .invertDDC, for: .brightness)
 
     XCTAssertEqual(display.convValueToDDC(for: .brightness, from: 0), 100)
     XCTAssertEqual(display.convValueToDDC(for: .brightness, from: 1.0), 0)
@@ -90,8 +91,7 @@ class DisplayValueConversionTests: XCTestCase {
   // MARK: - convValueToDDC with min/max overrides
 
   func testConvValueToDDCWithMinOverride() {
-    let suffix = String(Command.brightness.rawValue) + prefsId
-    prefs.set(20, forKey: "minDDCOverride" + suffix)
+    display.savePref(20, key: .minDDCOverride, for: .brightness)
 
     // value=0 should map to min=20
     XCTAssertEqual(display.convValueToDDC(for: .brightness, from: 0), 20)
@@ -100,17 +100,15 @@ class DisplayValueConversionTests: XCTestCase {
   }
 
   func testConvValueToDDCWithMaxOverride() {
-    let suffix = String(Command.brightness.rawValue) + prefsId
-    prefs.set(80, forKey: "maxDDC" + suffix)
+    display.savePref(80, key: .maxDDC, for: .brightness)
 
     XCTAssertEqual(display.convValueToDDC(for: .brightness, from: 0), 0)
     XCTAssertEqual(display.convValueToDDC(for: .brightness, from: 1.0), 80)
   }
 
   func testConvValueToDDCWithMinAndMaxOverride() {
-    let suffix = String(Command.brightness.rawValue) + prefsId
-    prefs.set(10, forKey: "minDDCOverride" + suffix)
-    prefs.set(90, forKey: "maxDDC" + suffix)
+    display.savePref(10, key: .minDDCOverride, for: .brightness)
+    display.savePref(90, key: .maxDDC, for: .brightness)
 
     XCTAssertEqual(display.convValueToDDC(for: .brightness, from: 0), 10)
     XCTAssertEqual(display.convValueToDDC(for: .brightness, from: 1.0), 90)
@@ -120,12 +118,11 @@ class DisplayValueConversionTests: XCTestCase {
   // MARK: - convValueToDDC with curves
 
   func testConvValueToDDCWithCurve() {
-    let suffix = String(Command.brightness.rawValue) + prefsId
-    prefs.set(7, forKey: "curveDDC" + suffix) // 1.5 multiplier
+    display.savePref(7, key: .curveDDC, for: .brightness) // 1.5 multiplier
 
     // pow(0.5, 1.5) ≈ 0.354, so DDC ≈ 35
     let result = display.convValueToDDC(for: .brightness, from: 0.5)
-    XCTAssertEqual(result, UInt16(pow(0.5, 1.5) * 100), accuracy: 1)
+    XCTAssertEqualUInt16(result, UInt16(pow(0.5, 1.5) * 100), accuracy: 1)
 
     // Endpoints should be unaffected
     XCTAssertEqual(display.convValueToDDC(for: .brightness, from: 0), 0)
@@ -136,10 +133,9 @@ class DisplayValueConversionTests: XCTestCase {
 
   func testConvValueToDDCAudioNeverZeroForPositiveInput() {
     // For audioSpeakerVolume, value > 0 should produce DDC >= 1
-    let suffix = String(Command.audioSpeakerVolume.rawValue) + prefsId
-    prefs.set(9, forKey: "curveDDC" + suffix) // steep curve (1.88)
-    prefs.set(0, forKey: "minDDCOverride" + suffix)
-    prefs.set(100, forKey: "maxDDC" + suffix)
+    display.savePref(9, key: .curveDDC, for: .audioSpeakerVolume) // steep curve (1.88)
+    display.savePref(0, key: .minDDCOverride, for: .audioSpeakerVolume)
+    display.savePref(100, key: .maxDDC, for: .audioSpeakerVolume)
 
     // Even a tiny value should map to at least 1
     let result = display.convValueToDDC(for: .audioSpeakerVolume, from: 0.01)
@@ -173,8 +169,7 @@ class DisplayValueConversionTests: XCTestCase {
   }
 
   func testConvDDCToValueInverted() {
-    let suffix = String(Command.brightness.rawValue) + prefsId
-    prefs.set(true, forKey: "invertDDC" + suffix)
+    display.savePref(true, key: .invertDDC, for: .brightness)
 
     XCTAssertEqual(display.convDDCToValue(for: .brightness, from: 0), 1.0, accuracy: 0.001)
     XCTAssertEqual(display.convDDCToValue(for: .brightness, from: 100), 0, accuracy: 0.001)
@@ -192,8 +187,7 @@ class DisplayValueConversionTests: XCTestCase {
   }
 
   func testRoundtripWithCurve() {
-    let suffix = String(Command.brightness.rawValue) + prefsId
-    prefs.set(3, forKey: "curveDDC" + suffix) // 0.8 multiplier
+    display.savePref(3, key: .curveDDC, for: .brightness) // 0.8 multiplier
 
     let testValues: [Float] = [0, 0.25, 0.5, 0.75, 1.0]
     for value in testValues {
@@ -206,20 +200,20 @@ class DisplayValueConversionTests: XCTestCase {
   // MARK: - combinedBrightnessSwitchingValue
 
   func testCombinedBrightnessSwitchingDefault() {
-    // Default pref = 0, formula: (0 + 8) / 16 = 0.5
+    // Pref cleared in setUp; default = 0, formula: (0 + 8) / 16 = 0.5
     let result = display.combinedBrightnessSwitchingValue()
     XCTAssertEqual(result, 0.5, accuracy: 0.001)
   }
 
   func testCombinedBrightnessSwitchingCustom() {
-    let suffix = prefsId
-    prefs.set(4, forKey: "combinedBrightnessSwitchingPoint" + suffix)
+    display.savePref(4, key: .combinedBrightnessSwitchingPoint)
     let result = display.combinedBrightnessSwitchingValue()
     // (4 + 8) / 16 = 0.75
     XCTAssertEqual(result, 0.75, accuracy: 0.001)
   }
 }
 
-private func XCTAssertEqual(_ lhs: UInt16, _ rhs: UInt16, accuracy: UInt16, file: StaticString = #file, line: UInt = #line) {
+/// UInt16 accuracy comparison. Named distinctly so it does not shadow XCTest's `XCTAssertEqual`.
+private func XCTAssertEqualUInt16(_ lhs: UInt16, _ rhs: UInt16, accuracy: UInt16, file: StaticString = #file, line: UInt = #line) {
   XCTAssertTrue(abs(Int(lhs) - Int(rhs)) <= Int(accuracy), "Expected \(lhs) to be within \(accuracy) of \(rhs)", file: file, line: line)
 }
