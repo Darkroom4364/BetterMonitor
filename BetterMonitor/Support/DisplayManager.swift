@@ -311,6 +311,11 @@ class DisplayManager {
   }
 
   func clearDisplays() {
+    if TahoeHUD.shouldUseCustomHUD {
+      for display in self.displays {
+        TahoeHUD.closeHUD(for: display.identifier)
+      }
+    }
     self.displays = []
   }
   

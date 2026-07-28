@@ -22,6 +22,17 @@ class OSDUtils: NSObject {
   }
 
   static func showOsd(displayID: CGDirectDisplayID, command: Command, value: Float, maxValue: Float = 1, roundChiclet: Bool = false, lock: Bool = false) {
+    if TahoeHUD.shouldUseCustomHUD {
+      let osdImage = self.getOSDImageByCommand(command: command, value: value)
+      let progress: Float
+      if roundChiclet {
+        progress = TahoeHUD.normalizedProgress(value: Float(round(OSDUtils.chiclet(fromValue: value, maxValue: maxValue))), maxValue: OSDUtils.chicletCount)
+      } else {
+        progress = TahoeHUD.normalizedProgress(value: value, maxValue: maxValue)
+      }
+      TahoeHUD.show(displayID: displayID, kind: TahoeHUD.kind(for: osdImage), progress: progress)
+      return
+    }
     guard let manager = OSDManager.sharedManager() as? OSDManager else {
       return
     }
@@ -40,6 +51,10 @@ class OSDUtils: NSObject {
   }
 
   static func showOsdVolumeDisabled(displayID: CGDirectDisplayID) {
+    if TahoeHUD.shouldUseCustomHUD {
+      TahoeHUD.show(displayID: displayID, kind: .volume, progress: 0, disabled: true)
+      return
+    }
     guard let manager = OSDManager.sharedManager() as? OSDManager else {
       return
     }
@@ -47,6 +62,10 @@ class OSDUtils: NSObject {
   }
 
   static func showOsdMuteDisabled(displayID: CGDirectDisplayID) {
+    if TahoeHUD.shouldUseCustomHUD {
+      TahoeHUD.show(displayID: displayID, kind: .mutedVolume, progress: 0, disabled: true)
+      return
+    }
     guard let manager = OSDManager.sharedManager() as? OSDManager else {
       return
     }
@@ -54,6 +73,10 @@ class OSDUtils: NSObject {
   }
 
   static func popEmptyOsd(displayID: CGDirectDisplayID, command: Command) {
+    if TahoeHUD.shouldUseCustomHUD {
+      TahoeHUD.show(displayID: displayID, kind: TahoeHUD.kind(for: self.getOSDImageByCommand(command: command)), progress: 0)
+      return
+    }
     guard let manager = OSDManager.sharedManager() as? OSDManager else {
       return
     }
