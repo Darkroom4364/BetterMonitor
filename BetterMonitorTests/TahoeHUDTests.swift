@@ -58,6 +58,13 @@ class TahoeHUDTests: XCTestCase {
     XCTAssertEqual(TahoeHUD.Kind.contrast.symbolName, "circle.lefthalf.filled")
   }
 
+  func testStockOSDAssetNames() {
+    XCTAssertEqual(TahoeHUD.Kind.brightness.stockOSDAssetName, "Brightness")
+    XCTAssertEqual(TahoeHUD.Kind.volume.stockOSDAssetName, "Volume")
+    XCTAssertEqual(TahoeHUD.Kind.mutedVolume.stockOSDAssetName, "Mute")
+    XCTAssertNil(TahoeHUD.Kind.contrast.stockOSDAssetName)
+  }
+
   // MARK: - normalizedProgress clamping
 
   func testNormalizedProgressAtBounds() {

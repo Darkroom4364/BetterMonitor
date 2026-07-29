@@ -19,9 +19,41 @@ enum TahoeHUD {
       case .contrast: return "circle.lefthalf.filled"
       }
     }
+
+    // Tahoe ships these three OSD artwork files; contrast has no equivalent system asset.
+    var stockOSDAssetName: String? {
+      switch self {
+      case .brightness: return "Brightness"
+      case .volume: return "Volume"
+      case .mutedVolume: return "Mute"
+      case .contrast: return nil
+      }
+    }
   }
 
   static let chicletCount = 16
+
+  // Keep Apple-owned artwork on the host rather than copying private OS assets into the app.
+  // Failure to load any asset deliberately falls back to the matching SF Symbol.
+  private static let stockOSDResourceURL = URL(fileURLWithPath: "/System/Library/CoreServices/OSDUIHelper.app/Contents/Resources", isDirectory: true)
+  private static let stockOSDImages: [String: NSImage] = {
+    var images = [String: NSImage]()
+    for name in ["Brightness", "Volume", "Mute"] {
+      guard let image = NSImage(contentsOf: TahoeHUD.stockOSDResourceURL.appendingPathComponent("\(name).pdf")) else {
+        continue
+      }
+      image.isTemplate = true
+      images[name] = image
+    }
+    return images
+  }()
+
+  static func stockIcon(for kind: Kind) -> NSImage? {
+    guard let assetName = kind.stockOSDAssetName else {
+      return nil
+    }
+    return self.stockOSDImages[assetName]
+  }
 
   static func kind(for osdImage: OSDUtils.OSDImage) -> Kind {
     switch osdImage {
@@ -82,7 +114,7 @@ enum TahoeHUD {
   }
 }
 
-// A small non-activating, click-through panel mimicking the native OSD: SF Symbol icon plus a 16-chiclet progress bar.
+// A small non-activating, click-through panel mimicking the native OSD with stock Tahoe artwork plus a 16-chiclet progress bar.
 final class TahoeHUDPanel: NSPanel {
   private static let panelSize = NSSize(width: 180, height: 180)
   private static let bottomOffset: CGFloat = 140
@@ -138,7 +170,7 @@ final class TahoeHUDPanel: NSPanel {
     self.fadeWorkItem?.cancel()
     self.fadeWorkItem = nil
     if #available(macOS 11, *) {
-      self.iconView.image = NSImage(systemSymbolName: kind.symbolName, accessibilityDescription: nil)
+      self.iconView.image = TahoeHUD.stockIcon(for: kind) ?? NSImage(systemSymbolName: kind.symbolName, accessibilityDescription: nil)
     }
     self.iconView.contentTintColor = disabled ? .tertiaryLabelColor : .labelColor
     self.chicletView.progress = disabled ? 0 : progress
