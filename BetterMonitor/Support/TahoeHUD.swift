@@ -55,6 +55,10 @@ enum TahoeHUD {
     return self.stockOSDImages[assetName]
   }
 
+  static func fallbackSymbolName(for kind: Kind, stockIconAvailable: Bool) -> String? {
+    stockIconAvailable ? nil : kind.symbolName
+  }
+
   static func kind(for osdImage: OSDUtils.OSDImage) -> Kind {
     switch osdImage {
     case .brightness: return .brightness
@@ -81,9 +85,14 @@ enum TahoeHUD {
   }
 
   private static var panels: [CGDirectDisplayID: TahoeHUDPanel] = [:]
+  private static let lifecycle = TahoeHUDLifecycle()
 
   static func show(displayID: CGDirectDisplayID, kind: Kind, progress: Float, disabled: Bool = false) {
+    let lifecycleGeneration = self.lifecycle.captureGeneration()
     let run = {
+      guard self.lifecycle.isCurrent(lifecycleGeneration) else {
+        return
+      }
       let effectiveDisplayID = DisplayManager.resolveEffectiveDisplayID(displayID)
       guard let screen = DisplayManager.getByDisplayID(displayID: effectiveDisplayID) else {
         return
@@ -99,18 +108,42 @@ enum TahoeHUD {
     }
   }
 
-  static func closeHUD(for displayID: CGDirectDisplayID) {
+  static func invalidateAndCloseAllHUDs() {
+    self.lifecycle.invalidate()
     let run = {
-      guard let panel = self.panels.removeValue(forKey: DisplayManager.resolveEffectiveDisplayID(displayID)) else {
-        return
-      }
-      panel.cancelAndClose()
+      let panels = self.panels.values
+      self.panels.removeAll()
+      panels.forEach { $0.cancelAndClose() }
     }
     if Thread.isMainThread {
       run()
     } else {
       DispatchQueue.main.async(execute: run)
     }
+  }
+}
+
+// Serializes the generation token that invalidates HUD updates queued before display teardown.
+final class TahoeHUDLifecycle {
+  private let lock = NSLock()
+  private var generation = 0
+
+  func captureGeneration() -> Int {
+    self.lock.lock()
+    defer { self.lock.unlock() }
+    return self.generation
+  }
+
+  func invalidate() {
+    self.lock.lock()
+    self.generation &+= 1
+    self.lock.unlock()
+  }
+
+  func isCurrent(_ capturedGeneration: Int) -> Bool {
+    self.lock.lock()
+    defer { self.lock.unlock() }
+    return capturedGeneration == self.generation
   }
 }
 
@@ -170,7 +203,12 @@ final class TahoeHUDPanel: NSPanel {
     self.fadeWorkItem?.cancel()
     self.fadeWorkItem = nil
     if #available(macOS 11, *) {
-      self.iconView.image = TahoeHUD.stockIcon(for: kind) ?? NSImage(systemSymbolName: kind.symbolName, accessibilityDescription: nil)
+      let stockIcon = TahoeHUD.stockIcon(for: kind)
+      if let fallbackSymbolName = TahoeHUD.fallbackSymbolName(for: kind, stockIconAvailable: stockIcon != nil) {
+        self.iconView.image = NSImage(systemSymbolName: fallbackSymbolName, accessibilityDescription: nil)
+      } else {
+        self.iconView.image = stockIcon
+      }
     }
     self.iconView.contentTintColor = disabled ? .tertiaryLabelColor : .labelColor
     self.chicletView.progress = disabled ? 0 : progress

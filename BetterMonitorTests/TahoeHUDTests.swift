@@ -65,6 +65,29 @@ class TahoeHUDTests: XCTestCase {
     XCTAssertNil(TahoeHUD.Kind.contrast.stockOSDAssetName)
   }
 
+  func testFallbackSymbolsWhenStockAssetIsUnavailable() {
+    XCTAssertEqual(TahoeHUD.fallbackSymbolName(for: .brightness, stockIconAvailable: false), "sun.max.fill")
+    XCTAssertEqual(TahoeHUD.fallbackSymbolName(for: .volume, stockIconAvailable: false), "speaker.wave.2.fill")
+    XCTAssertEqual(TahoeHUD.fallbackSymbolName(for: .mutedVolume, stockIconAvailable: false), "speaker.slash.fill")
+    XCTAssertEqual(TahoeHUD.fallbackSymbolName(for: .contrast, stockIconAvailable: false), "circle.lefthalf.filled")
+    XCTAssertNil(TahoeHUD.fallbackSymbolName(for: .brightness, stockIconAvailable: true))
+  }
+
+  func testLifecycleInvalidatesQueuedHUDShow() {
+    let lifecycle = TahoeHUDLifecycle()
+    let queuedGeneration = lifecycle.captureGeneration()
+    let queuedShowExecuted = self.expectation(description: "queued HUD show executes")
+
+    DispatchQueue.main.async {
+      XCTAssertFalse(lifecycle.isCurrent(queuedGeneration))
+      queuedShowExecuted.fulfill()
+    }
+
+    lifecycle.invalidate()
+    self.wait(for: [queuedShowExecuted], timeout: 1)
+    XCTAssertTrue(lifecycle.isCurrent(lifecycle.captureGeneration()))
+  }
+
   // MARK: - normalizedProgress clamping
 
   func testNormalizedProgressAtBounds() {
