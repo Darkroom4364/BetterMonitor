@@ -33,6 +33,24 @@ class CLICommandParsingTests: XCTestCase {
     XCTAssertEqual(cmd?.property, .contrast)
   }
 
+  func testParseGetInput() {
+    let cmd = CLICommand.parse(["bettermonitor", "get", "input"])
+    XCTAssertEqual(cmd?.property, .input)
+  }
+
+  func testParseSetInputWithStandardAlias() {
+    let cmd = CLICommand.parse(["bettermonitor", "set", "input", "hdmi1", "--display", "12345"])
+    XCTAssertEqual(cmd?.property, .input)
+    XCTAssertEqual(cmd?.value, 0x11)
+    XCTAssertEqual(cmd?.displayId, 12345)
+  }
+
+  func testParseSetInputWithRawHexValue() {
+    let cmd = CLICommand.parse(["bettermonitor", "set", "input", "0x0f", "--display", "C49"])
+    XCTAssertEqual(cmd?.value, 0x0F)
+    XCTAssertEqual(cmd?.displayName, "C49")
+  }
+
   func testParseSetBrightness() {
     let cmd = CLICommand.parse(["bettermonitor", "set", "brightness", "50"])
     XCTAssertNotNil(cmd)
@@ -145,6 +163,21 @@ class CLICommandParsingTests: XCTestCase {
     XCTAssertNil(cmd)
   }
 
+  func testSetInputRequiresDisplayTarget() {
+    let cmd = CLICommand.parse(["bettermonitor", "set", "input", "hdmi1"])
+    XCTAssertNil(cmd)
+  }
+
+  func testSetInputRejectsUnknownSource() {
+    let cmd = CLICommand.parse(["bettermonitor", "set", "input", "hdmi7", "--display", "C49"])
+    XCTAssertNil(cmd)
+  }
+
+  func testSetInputRejectsNoActiveInput() {
+    let cmd = CLICommand.parse(["bettermonitor", "set", "input", "0x00", "--display", "C49"])
+    XCTAssertNil(cmd)
+  }
+
   func testDisplayFlagMissingValue() {
     let cmd = CLICommand.parse(["bettermonitor", "--display"])
     XCTAssertNil(cmd)
@@ -173,6 +206,7 @@ class CLICommandParsingTests: XCTestCase {
     guard let cmd = CLICommand.parse(["bettermonitor", "set", "volume", "75"]) else { return XCTFail("parse returned nil") }
     XCTAssertEqual(cmd.userInfo[CLIKey.value] as? Int, 75)
   }
+
 
   func testUserInfoContainsDisplayName() {
     guard let cmd = CLICommand.parse(["bettermonitor", "--display", "Dell", "list"]) else { return XCTFail("parse returned nil") }

@@ -9,9 +9,11 @@ private extension CLIProperty {
     case .brightness: return .brightness
     case .volume: return .audioSpeakerVolume
     case .contrast: return .contrast
+    case .input: return .inputSelect
     }
   }
 }
+
 
 class CLIRequestHandler {
   init() {
@@ -53,6 +55,7 @@ class CLIRequestHandler {
     }
   }
 
+
   private func handleList() -> [[String: Any]] {
     DisplayManager.shared.getAllDisplays().map { display in
       var info: [String: Any] = [
@@ -75,28 +78,43 @@ class CLIRequestHandler {
     guard let propertyString = userInfo[CLIKey.property] as? String,
           let property = CLIProperty(rawValue: propertyString)
     else {
-      return [["error": "Invalid property. Use: brightness, volume, contrast"]]
+      return [["error": "Invalid property. Use: brightness, volume, contrast, input"]]
     }
     let displays = resolveDisplays(userInfo: userInfo)
     if displays.isEmpty {
       return [["error": "No matching display found"]]
     }
     return displays.map { display in
-      var value: Float
       switch property {
+      case .input:
+        guard let otherDisplay = display as? OtherDisplay,
+              !otherDisplay.isSw(),
+              let input = otherDisplay.readDDCValues(for: property.command, tries: 1, minReplyDelay: nil)?.current
+        else {
+          return ["name": display.name, "error": "Input source is unavailable — DDC unavailable, software-only, or unsupported"]
+        }
+        return [
+          "name": display.name,
+          "id": display.identifier,
+          property.rawValue: DDCInputSource.label(for: input),
+          "inputValue": Int(input),
+        ] as [String: Any]
       case .brightness:
-        value = display.getBrightness()
+        return [
+          "name": display.name,
+          "id": display.identifier,
+          property.rawValue: Int(round(display.getBrightness() * 100)),
+        ] as [String: Any]
       case .volume, .contrast:
         guard let otherDisplay = display as? OtherDisplay else {
           return ["name": display.name, "error": "Property not available for Apple displays"]
         }
-        value = otherDisplay.readPrefAsFloat(for: property.command)
+        return [
+          "name": display.name,
+          "id": display.identifier,
+          property.rawValue: Int(round(otherDisplay.readPrefAsFloat(for: property.command) * 100)),
+        ] as [String: Any]
       }
-      return [
-        "name": display.name,
-        "id": display.identifier,
-        property.rawValue: Int(round(value * 100)),
-      ] as [String: Any]
     }
   }
 
@@ -106,6 +124,9 @@ class CLIRequestHandler {
           let valueInt = userInfo[CLIKey.value] as? Int
     else {
       return [["error": "Invalid property or value"]]
+    }
+    if property == .input {
+      return handleSetInput(userInfo: userInfo, value: valueInt)
     }
     let floatValue = max(0, min(1, Float(valueInt) / 100.0))
     let displays = resolveDisplays(userInfo: userInfo)
@@ -146,6 +167,8 @@ class CLIRequestHandler {
             slider.setValue(floatValue, displayID: otherDisplay.identifier)
           }
         }
+      case .input:
+        fatalError("Input source is handled before brightness conversion")
       }
       var result: [String: Any] = [
         "name": display.name,
@@ -157,6 +180,41 @@ class CLIRequestHandler {
       }
       return result
     }
+  }
+
+  private func handleSetInput(userInfo: [AnyHashable: Any], value: Int) -> [[String: Any]] {
+    guard let input = UInt16(exactly: value),
+          input > 0, input <= UInt16(UInt8.max)
+    else {
+      return [["error": "Invalid DDC input source value"]]
+    }
+    let hasDisplayId = userInfo[CLIKey.displayId] is NSNumber
+    let hasDisplayName = !(userInfo[CLIKey.displayName] as? String ?? "").trimmingCharacters(in: .whitespaces).isEmpty
+    guard hasDisplayId || hasDisplayName else {
+      return [["error": "Input source changes require --display <name-or-id>"]]
+    }
+    let displays = resolveDisplays(userInfo: userInfo)
+    guard displays.count == 1 else {
+      return [[
+        "error": displays.isEmpty
+          ? "No matching display found"
+          : "Input source changes require exactly one matching display",
+      ]]
+    }
+    guard let otherDisplay = displays[0] as? OtherDisplay,
+          !otherDisplay.isSw(),
+          !otherDisplay.readPrefAsBool(key: .unavailableDDC, for: .inputSelect),
+          otherDisplay.queueInputSource(input)
+    else {
+      return [["name": displays[0].name, "error": "Input source is unavailable — DDC unavailable or software-only display"]]
+    }
+    return [[
+      "name": otherDisplay.name,
+      "id": otherDisplay.identifier,
+      "input": DDCInputSource.label(for: input),
+      "inputValue": Int(input),
+      "queued": true,
+    ]]
   }
 
   private func resolveDisplays(userInfo: [AnyHashable: Any]) -> [Display] {

@@ -63,10 +63,9 @@ DistributedNotificationCenter.default().postNotificationName(
   deliverImmediately: true
 )
 
-// Run loop with 3-second timeout
 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
   if !handler.receivedReply {
-    CLICommand.printError("BetterMonitor app is not running. Please launch BetterMonitor first.")
+    CLICommand.printError("BetterMonitor did not reply within 3 seconds. Make sure it is running.")
     exit(1)
   }
 }
@@ -102,14 +101,23 @@ func formatOutput(action: CLIAction, property: CLIProperty?, data: [[String: Any
     case .get:
       let name = item["name"] as? String ?? "Unknown"
       let propName = property?.rawValue ?? ""
-      if let value = item[propName] as? Int {
+      if property == .input,
+         let input = item["input"] as? String,
+         let inputValue = item["inputValue"] as? Int {
+        print("\(name): input = \(input) (0x\(String(inputValue, radix: 16, uppercase: true)))")
+      } else if let value = item[propName] as? Int {
         print("\(name): \(propName) = \(value)%")
       }
 
     case .set:
       let name = item["name"] as? String ?? "Unknown"
       let propName = property?.rawValue ?? ""
-      if let value = item[propName] as? Int {
+      if property == .input,
+         let input = item["input"] as? String,
+         let inputValue = item["inputValue"] as? Int {
+        let status = item["queued"] as? Bool == true ? "change to \(input) (0x\(String(inputValue, radix: 16, uppercase: true))) queued" : "set to \(input) (0x\(String(inputValue, radix: 16, uppercase: true)))"
+        print("\(name): input \(status)")
+      } else if let value = item[propName] as? Int {
         print("\(name): \(propName) set to \(value)%")
       }
     }

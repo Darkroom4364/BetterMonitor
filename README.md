@@ -62,9 +62,15 @@ bettermonitor set brightness 70
 
 # JSON output
 bettermonitor list --json
+
+# Inspect or switch an external display input (target required for switching)
+bettermonitor get input --display C49
+bettermonitor set input hdmi1 --display C49
 ```
 
 The CLI communicates with the running BetterMonitor app — make sure it's open.
+
+Input selection uses DDC VCP 0x60 and queues the request. CLI success confirms that BetterMonitor accepted it; read the input afterward to confirm a supported monitor switched. Use a specific display target; switching away from the active input can temporarily make that display unavailable.
 
 ## Getting started
 
