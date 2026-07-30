@@ -31,7 +31,6 @@ enum TahoeHUD {
     }
   }
 
-  static let chicletCount = 16
 
   // Keep Apple-owned artwork on the host rather than copying private OS assets into the app.
   // Failure to load any asset deliberately falls back to the matching SF Symbol.
@@ -147,16 +146,16 @@ final class TahoeHUDLifecycle {
   }
 }
 
-// A small non-activating, click-through panel mimicking the native OSD with stock Tahoe artwork plus a 16-chiclet progress bar.
+// A compact horizontal HUD with stock Tahoe artwork and a native-style progress bar.
 final class TahoeHUDPanel: NSPanel {
-  private static let panelSize = NSSize(width: 180, height: 180)
-  private static let bottomOffset: CGFloat = 140
+  private static let panelSize = NSSize(width: 280, height: 56)
+  private static let bottomOffset: CGFloat = 96
   private static let holdInterval: TimeInterval = 1.0
   private static let fadeInterval: TimeInterval = 0.4
 
   private let effectView = NSVisualEffectView()
   private let iconView = NSImageView()
-  private let chicletView = TahoeHUDChicletView()
+  private let progressView = TahoeHUDProgressView()
   private var fadeWorkItem: DispatchWorkItem?
   // Monotonic token invalidating any fade scheduled or already running for an older update. Main thread only.
   private var fadeGeneration = 0
@@ -182,18 +181,18 @@ final class TahoeHUDPanel: NSPanel {
     self.iconView.imageScaling = .scaleProportionallyUpOrDown
     self.iconView.contentTintColor = .labelColor
     self.iconView.translatesAutoresizingMaskIntoConstraints = false
-    self.chicletView.translatesAutoresizingMaskIntoConstraints = false
+    self.progressView.translatesAutoresizingMaskIntoConstraints = false
     self.effectView.addSubview(self.iconView)
-    self.effectView.addSubview(self.chicletView)
+    self.effectView.addSubview(self.progressView)
     NSLayoutConstraint.activate([
-      self.iconView.centerXAnchor.constraint(equalTo: self.effectView.centerXAnchor),
-      self.iconView.centerYAnchor.constraint(equalTo: self.effectView.centerYAnchor, constant: 10),
-      self.iconView.widthAnchor.constraint(equalToConstant: 64),
-      self.iconView.heightAnchor.constraint(equalToConstant: 64),
-      self.chicletView.centerXAnchor.constraint(equalTo: self.effectView.centerXAnchor),
-      self.chicletView.bottomAnchor.constraint(equalTo: self.effectView.bottomAnchor, constant: -24),
-      self.chicletView.widthAnchor.constraint(equalToConstant: 140),
-      self.chicletView.heightAnchor.constraint(equalToConstant: 8),
+      self.iconView.leadingAnchor.constraint(equalTo: self.effectView.leadingAnchor, constant: 16),
+      self.iconView.centerYAnchor.constraint(equalTo: self.effectView.centerYAnchor),
+      self.iconView.widthAnchor.constraint(equalToConstant: 24),
+      self.iconView.heightAnchor.constraint(equalToConstant: 24),
+      self.progressView.leadingAnchor.constraint(equalTo: self.iconView.trailingAnchor, constant: 12),
+      self.progressView.trailingAnchor.constraint(equalTo: self.effectView.trailingAnchor, constant: -18),
+      self.progressView.centerYAnchor.constraint(equalTo: self.effectView.centerYAnchor),
+      self.progressView.heightAnchor.constraint(equalToConstant: 6),
     ])
   }
 
@@ -211,9 +210,8 @@ final class TahoeHUDPanel: NSPanel {
       }
     }
     self.iconView.contentTintColor = disabled ? .tertiaryLabelColor : .labelColor
-    self.chicletView.progress = disabled ? 0 : progress
-    self.chicletView.chicletCount = TahoeHUD.chicletCount
-    self.chicletView.needsDisplay = true
+    self.progressView.progress = disabled ? 0 : progress
+    self.progressView.needsDisplay = true
 
     let frame = screen.visibleFrame
     self.setFrameOrigin(NSPoint(x: frame.midX - TahoeHUDPanel.panelSize.width / 2, y: frame.minY + TahoeHUDPanel.bottomOffset))
@@ -251,31 +249,24 @@ final class TahoeHUDPanel: NSPanel {
   }
 }
 
-// Draws the segmented (chiclet) progress bar of the native OSD.
-final class TahoeHUDChicletView: NSView {
+// Draws the continuous progress bar used by the horizontal Tahoe HUD.
+final class TahoeHUDProgressView: NSView {
   var progress: Float = 0
-  var chicletCount: Int = TahoeHUD.chicletCount
 
   override func draw(_ dirtyRect: NSRect) {
-    guard self.chicletCount > 0 else {
+    guard !self.bounds.isEmpty else {
       return
     }
-    let spacing: CGFloat = 2
-    let totalSpacing = spacing * CGFloat(self.chicletCount - 1)
-    let chicletWidth = (self.bounds.width - totalSpacing) / CGFloat(self.chicletCount)
-    guard chicletWidth > 0 else {
+    let radius = self.bounds.height / 2
+    NSColor.labelColor.withAlphaComponent(0.25).setFill()
+    NSBezierPath(roundedRect: self.bounds, xRadius: radius, yRadius: radius).fill()
+
+    let fillWidth = self.bounds.width * CGFloat(min(max(self.progress, 0), 1))
+    guard fillWidth > 0 else {
       return
     }
-    let filledCount = Int((self.progress * Float(self.chicletCount)).rounded())
-    for index in 0 ..< self.chicletCount {
-      let rect = NSRect(x: CGFloat(index) * (chicletWidth + spacing), y: 0, width: chicletWidth, height: self.bounds.height)
-      let path = NSBezierPath(roundedRect: rect, xRadius: 2, yRadius: 2)
-      if index < filledCount {
-        NSColor.labelColor.setFill()
-      } else {
-        NSColor.labelColor.withAlphaComponent(0.25).setFill()
-      }
-      path.fill()
-    }
+    let fillRect = NSRect(x: self.bounds.minX, y: self.bounds.minY, width: fillWidth, height: self.bounds.height)
+    NSColor.labelColor.setFill()
+    NSBezierPath(roundedRect: fillRect, xRadius: radius, yRadius: radius).fill()
   }
 }
