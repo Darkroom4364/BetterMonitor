@@ -79,7 +79,7 @@ struct CLICommand {
 
     case .get:
       guard positional.count >= 2, let property = CLIProperty(rawValue: positional[1]) else {
-        printError("Usage: bettermonitor get <brightness|volume|contrast>")
+        printError("Usage: bettermonitor get <brightness|volume|contrast|input>")
         return nil
       }
       return CLICommand(action: .get, property: property, value: nil, displayName: displayName, displayId: displayId, jsonOutput: jsonOutput)
@@ -87,13 +87,28 @@ struct CLICommand {
     case .set:
       guard positional.count >= 3,
             let property = CLIProperty(rawValue: positional[1]),
-            let value = Int(positional[2]),
-            value >= 0, value <= 100
+            let value = parseSetValue(positional[2], for: property)
       else {
-        printError("Usage: bettermonitor set <brightness|volume|contrast> <0-100>")
+        printError("Usage: bettermonitor set <brightness|volume|contrast> <0-100> or bettermonitor set input <source> --display <name-or-id>")
+        return nil
+      }
+      guard property != .input || displayName != nil || displayId != nil else {
+        printError("Input source changes require --display <name-or-id>")
         return nil
       }
       return CLICommand(action: .set, property: property, value: value, displayName: displayName, displayId: displayId, jsonOutput: jsonOutput)
+    }
+  }
+
+  private static func parseSetValue(_ value: String, for property: CLIProperty) -> Int? {
+    switch property {
+    case .input:
+      return DDCInputSource.value(for: value).map { Int($0) }
+    case .brightness, .volume, .contrast:
+      guard let percentage = Int(value), (0 ... 100).contains(percentage) else {
+        return nil
+      }
+      return percentage
     }
   }
 
@@ -101,10 +116,10 @@ struct CLICommand {
     let usage = """
     Usage: bettermonitor <command> [options]
 
-    Commands:
       list                                      List connected displays
-      get <brightness|volume|contrast>           Get current value
+      get <brightness|volume|contrast|input>     Get current value
       set <brightness|volume|contrast> <0-100>   Set value
+      set input <source> --display <name-or-id>  Queue DDC input (hdmi1, dp1, or 0x01-0xFF)
 
     Options:
       --display <name-or-id>    Target a specific display

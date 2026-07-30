@@ -389,6 +389,43 @@ class OtherDisplay: Display {
     }
   }
 
+  func queueInputSource(_ input: UInt16) -> Bool {
+    guard !self.isSw(),
+          app.sleepID == 0,
+          app.reconfigureID == 0,
+          !self.readPrefAsBool(key: .forceSw),
+          !self.readPrefAsBool(key: .unavailableDDC, for: .inputSelect)
+    else {
+      return false
+    }
+    var controlCodes = self.getRemapControlCodes(command: .inputSelect)
+    if controlCodes.isEmpty {
+      controlCodes.append(Command.inputSelect.rawValue)
+    }
+    DisplayManager.shared.globalDDCQueue.async(flags: .barrier) {
+      guard !self.isSw(),
+            app.sleepID == 0,
+            app.reconfigureID == 0,
+            !self.readPrefAsBool(key: .forceSw),
+            !self.readPrefAsBool(key: .unavailableDDC, for: .inputSelect)
+      else {
+        return
+      }
+      for controlCode in controlCodes {
+        let success: Bool
+        if Arm64DDC.isArm64 {
+          success = self.arm64ddc && Arm64DDC.write(service: self.arm64avService, command: controlCode, value: input)
+        } else {
+          success = self.ddc?.write(command: controlCode, value: input, errorRecoveryWaitTime: 2000) ?? false
+        }
+        if !success {
+          break
+        }
+      }
+    }
+    return true
+  }
+
   func asyncPerformWriteDDCValues(command: Command) {
     var value = UInt16.max
     var lastValue = UInt16.max
