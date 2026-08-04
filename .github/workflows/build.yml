@@ -51,4 +51,26 @@ jobs:
             -project BetterMonitor.xcodeproj \
             -scheme BetterMonitor \
             -destination 'platform=macOS' \
+            -enableCodeCoverage YES \
+            -resultBundlePath BetterMonitor.xcresult \
             CODE_SIGNING_ALLOWED=NO
+
+      - name: Test Coverage Checker
+        if: matrix.os == 'macos-15'
+        run: python3 -m unittest scripts/test_check_coverage.py
+
+      - name: Check Code Coverage
+        if: matrix.os == 'macos-15'
+        run: |
+          python3 scripts/check_coverage.py \
+            BetterMonitor.xcresult \
+            --target BetterMonitor.app \
+            --minimum 9.17
+
+      - name: Upload test result bundle
+        if: always() && matrix.os == 'macos-15'
+        uses: actions/upload-artifact@v4
+        with:
+          name: BetterMonitor-xcresult-macos-15
+          path: BetterMonitor.xcresult
+          if-no-files-found: error
