@@ -18,6 +18,7 @@ DEFAULT_TARGET = "BetterMonitor.app"
 # sub-trillionth representation difference; the integer line counts decide the gate.
 LINE_COVERAGE_TOLERANCE = Decimal("0.000000000001")
 MAX_MINIMUM_DECIMAL_PLACES = 18
+XCCOV_TIMEOUT_SECONDS = 60
 
 
 class CoverageError(Exception):
@@ -103,7 +104,17 @@ def _target_report(report: Any, target_name: str) -> dict[str, Any]:
 def _load_coverage(result_bundle: Path, target_name: str) -> Coverage:
     command = ["xcrun", "xccov", "view", "--report", "--json", str(result_bundle)]
     try:
-        result = subprocess.run(command, capture_output=True, check=False, text=True)
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            check=False,
+            text=True,
+            timeout=XCCOV_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise CoverageError(
+            f"xccov timed out after {XCCOV_TIMEOUT_SECONDS} seconds"
+        ) from error
     except OSError as error:
         raise CoverageError(f"could not run xccov: {error}") from error
 

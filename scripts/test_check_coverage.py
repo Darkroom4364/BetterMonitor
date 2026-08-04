@@ -95,6 +95,9 @@ class CheckCoverageTests(unittest.TestCase):
                 "test-result.xcresult",
             ],
         )
+        self.assertEqual(
+            run.call_args.kwargs["timeout"], check_coverage.XCCOV_TIMEOUT_SECONDS
+        )
 
     def test_exact_minimum_boundary_passes(self) -> None:
         code, stdout, stderr, _ = self.invoke(
@@ -192,6 +195,30 @@ class CheckCoverageTests(unittest.TestCase):
         self.assertEqual(stdout, "")
         self.assertIn("xccov failed with exit code 2", stderr)
         self.assertIn("unable to read result bundle", stderr)
+
+    def test_xccov_timeout_fails(self) -> None:
+        timeout = subprocess.TimeoutExpired(
+            ["xcrun", "xccov"], check_coverage.XCCOV_TIMEOUT_SECONDS
+        )
+        captured_stdout = io.StringIO()
+        captured_stderr = io.StringIO()
+        with mock.patch.object(check_coverage.subprocess, "run", side_effect=timeout) as run:
+            with contextlib.redirect_stdout(captured_stdout), contextlib.redirect_stderr(
+                captured_stderr
+            ):
+                code = check_coverage.main(
+                    ["test-result.xcresult", "--minimum", "9.17"]
+                )
+
+        self.assertNotEqual(code, 0)
+        self.assertEqual(captured_stdout.getvalue(), "")
+        self.assertIn(
+            "Coverage check failed: xccov timed out after 60 seconds",
+            captured_stderr.getvalue(),
+        )
+        self.assertEqual(
+            run.call_args.kwargs["timeout"], check_coverage.XCCOV_TIMEOUT_SECONDS
+        )
 
     def test_incomplete_report_fails(self) -> None:
         report = self.report()
