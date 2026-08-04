@@ -120,6 +120,17 @@ func formatOutput(action: CLIAction, property: CLIProperty?, data: [[String: Any
       } else if let value = item[propName] as? Int {
         print("\(name): \(propName) set to \(value)%")
       }
+    case .modeFavoriteList:
+      let display = item["display"] as? String ?? "Unknown"
+      let name = item["name"] as? String ?? "Unnamed"
+      let mode = item["mode"] as? String ?? "Unknown mode"
+      print("\(display): \(name) — \(mode)")
+
+    case .modeFavoriteSave, .modeFavoriteApply, .modeFavoriteDelete:
+      let display = item["display"] as? String ?? "Unknown"
+      let name = item["name"] as? String ?? "Unnamed"
+      let operation = item["operation"] as? String ?? "completed"
+      print("\(display): \(name) \(operation)")
     }
   }
 }

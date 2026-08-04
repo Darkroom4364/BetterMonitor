@@ -15,12 +15,17 @@ enum CLIKey {
   static let displayName = "displayName"
   static let replyId = "replyId"
   static let json = "json"
+  static let favoriteName = "favoriteName"
 }
 
 enum CLIAction: String {
   case list
   case get
   case set
+  case modeFavoriteList = "mode-favorite-list"
+  case modeFavoriteSave = "mode-favorite-save"
+  case modeFavoriteApply = "mode-favorite-apply"
+  case modeFavoriteDelete = "mode-favorite-delete"
 }
 
 enum CLIProperty: String {

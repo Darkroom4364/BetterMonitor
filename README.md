@@ -28,6 +28,7 @@ Use menubar sliders, keyboard shortcuts, or the CLI for automation.</p>
 - **Brightness, volume & contrast** control for external displays via DDC
 - **Native OSD** — shows the system brightness/volume overlay
 - **CLI tool** (`bettermonitor`) for scripted and automated control
+- **Exact mode favorites** — save, apply, list, and delete currently offered per-display desktop modes
 - **Multiple protocols** — DDC for external displays, native Apple protocol for built-in displays, gamma/shade for virtual screens
 - **Smooth transitions** and combined hardware + software dimming (dim beyond your display's minimum)
 - **Brightness sync** — replicate ambient light sensor changes from built-in displays to externals
@@ -66,11 +67,22 @@ bettermonitor list --json
 # Inspect or switch an external display input (target required for switching)
 bettermonitor get input --display C49
 bettermonitor set input hdmi1 --display C49
+
+# Save, list, apply, or delete an exact offered desktop mode
+bettermonitor mode-favorite-save Work --display C49
+bettermonitor mode-favorite-list --display C49
+bettermonitor mode-favorite-apply Work --display C49
+bettermonitor mode-favorite-delete Work --display C49
 ```
 
 The CLI communicates with the running BetterMonitor app — make sure it's open.
 
 Input selection uses DDC VCP 0x60 and queues the request. CLI success confirms that BetterMonitor accepted it; read the input afterward to confirm a supported monitor switched. Use a specific display target; switching away from the active input can temporarily make that display unavailable.
+
+Mode favorites preserve the current display's exact offered mode (logical and pixel dimensions,
+refresh rate, pixel encoding, desktop usability, IO flags, and HiDPI state). They require a complete,
+non-sentinel vendor/model/serial identity; they are unavailable rather than persisted when it is absent.
+They do not create custom resolutions, unlock additional HiDPI modes, or complete the broader display-mode roadmap.
 
 ## Getting started
 
