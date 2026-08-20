@@ -13,22 +13,94 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Build App
+      - name: Archive Release App
+        env:
+          ARCHIVE_PATH: ${{ runner.temp }}/BetterMonitor.xcarchive
+          DERIVED_DATA_PATH: ${{ runner.temp }}/BetterMonitorAppDerivedData
+        run: |
+          xcodebuild archive \
+            -project BetterMonitor.xcodeproj \
+            -scheme BetterMonitor \
+            -configuration Release \
+            -destination 'generic/platform=macOS' \
+            -archivePath "$ARCHIVE_PATH" \
+            -derivedDataPath "$DERIVED_DATA_PATH" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            SOURCE_MUTATING_BUILD_PHASES=NO
+
+      - name: Build Release CLI
+        env:
+          DERIVED_DATA_PATH: ${{ runner.temp }}/BetterMonitorCLIDerivedData
         run: |
           xcodebuild build \
             -project BetterMonitor.xcodeproj \
-            -scheme BetterMonitor \
-            -destination 'platform=macOS' \
-            -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO
+            -target BetterMonitorCLI \
+            -configuration Release \
+            -destination 'generic/platform=macOS' \
+            SYMROOT="$DERIVED_DATA_PATH/Build/Products" \
+            OBJROOT="$DERIVED_DATA_PATH/Build/Intermediates.noindex" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            SOURCE_MUTATING_BUILD_PHASES=NO
 
-      - name: Archive App
+      - name: Verify Release Build Source State
         run: |
-          cd build/Build/Products/Release
-          zip -r BetterMonitor.zip BetterMonitor.app
+          source_status="$(git status --porcelain=v1 --untracked-files=all)"
+          if [ -n "$source_status" ]; then
+            echo "Release build modified or created source files; refusing to package."
+            printf '%s\n' "$source_status"
+            git diff --no-ext-diff
+            git diff --cached --no-ext-diff
+            exit 1
+          fi
+
+      - name: Package Release
+        env:
+          ARCHIVE_PATH: ${{ runner.temp }}/BetterMonitor.xcarchive
+          CLI_DERIVED_DATA_PATH: ${{ runner.temp }}/BetterMonitorCLIDerivedData
+          DIST_DIR: ${{ runner.temp }}/BetterMonitorReleaseDist
+        run: |
+          package_name="BetterMonitor-${GITHUB_REF_NAME}"
+          package_root="$DIST_DIR/BetterMonitor"
+          rm -rf "$DIST_DIR"
+          mkdir -p "$package_root"
+          ditto "$ARCHIVE_PATH/Products/Applications/BetterMonitor.app" "$package_root/BetterMonitor.app"
+          cp "$CLI_DERIVED_DATA_PATH/Build/Products/Release/bettermonitor" "$package_root/bettermonitor"
+          chmod +x "$package_root/bettermonitor"
+          ditto -c -k --sequesterRsrc --keepParent "$package_root" "$DIST_DIR/${package_name}.zip"
+          shasum -a 256 "$DIST_DIR/${package_name}.zip" > "$DIST_DIR/${package_name}.zip.sha256"
+
+      - name: Verify Packaged Release
+        env:
+          DIST_DIR: ${{ runner.temp }}/BetterMonitorReleaseDist
+        run: |
+          package_name="BetterMonitor-${GITHUB_REF_NAME}"
+          package_root="$DIST_DIR/BetterMonitor"
+          extraction_dir="$RUNNER_TEMP/BetterMonitor-release-smoke"
+          assert_exact_cli_archs() {
+            local actual_archs
+            actual_archs="$(lipo -archs "$1" | tr ' ' '\n' | LC_ALL=C sort | paste -sd ' ' -)"
+            test "$actual_archs" = "arm64 x86_64"
+          }
+          assert_exact_cli_archs "$package_root/bettermonitor"
+          test -x "$package_root/BetterMonitor.app/Contents/MacOS/BetterMonitor"
+          test -x "$package_root/BetterMonitor.app/Contents/Library/LoginItems/BetterMonitorHelper.app/Contents/MacOS/BetterMonitorHelper"
+          test -x "$package_root/bettermonitor"
+          plutil -lint "$package_root/BetterMonitor.app/Contents/Info.plist"
+          "$package_root/bettermonitor" --help > /dev/null
+          shasum -a 256 -c "$DIST_DIR/${package_name}.zip.sha256"
+          rm -rf "$extraction_dir"
+          ditto -x -k "$DIST_DIR/${package_name}.zip" "$extraction_dir"
+          assert_exact_cli_archs "$extraction_dir/BetterMonitor/bettermonitor"
+          test -x "$extraction_dir/BetterMonitor/BetterMonitor.app/Contents/MacOS/BetterMonitor"
+          test -x "$extraction_dir/BetterMonitor/BetterMonitor.app/Contents/Library/LoginItems/BetterMonitorHelper.app/Contents/MacOS/BetterMonitorHelper"
+          test -x "$extraction_dir/BetterMonitor/bettermonitor"
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/Build/Products/Release/BetterMonitor.zip
+          files: |
+            ${{ runner.temp }}/BetterMonitorReleaseDist/BetterMonitor-${{ github.ref_name }}.zip
+            ${{ runner.temp }}/BetterMonitorReleaseDist/BetterMonitor-${{ github.ref_name }}.zip.sha256
           generate_release_notes: true
