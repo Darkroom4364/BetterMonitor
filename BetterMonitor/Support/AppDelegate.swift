@@ -59,7 +59,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     if !prefs.bool(forKey: PrefKey.appAlreadyLaunched.rawValue) {
       self.showOnboardingWindow()
     } else {
-      self.checkPermissions()
+      self.refreshAccessibilityStatus()
     }
     self.setPrefsBuildNumber()
     self.setDefaultPrefs()
@@ -163,11 +163,96 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     self.updateMediaKeyTap()
   }
 
-  func checkPermissions(firstAsk: Bool = false) {
-    let permissionsRequired: Bool = [KeyboardVolume.media.rawValue, KeyboardVolume.both.rawValue].contains(prefs.integer(forKey: PrefKey.keyboardVolume.rawValue)) || [KeyboardBrightness.media.rawValue, KeyboardBrightness.both.rawValue].contains(prefs.integer(forKey: PrefKey.keyboardBrightness.rawValue))
-    if !MediaKeyTapManager.readPrivileges(prompt: false), permissionsRequired {
-      MediaKeyTapManager.acquirePrivileges(firstAsk: firstAsk)
+  enum AccessibilityConsentTrigger {
+    case statusRefresh(brightness: KeyboardBrightness, volume: KeyboardVolume)
+    case onboarding(brightness: KeyboardBrightness, volume: KeyboardVolume)
+    case brightnessSelection(KeyboardBrightness)
+    case volumeSelection(KeyboardVolume)
+  }
+
+  static func isNativeMediaKeyMode(_ mode: KeyboardBrightness) -> Bool {
+    mode == .media || mode == .both
+  }
+
+  static func isNativeMediaKeyMode(_ mode: KeyboardVolume) -> Bool {
+    mode == .media || mode == .both
+  }
+
+  static func requiresAccessibilityForNativeMediaKeys(brightness: KeyboardBrightness, volume: KeyboardVolume) -> Bool {
+    Self.isNativeMediaKeyMode(brightness) || Self.isNativeMediaKeyMode(volume)
+  }
+
+  @discardableResult
+  static func handleAccessibilityConsent(_ trigger: AccessibilityConsentTrigger, using mediaKeyTap: MediaKeyTapManager) -> Bool {
+    switch trigger {
+    case let .statusRefresh(brightness, volume):
+      if Self.requiresAccessibilityForNativeMediaKeys(brightness: brightness, volume: volume) {
+        _ = mediaKeyTap.accessibilityStatus()
+      }
+      return false
+    case let .onboarding(brightness, volume):
+      guard Self.requiresAccessibilityForNativeMediaKeys(brightness: brightness, volume: volume), !mediaKeyTap.accessibilityStatus() else {
+        return false
+      }
+    case let .brightnessSelection(mode):
+      guard Self.isNativeMediaKeyMode(mode), !mediaKeyTap.accessibilityStatus() else {
+        return false
+      }
+    case let .volumeSelection(mode):
+      guard Self.isNativeMediaKeyMode(mode), !mediaKeyTap.accessibilityStatus() else {
+        return false
+      }
     }
+    _ = mediaKeyTap.requestAccessibilityAccess()
+    return true
+  }
+
+  private func currentKeyboardBrightnessMode() -> KeyboardBrightness {
+    KeyboardBrightness(rawValue: prefs.integer(forKey: PrefKey.keyboardBrightness.rawValue)) ?? .disabled
+  }
+
+  private func currentKeyboardVolumeMode() -> KeyboardVolume {
+    KeyboardVolume(rawValue: prefs.integer(forKey: PrefKey.keyboardVolume.rawValue)) ?? .disabled
+  }
+
+  func mediaKeyControlsRequireAccessibility() -> Bool {
+    Self.requiresAccessibilityForNativeMediaKeys(
+      brightness: self.currentKeyboardBrightnessMode(),
+      volume: self.currentKeyboardVolumeMode()
+    )
+  }
+
+  func refreshAccessibilityStatus() {
+    _ = Self.handleAccessibilityConsent(
+      .statusRefresh(brightness: self.currentKeyboardBrightnessMode(), volume: self.currentKeyboardVolumeMode()),
+      using: self.mediaKeyTap
+    )
+  }
+
+  func requestAccessibilityAccessFromOnboarding() {
+    _ = Self.handleAccessibilityConsent(
+      .onboarding(brightness: self.currentKeyboardBrightnessMode(), volume: self.currentKeyboardVolumeMode()),
+      using: self.mediaKeyTap
+    )
+  }
+
+  func requestAccessibilityAccessFromKeyboardBrightnessSelection(_ mode: KeyboardBrightness) {
+    if Self.handleAccessibilityConsent(.brightnessSelection(mode), using: self.mediaKeyTap), !self.mediaKeyTap.accessibilityStatus() {
+      self.showAccessibilityDeniedAlert()
+    }
+  }
+
+  func requestAccessibilityAccessFromKeyboardVolumeSelection(_ mode: KeyboardVolume) {
+    if Self.handleAccessibilityConsent(.volumeSelection(mode), using: self.mediaKeyTap), !self.mediaKeyTap.accessibilityStatus() {
+      self.showAccessibilityDeniedAlert()
+    }
+  }
+
+  private func showAccessibilityDeniedAlert() {
+    let alert = NSAlert()
+    alert.messageText = NSLocalizedString("Shortcuts not available", comment: "Shown in the alert dialog")
+    alert.informativeText = NSLocalizedString("You need to enable BetterMonitor in System Settings > Security and Privacy > Accessibility for the keyboard shortcuts to work", comment: "Shown in the alert dialog")
+    alert.runModal()
   }
 
   private func subscribeEventListeners() {
@@ -268,7 +353,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func handleListenForChanged() {
-    self.checkPermissions()
+    self.refreshAccessibilityStatus()
     self.updateMediaKeyTap()
   }
 
@@ -282,7 +367,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     app.updateStatusItemVisibility(true)
     self.setDefaultPrefs()
-    self.checkPermissions()
+    self.refreshAccessibilityStatus()
     self.updateMediaKeyTap()
     self.configure(firstrun: true)
   }

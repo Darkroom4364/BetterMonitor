@@ -70,6 +70,7 @@
 		DD00010100000000000000A4 /* DisplayValueConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B4 /* DisplayValueConversionTests.swift */; };
 		DD00010100000000000000A5 /* DisplaySteppingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B5 /* DisplaySteppingTests.swift */; };
 		DD00010100000000000000A8 /* HIDKeyMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B7 /* HIDKeyMonitorTests.swift */; };
+		DD00010100000000000000AB /* AccessibilityConsentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000BA /* AccessibilityConsentTests.swift */; };
 		DD00010100000000000000A9 /* TahoeHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B8 /* TahoeHUD.swift */; };
 		DD00010100000000000000AA /* TahoeHUDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00010100000000000000B9 /* TahoeHUDTests.swift */; };
 		DD00010100000000000000A6 /* CLICommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B4 /* CLICommand.swift */; };
@@ -213,6 +214,7 @@
 		DD00010100000000000000B4 /* DisplayValueConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayValueConversionTests.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B5 /* DisplaySteppingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySteppingTests.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B7 /* HIDKeyMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDKeyMonitorTests.swift; sourceTree = "<group>"; };
+		DD00010100000000000000BA /* AccessibilityConsentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityConsentTests.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B8 /* TahoeHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TahoeHUD.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B9 /* TahoeHUDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TahoeHUDTests.swift; sourceTree = "<group>"; };
 		B0FA100100000000000000B1 /* ModeFavorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeFavorites.swift; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 				DD00010100000000000000B4 /* DisplayValueConversionTests.swift */,
 				DD00010100000000000000B5 /* DisplaySteppingTests.swift */,
 				DD00010100000000000000B7 /* HIDKeyMonitorTests.swift */,
+				DD00010100000000000000BA /* AccessibilityConsentTests.swift */,
 				DD00010100000000000000B9 /* TahoeHUDTests.swift */,
 				B0FA100100000000000000B2 /* ModeFavoritesTests.swift */,
 			);
@@ -810,6 +813,7 @@
 				DD00010100000000000000A4 /* DisplayValueConversionTests.swift in Sources */,
 				DD00010100000000000000A5 /* DisplaySteppingTests.swift in Sources */,
 				DD00010100000000000000A8 /* HIDKeyMonitorTests.swift in Sources */,
+				DD00010100000000000000AB /* AccessibilityConsentTests.swift in Sources */,
 				DD00010100000000000000AA /* TahoeHUDTests.swift in Sources */,
 				DD00010100000000000000A6 /* CLICommand.swift in Sources */,
 				DD00010100000000000000A7 /* CLIProtocol.swift in Sources */,

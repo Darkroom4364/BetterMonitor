@@ -225,15 +225,27 @@ class KeyboardPrefsViewController: NSViewController, SettingsPane {
     app.updateMediaKeyTap()
   }
 
+  static func persistKeyboardBrightnessSelection(_ rawValue: Int, in preferences: UserDefaults) -> KeyboardBrightness {
+    preferences.set(rawValue, forKey: PrefKey.keyboardBrightness.rawValue)
+    return KeyboardBrightness(rawValue: rawValue) ?? .disabled
+  }
+
+  static func persistKeyboardVolumeSelection(_ rawValue: Int, in preferences: UserDefaults) -> KeyboardVolume {
+    preferences.set(rawValue, forKey: PrefKey.keyboardVolume.rawValue)
+    return KeyboardVolume(rawValue: rawValue) ?? .disabled
+  }
+
   @IBAction func keyboardBrightness(_ sender: NSPopUpButton) {
-    prefs.set(sender.selectedTag(), forKey: PrefKey.keyboardBrightness.rawValue)
+    let selectedMode = Self.persistKeyboardBrightnessSelection(sender.selectedTag(), in: prefs)
     app.updateMenusAndKeys()
+    app.requestAccessibilityAccessFromKeyboardBrightnessSelection(selectedMode)
     self.updateGridLayout()
   }
 
   @IBAction func keyboardVolume(_ sender: NSPopUpButton) {
-    prefs.set(sender.selectedTag(), forKey: PrefKey.keyboardVolume.rawValue)
+    let selectedMode = Self.persistKeyboardVolumeSelection(sender.selectedTag(), in: prefs)
     app.updateMenusAndKeys()
+    app.requestAccessibilityAccessFromKeyboardVolumeSelection(selectedMode)
     self.updateGridLayout()
   }
 }

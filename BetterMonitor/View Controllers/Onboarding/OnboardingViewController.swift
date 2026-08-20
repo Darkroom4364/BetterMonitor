@@ -5,8 +5,8 @@ import Cocoa
 class OnboardingViewController: NSViewController {
   @IBOutlet private var permissionsButton: NSButton!
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
+  override func viewWillAppear() {
+    super.viewWillAppear()
     self.setPermissionsButtonState()
   }
 
@@ -17,7 +17,7 @@ class OnboardingViewController: NSViewController {
   }
 
   @IBAction func askForPermissionsButtonTouched(_: NSButton) {
-    app.checkPermissions(firstAsk: true)
+    app.requestAccessibilityAccessFromOnboarding()
   }
 
   @IBAction func closeButtonTouched(_: NSButton) {
@@ -27,10 +27,7 @@ class OnboardingViewController: NSViewController {
   // MARK: - Style
 
   private func setPermissionsButtonState() {
-    let volumePermissions: Bool = [KeyboardVolume.media.rawValue, KeyboardVolume.both.rawValue].contains(prefs.integer(forKey: PrefKey.keyboardVolume.rawValue))
-    let brigthnessPermissions: Bool = [KeyboardBrightness.media.rawValue, KeyboardBrightness.both.rawValue].contains(prefs.integer(forKey: PrefKey.keyboardBrightness.rawValue))
-    let permissionsRequired: Bool = volumePermissions || brigthnessPermissions
-    let enabled: Bool = !MediaKeyTapManager.readPrivileges(prompt: false) && permissionsRequired
+    let enabled: Bool = app.mediaKeyControlsRequireAccessibility() && !app.mediaKeyTap.accessibilityStatus()
     self.permissionsButton.image = enabled ? nil : NSImage(named: "onboarding_icon_checkmark")
   }
 }
