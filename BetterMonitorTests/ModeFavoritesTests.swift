@@ -26,7 +26,9 @@ final class ModeFavoritesTests: XCTestCase {
     let secondDisplay = target(id: 22, serial: 202)
 
     XCTAssertSuccess(manager.saveCurrent(name: "Café", for: firstDisplay))
-    controller.current = mode(refreshRate: 75)
+    let replacement = mode(refreshRate: 75)
+    controller.current = replacement
+    controller.offered = [replacement]
     XCTAssertSuccess(manager.saveCurrent(name: "cafe", for: firstDisplay))
     XCTAssertSuccess(manager.saveCurrent(name: "CAFE", for: secondDisplay))
 
@@ -35,6 +37,28 @@ final class ModeFavoritesTests: XCTestCase {
     XCTAssertEqual(firstFavorites[0].name, "cafe")
     XCTAssertEqual(firstFavorites[0].signature.refreshRate, 75)
     XCTAssertEqual(manager.favorites(for: secondDisplay).count, 1)
+  }
+
+  func testSaveRejectsUnofferedUsableCurrentModeWithoutAddingOrReplacingFavorite() {
+    let offeredMode = mode(refreshRate: 60)
+    let unofferedMode = mode(refreshRate: 75)
+    let controller = FakeModeController(current: offeredMode)
+    let manager = makeManager(controller: controller)
+    let display = target(id: 16, serial: 32)
+
+    XCTAssertSuccess(manager.saveCurrent(name: "Keep", for: display))
+    let savedFavorites = manager.favorites(for: display)
+    let savedData = defaults.data(forKey: ModeFavoriteManager.storageKey)
+    controller.current = unofferedMode
+    controller.offered = [offeredMode]
+
+    XCTAssertFailure(manager.saveCurrent(name: "New", for: display), equals: .unavailableMode)
+    XCTAssertEqual(manager.favorites(for: display), savedFavorites)
+    XCTAssertEqual(defaults.data(forKey: ModeFavoriteManager.storageKey), savedData)
+
+    XCTAssertFailure(manager.saveCurrent(name: "Keep", for: display), equals: .unavailableMode)
+    XCTAssertEqual(manager.favorites(for: display), savedFavorites)
+    XCTAssertEqual(defaults.data(forKey: ModeFavoriteManager.storageKey), savedData)
   }
 
   func testCorruptStorageReadsAsEmpty() {
@@ -164,7 +188,9 @@ final class ModeFavoritesTests: XCTestCase {
     XCTAssertFailure(manager.saveCurrent(name: "Favorite 6", for: display), equals: .maximumFavoritesReached)
     XCTAssertEqual(manager.favorites(for: display).count, 5)
 
-    controller.current = mode(refreshRate: 75)
+    let replacement = mode(refreshRate: 75)
+    controller.current = replacement
+    controller.offered = [replacement]
     XCTAssertSuccess(manager.saveCurrent(name: "favorite 3", for: display))
     XCTAssertEqual(manager.favorites(for: display).count, 5)
     XCTAssertEqual(manager.favorites(for: display).first { $0.normalizedName == "favorite 3" }?.signature.refreshRate, 75)
@@ -187,6 +213,38 @@ final class ModeFavoritesTests: XCTestCase {
     XCTAssertNil(CLICommand.parse(["bettermonitor", "mode-favorite-save", "Desk", "Extra", "--display", "24"]))
     XCTAssertNil(CLICommand.parse(["bettermonitor", "mode-favorite-save", "Desk", "--display", "24", "--display", "25"]))
     XCTAssertNil(CLICommand.parse(["bettermonitor", "mode-favorite-list", "--display", "24", "--display", "25"]))
+  }
+
+  func testCLIProcessorRefreshesOnceForSuccessfulSaveAndDeleteOnly() {
+    let manager = StubModeFavoriteManager()
+    let display = target(id: 54, serial: 404)
+    let favorite = favorite(name: "Desk", display: display)
+    var refreshes = 0
+    let processor = ModeFavoriteCLIProcessor(manager: manager, onSuccessfulMutation: {
+      refreshes += 1
+    })
+
+    manager.saveResult = .success(favorite)
+    XCTAssertEqual(
+      processor.handle(action: .modeFavoriteSave, name: "Desk", targetResult: .success(display)).first?["operation"] as? String,
+      "saved"
+    )
+    XCTAssertEqual(refreshes, 1)
+
+    manager.deleteResult = .success(favorite)
+    XCTAssertEqual(
+      processor.handle(action: .modeFavoriteDelete, name: "Desk", targetResult: .success(display)).first?["operation"] as? String,
+      "deleted"
+    )
+    XCTAssertEqual(refreshes, 2)
+
+    manager.saveResult = .failure(.unavailableMode)
+    XCTAssertNotNil(processor.handle(action: .modeFavoriteSave, name: "Desk", targetResult: .success(display)).first?["error"])
+    XCTAssertEqual(refreshes, 2)
+
+    manager.deleteResult = .failure(.favoriteNotFound)
+    XCTAssertNotNil(processor.handle(action: .modeFavoriteDelete, name: "Desk", targetResult: .success(display)).first?["error"])
+    XCTAssertEqual(refreshes, 2)
   }
 
   func testCLIProcessorRejectsMalformedAndAmbiguousTargetsWithoutCallingManager() {
@@ -360,6 +418,7 @@ private final class FakeModeController: ModeFavoriteModeControlling {
 
   init(current: DisplayModeSignature?) {
     self.current = current
+    offered = current.map { [$0] }
   }
 
   func currentModeSignature(displayID _: CGDirectDisplayID) -> DisplayModeSignature? {
@@ -384,6 +443,8 @@ private final class FakeModeController: ModeFavoriteModeControlling {
 private final class StubModeFavoriteManager: ModeFavoriteManaging {
   var mutationCalls = 0
   var listCalls = 0
+  var saveResult: Result<ModeFavorite, ModeFavoriteError> = .failure(.currentModeUnreadable)
+  var deleteResult: Result<ModeFavorite, ModeFavoriteError> = .failure(.favoriteNotFound)
 
   func favorites(for _: ModeFavoriteDisplayTarget?) -> [ModeFavorite] {
     listCalls += 1
@@ -392,7 +453,7 @@ private final class StubModeFavoriteManager: ModeFavoriteManaging {
 
   func saveCurrent(name _: String, for _: ModeFavoriteDisplayTarget) -> Result<ModeFavorite, ModeFavoriteError> {
     mutationCalls += 1
-    return .failure(.currentModeUnreadable)
+    return saveResult
   }
 
   func apply(name _: String, for _: ModeFavoriteDisplayTarget) -> Result<ModeFavorite, ModeFavoriteError> {
@@ -402,6 +463,6 @@ private final class StubModeFavoriteManager: ModeFavoriteManaging {
 
   func delete(name _: String, for _: ModeFavoriteDisplayTarget) -> Result<ModeFavorite, ModeFavoriteError> {
     mutationCalls += 1
-    return .failure(.favoriteNotFound)
+    return deleteResult
   }
 }

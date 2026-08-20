@@ -236,6 +236,12 @@ final class ModeFavoriteManager: ModeFavoriteManaging {
       return .failure(.unusableMode)
     }
 
+    guard let offeredModes = modeController.offeredModeSignatures(displayID: target.identifier),
+          offeredModes.contains(signature)
+    else {
+      return .failure(.unavailableMode)
+    }
+
     let favorite = ModeFavorite(
       name: name.trimmingCharacters(in: .whitespacesAndNewlines),
       normalizedName: normalizedName,
@@ -403,9 +409,11 @@ struct ModeFavoriteTargetResolver {
 
 final class ModeFavoriteCLIProcessor {
   private let manager: ModeFavoriteManaging
+  private let onSuccessfulMutation: () -> Void
 
-  init(manager: ModeFavoriteManaging = ModeFavoriteManager.shared) {
+  init(manager: ModeFavoriteManaging = ModeFavoriteManager.shared, onSuccessfulMutation: @escaping () -> Void = {}) {
     self.manager = manager
+    self.onSuccessfulMutation = onSuccessfulMutation
   }
 
   func handle(action: CLIAction, name: String?, targetResult: Result<ModeFavoriteDisplayTarget?, ModeFavoriteTargetError>) -> [[String: Any]] {
@@ -449,6 +457,9 @@ final class ModeFavoriteCLIProcessor {
         }
         switch result {
         case let .success(favorite):
+          if action == .modeFavoriteSave || action == .modeFavoriteDelete {
+            onSuccessfulMutation()
+          }
           let operation: String
           switch action {
           case .modeFavoriteSave: operation = "saved"

@@ -231,7 +231,9 @@ class CLIRequestHandler {
       )
     }
     let targetResult = ModeFavoriteTargetResolver.resolve(userInfo: userInfo, targets: targets)
-    return ModeFavoriteCLIProcessor().handle(
+    return ModeFavoriteCLIProcessor(onSuccessfulMutation: {
+      menu.updateMenus(dontClose: true)
+    }).handle(
       action: action,
       name: userInfo[CLIKey.favoriteName] as? String,
       targetResult: targetResult
