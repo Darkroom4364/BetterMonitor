@@ -6,9 +6,28 @@ import Foundation
 import MediaKeyTap
 import os.log
 
+struct AccessibilityTrustDriver {
+  let status: () -> Bool
+  let request: () -> Bool
+
+  static let live = AccessibilityTrustDriver(
+    status: { AXIsProcessTrusted() },
+    request: {
+      let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true]
+      return AXIsProcessTrustedWithOptions(options)
+    }
+  )
+}
+
 class MediaKeyTapManager: MediaKeyTapDelegate {
+  private let accessibilityTrustDriver: AccessibilityTrustDriver
+
   var mediaKeyTap: MediaKeyTap?
   var keyRepeatTimers: [MediaKey: Timer] = [:]
+
+  init(accessibilityTrustDriver: AccessibilityTrustDriver = .live) {
+    self.accessibilityTrustDriver = accessibilityTrustDriver
+  }
 
   func handle(mediaKey: MediaKey, event: KeyEvent?, modifiers: NSEvent.ModifierFlags?) {
     let isPressed = event?.keyPressed ?? true
@@ -204,19 +223,15 @@ class MediaKeyTapManager: MediaKeyTapDelegate {
     return true
   }
 
-  static func acquirePrivileges(firstAsk: Bool = false) {
-    if !self.readPrivileges(prompt: true), !firstAsk {
-      let alert = NSAlert()
-      alert.messageText = NSLocalizedString("Shortcuts not available", comment: "Shown in the alert dialog")
-      alert.informativeText = NSLocalizedString("You need to enable BetterMonitor in System Settings > Security and Privacy > Accessibility for the keyboard shortcuts to work", comment: "Shown in the alert dialog")
-      alert.runModal()
-    }
+  func accessibilityStatus() -> Bool {
+    let status = self.accessibilityTrustDriver.status()
+    os_log("Reading Accessibility privileges - Current access status %{public}@", type: .info, String(status))
+    return status
   }
 
-  static func readPrivileges(prompt: Bool) -> Bool {
-    let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: prompt]
-    let status = AXIsProcessTrustedWithOptions(options)
-    os_log("Reading Accessibility privileges - Current access status %{public}@", type: .info, String(status))
+  func requestAccessibilityAccess() -> Bool {
+    let status = self.accessibilityTrustDriver.request()
+    os_log("Requesting Accessibility privileges - Current access status %{public}@", type: .info, String(status))
     return status
   }
 }
