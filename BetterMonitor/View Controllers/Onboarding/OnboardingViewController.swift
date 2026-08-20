@@ -5,8 +5,8 @@ import Cocoa
 class OnboardingViewController: NSViewController {
   @IBOutlet private var permissionsButton: NSButton!
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
+  override func viewWillAppear() {
+    super.viewWillAppear()
     self.setPermissionsButtonState()
   }
 
