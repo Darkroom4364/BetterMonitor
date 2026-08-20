@@ -3,6 +3,16 @@
 import AppKit
 import os.log
 
+private final class ModeFavoriteMenuContext: NSObject {
+  let target: ModeFavoriteDisplayTarget
+  let action: ModeFavoriteMenuAction
+
+  init(target: ModeFavoriteDisplayTarget, action: ModeFavoriteMenuAction) {
+    self.target = target
+    self.action = action
+  }
+}
+
 class MenuHandler: NSMenu, NSMenuDelegate {
   var combinedSliderHandler: [Command: SliderHandler] = [:]
 
@@ -197,9 +207,122 @@ class MenuHandler: NSMenu, NSMenuDelegate {
     if prefs.integer(forKey: PrefKey.multiSliders.rawValue) != MultiSliders.combine.rawValue {
       self.addDisplayMenuBlock(addedSliderHandlers: addedSliderHandlers, blockName: display.readPrefAsString(key: .friendlyName) != "" ? display.readPrefAsString(key: .friendlyName) : display.name, monitorSubMenu: monitorSubMenu, numOfDisplays: numOfDisplays, asSubMenu: asSubMenu)
     }
+    self.addModeFavoriteMenu(display: display, monitorSubMenu: monitorSubMenu)
     if addedSliderHandlers.count > 0, prefs.integer(forKey: PrefKey.menuIcon.rawValue) == MenuIcon.sliderOnly.rawValue {
       app.updateStatusItemVisibility(true)
     }
+  }
+
+  private func addModeFavoriteMenu(display: Display, monitorSubMenu: NSMenu) {
+    let target = ModeFavoriteDisplayTarget(
+      identifier: display.identifier,
+      name: display.name,
+      vendorNumber: display.vendorNumber,
+      modelNumber: display.modelNumber,
+      serialNumber: display.serialNumber
+    )
+    let favoritesMenu = NSMenu(title: NSLocalizedString("Favorite Modes", comment: "Shown in menu"))
+    let identityAvailable = target.durableIdentity != nil
+    let favorites = identityAvailable ? ModeFavoriteManager.shared.favorites(for: target) : []
+    let menuItems = ModeFavoriteMenuBuilder.items(favorites: favorites, identityAvailable: identityAvailable)
+    for item in menuItems {
+      favoritesMenu.addItem(modeFavoriteMenuItem(item, target: target))
+    }
+    let favoritesItem = NSMenuItem(title: NSLocalizedString("Favorite Modes", comment: "Shown in menu"), action: nil, keyEquivalent: "")
+    favoritesItem.submenu = favoritesMenu
+    monitorSubMenu.addItem(NSMenuItem.separator())
+    monitorSubMenu.addItem(favoritesItem)
+  }
+
+  private func modeFavoriteMenuItem(_ item: ModeFavoriteMenuItem, target: ModeFavoriteDisplayTarget) -> NSMenuItem {
+    switch item {
+    case let .action(title, action):
+      let menuItem = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+      menuItem.target = self
+      menuItem.representedObject = ModeFavoriteMenuContext(target: target, action: action)
+      switch action {
+      case .saveCurrent:
+        menuItem.action = #selector(saveModeFavorite(_:))
+      case .apply:
+        menuItem.action = #selector(applyModeFavorite(_:))
+      case .delete:
+        menuItem.action = #selector(deleteModeFavorite(_:))
+      }
+      return menuItem
+    case let .submenu(title, items):
+      let menuItem = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+      let submenu = NSMenu(title: title)
+      for child in items {
+        submenu.addItem(modeFavoriteMenuItem(child, target: target))
+      }
+      menuItem.submenu = submenu
+      return menuItem
+    case .separator:
+      return NSMenuItem.separator()
+    case let .disabled(title):
+      let menuItem = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+      menuItem.isEnabled = false
+      return menuItem
+    }
+  }
+
+  @objc private func saveModeFavorite(_ sender: Any?) {
+    guard let context = (sender as? NSMenuItem)?.representedObject as? ModeFavoriteMenuContext else {
+      return
+    }
+    let alert = NSAlert()
+    alert.messageText = NSLocalizedString("Save Favorite Mode", comment: "Shown in menu")
+    alert.informativeText = NSLocalizedString("Name this exact display mode.", comment: "Shown in menu")
+    alert.addButton(withTitle: NSLocalizedString("Save", comment: "Shown in menu"))
+    alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Shown in menu"))
+    let nameField = NSTextField(frame: NSRect(x: 0, y: 0, width: 240, height: 24))
+    nameField.placeholderString = NSLocalizedString("Favorite name", comment: "Shown in menu")
+    alert.accessoryView = nameField
+    guard alert.runModal() == .alertFirstButtonReturn else {
+      return
+    }
+    switch ModeFavoriteManager.shared.saveCurrent(name: nameField.stringValue, for: context.target) {
+    case .success:
+      updateMenus(dontClose: true)
+    case let .failure(error):
+      showModeFavoriteError(error)
+    }
+  }
+
+  @objc private func applyModeFavorite(_ sender: Any?) {
+    guard let context = (sender as? NSMenuItem)?.representedObject as? ModeFavoriteMenuContext,
+          case let .apply(name) = context.action
+    else {
+      return
+    }
+    switch ModeFavoriteManager.shared.apply(name: name, for: context.target) {
+    case .success:
+      updateMenus(dontClose: true)
+    case let .failure(error):
+      showModeFavoriteError(error)
+    }
+  }
+
+  @objc private func deleteModeFavorite(_ sender: Any?) {
+    guard let context = (sender as? NSMenuItem)?.representedObject as? ModeFavoriteMenuContext,
+          case let .delete(name) = context.action
+    else {
+      return
+    }
+    switch ModeFavoriteManager.shared.delete(name: name, for: context.target) {
+    case .success:
+      updateMenus(dontClose: true)
+    case let .failure(error):
+      showModeFavoriteError(error)
+    }
+  }
+
+  private func showModeFavoriteError(_ error: ModeFavoriteError) {
+    let alert = NSAlert()
+    alert.messageText = NSLocalizedString("Favorite Modes", comment: "Shown in menu")
+    alert.informativeText = error.localizedDescription
+    alert.alertStyle = .warning
+    alert.runModal()
   }
 
   private func appendMenuHeader(friendlyName: String, monitorSubMenu: NSMenu, asSubMenu: Bool, numOfDisplays: Int) {

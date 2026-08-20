@@ -49,6 +49,8 @@ class CLIRequestHandler {
         result = self.handleGet(userInfo: userInfo)
       case .set:
         result = self.handleSet(userInfo: userInfo)
+      case .modeFavoriteList, .modeFavoriteSave, .modeFavoriteApply, .modeFavoriteDelete:
+        result = self.handleModeFavorite(action: action, userInfo: userInfo)
       }
       let hasErrors = result.contains { $0["error"] != nil }
       self.postReply(replyId: replyId, result: ["success": !hasErrors, "data": result])
@@ -215,6 +217,27 @@ class CLIRequestHandler {
       "inputValue": Int(input),
       "queued": true,
     ]]
+  }
+
+  private func handleModeFavorite(action: CLIAction, userInfo: [AnyHashable: Any]) -> [[String: Any]] {
+    let targets = DisplayManager.shared.getAllDisplays().map {
+      ModeFavoriteDisplayTarget(
+        identifier: $0.identifier,
+        name: $0.name,
+        vendorNumber: $0.vendorNumber,
+        modelNumber: $0.modelNumber,
+        serialNumber: $0.serialNumber,
+        searchNames: [$0.readPrefAsString(key: .friendlyName)]
+      )
+    }
+    let targetResult = ModeFavoriteTargetResolver.resolve(userInfo: userInfo, targets: targets)
+    return ModeFavoriteCLIProcessor(onSuccessfulMutation: {
+      menu.updateMenus(dontClose: true)
+    }).handle(
+      action: action,
+      name: userInfo[CLIKey.favoriteName] as? String,
+      targetResult: targetResult
+    )
   }
 
   private func resolveDisplays(userInfo: [AnyHashable: Any]) -> [Display] {

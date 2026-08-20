@@ -8,6 +8,7 @@ struct CLICommand {
   let value: Int?
   let displayName: String?
   let displayId: UInt32?
+  let favoriteName: String?
   let jsonOutput: Bool
 
   var userInfo: [String: Any] {
@@ -27,6 +28,9 @@ struct CLICommand {
     if let displayId = displayId {
       info[CLIKey.displayId] = displayId
     }
+    if let favoriteName = favoriteName {
+      info[CLIKey.favoriteName] = favoriteName
+    }
     return info
   }
 
@@ -40,6 +44,7 @@ struct CLICommand {
     var jsonOutput = false
     var displayName: String?
     var displayId: UInt32?
+    var displayTargetCount = 0
     var positional: [String] = []
 
     var i = 0
@@ -48,6 +53,7 @@ struct CLICommand {
       case "--json":
         jsonOutput = true
       case "--display":
+        displayTargetCount += 1
         i += 1
         guard i < args.count else {
           printError("--display requires a value")
@@ -72,17 +78,18 @@ struct CLICommand {
       printUsage()
       return nil
     }
+    let hasExplicitDisplayTarget = displayId != nil || !(displayName ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
 
     switch action {
     case .list:
-      return CLICommand(action: .list, property: nil, value: nil, displayName: displayName, displayId: displayId, jsonOutput: jsonOutput)
+      return CLICommand(action: .list, property: nil, value: nil, displayName: displayName, displayId: displayId, favoriteName: nil, jsonOutput: jsonOutput)
 
     case .get:
       guard positional.count >= 2, let property = CLIProperty(rawValue: positional[1]) else {
         printError("Usage: bettermonitor get <brightness|volume|contrast|input>")
         return nil
       }
-      return CLICommand(action: .get, property: property, value: nil, displayName: displayName, displayId: displayId, jsonOutput: jsonOutput)
+      return CLICommand(action: .get, property: property, value: nil, displayName: displayName, displayId: displayId, favoriteName: nil, jsonOutput: jsonOutput)
 
     case .set:
       guard positional.count >= 3,
@@ -96,7 +103,28 @@ struct CLICommand {
         printError("Input source changes require --display <name-or-id>")
         return nil
       }
-      return CLICommand(action: .set, property: property, value: value, displayName: displayName, displayId: displayId, jsonOutput: jsonOutput)
+      return CLICommand(action: .set, property: property, value: value, displayName: displayName, displayId: displayId, favoriteName: nil, jsonOutput: jsonOutput)
+
+    case .modeFavoriteList:
+      guard positional.count == 1,
+            displayTargetCount <= 1,
+            displayTargetCount == 0 || hasExplicitDisplayTarget
+      else {
+        printError("Usage: bettermonitor mode-favorite-list [--display <name-or-id>]")
+        return nil
+      }
+      return CLICommand(action: action, property: nil, value: nil, displayName: displayName, displayId: displayId, favoriteName: nil, jsonOutput: jsonOutput)
+
+    case .modeFavoriteSave, .modeFavoriteApply, .modeFavoriteDelete:
+      guard positional.count == 2,
+            !ModeFavoriteManager.normalizedName(positional[1]).isEmpty,
+            displayTargetCount == 1,
+            hasExplicitDisplayTarget
+      else {
+        printError("Usage: bettermonitor \(action.rawValue) <name> --display <name-or-id>")
+        return nil
+      }
+      return CLICommand(action: action, property: nil, value: nil, displayName: displayName, displayId: displayId, favoriteName: positional[1], jsonOutput: jsonOutput)
     }
   }
 
@@ -120,6 +148,10 @@ struct CLICommand {
       get <brightness|volume|contrast|input>     Get current value
       set <brightness|volume|contrast> <0-100>   Set value
       set input <source> --display <name-or-id>  Queue DDC input (hdmi1, dp1, or 0x01-0xFF)
+      mode-favorite-list [--display <target>]     List saved exact offered-mode favorites
+      mode-favorite-save <name> --display <target>
+      mode-favorite-apply <name> --display <target>
+      mode-favorite-delete <name> --display <target>
 
     Options:
       --display <name-or-id>    Target a specific display
