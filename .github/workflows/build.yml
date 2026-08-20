@@ -45,6 +45,15 @@ jobs:
             -destination 'platform=macOS' \
             CODE_SIGNING_ALLOWED=NO
 
+      - name: Run Hostless CLI Tests
+        run: |
+          SOURCE_MUTATING_BUILD_PHASES=NO xcodebuild test \
+            -project BetterMonitor.xcodeproj \
+            -scheme BetterMonitorCLI \
+            -derivedDataPath "$RUNNER_TEMP/BetterMonitorCLITestsDerivedData" \
+            -destination "platform=macOS,arch=$(uname -m)" \
+            CODE_SIGNING_ALLOWED=NO
+
       - name: Run Tests
         run: |
           xcodebuild test \

@@ -55,7 +55,7 @@ struct CLICommand {
       case "--display":
         displayTargetCount += 1
         i += 1
-        guard i < args.count else {
+        guard i < args.count, !isKnownOption(args[i]) else {
           printError("--display requires a value")
           return nil
         }
@@ -105,6 +105,18 @@ struct CLICommand {
       }
       return CLICommand(action: .set, property: property, value: value, displayName: displayName, displayId: displayId, favoriteName: nil, jsonOutput: jsonOutput)
 
+    case .modeList:
+      let hasOverflowedNumericTarget = displayName.map(Self.isASCIIUnsignedDecimal) ?? false
+      guard positional.count == 1,
+            displayTargetCount == 1,
+            hasExplicitDisplayTarget,
+            !hasOverflowedNumericTarget
+      else {
+        printError("Usage: bettermonitor mode-list --display <name-or-id>")
+        return nil
+      }
+      return CLICommand(action: action, property: nil, value: nil, displayName: displayName, displayId: displayId, favoriteName: nil, jsonOutput: jsonOutput)
+
     case .modeFavoriteList:
       guard positional.count == 1,
             displayTargetCount <= 1,
@@ -128,6 +140,15 @@ struct CLICommand {
     }
   }
 
+  private static func isKnownOption(_ argument: String) -> Bool {
+    switch argument {
+    case "--json", "--display", "--help", "-h":
+      true
+    default:
+      false
+    }
+  }
+
   private static func parseSetValue(_ value: String, for property: CLIProperty) -> Int? {
     switch property {
     case .input:
@@ -140,6 +161,10 @@ struct CLICommand {
     }
   }
 
+  private static func isASCIIUnsignedDecimal(_ value: String) -> Bool {
+    !value.isEmpty && value.utf8.allSatisfy { $0 >= 48 && $0 <= 57 }
+  }
+
   static func printUsage() {
     let usage = """
     Usage: bettermonitor <command> [options]
@@ -148,6 +173,7 @@ struct CLICommand {
       get <brightness|volume|contrast|input>     Get current value
       set <brightness|volume|contrast> <0-100>   Set value
       set input <source> --display <name-or-id>  Queue DDC input (hdmi1, dp1, or 0x01-0xFF)
+      mode-list --display <name-or-id>            List offered usable desktop modes
       mode-favorite-list [--display <target>]     List saved exact offered-mode favorites
       mode-favorite-save <name> --display <target>
       mode-favorite-apply <name> --display <target>

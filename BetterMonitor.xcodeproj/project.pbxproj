@@ -79,6 +79,19 @@
 		B0FA100100000000000000A2 /* ModeFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FA100100000000000000B1 /* ModeFavorites.swift */; };
 		B0FA100100000000000000A3 /* ModeFavoritesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FA100100000000000000B2 /* ModeFavoritesTests.swift */; };
 		B0FA100100000000000000A4 /* ModeFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FA100100000000000000B1 /* ModeFavorites.swift */; };
+		EE00010100000000000000A1 /* ModeCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE00010100000000000000B1 /* ModeCatalog.swift */; };
+		EE00010100000000000000A3 /* ModeListOutputFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE00010100000000000000B2 /* ModeListOutputFormatter.swift */; };
+		EE00010100000000000000A4 /* CLICommandParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE00010100000000000000B4 /* CLICommandParsingTests.swift */; };
+		EE00010100000000000000A5 /* CLIProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE00010100000000000000B5 /* CLIProtocolTests.swift */; };
+		EE00010100000000000000A6 /* ModeCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE00010100000000000000B6 /* ModeCatalogTests.swift */; };
+		EE00010100000000000000A7 /* ModeListOutputFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE00010100000000000000B7 /* ModeListOutputFormatterTests.swift */; };
+		EE00010100000000000000A8 /* CLICommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B4 /* CLICommand.swift */; };
+		EE00010100000000000000A9 /* CLIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC00010100000000000000B1 /* CLIProtocol.swift */; };
+		EE00010100000000000000AA /* ModeFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FA100100000000000000B1 /* ModeFavorites.swift */; };
+		EE00010100000000000000AB /* ModeCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE00010100000000000000B1 /* ModeCatalog.swift */; };
+		EE00010100000000000000AC /* ModeListOutputFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE00010100000000000000B2 /* ModeListOutputFormatter.swift */; };
+		EE00010100000000000000AD /* ModeFavoriteCLIProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE00010100000000000000B3 /* ModeFavoriteCLIProcessorTests.swift */; };
+		EE00010100000000000000AE /* ModeCatalogProductionCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE00010100000000000000B9 /* ModeCatalogProductionCoverageTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -215,11 +228,20 @@
 		DD00010100000000000000B5 /* DisplaySteppingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySteppingTests.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B7 /* HIDKeyMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDKeyMonitorTests.swift; sourceTree = "<group>"; };
 		DD00010100000000000000BA /* AccessibilityConsentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityConsentTests.swift; sourceTree = "<group>"; };
+		EE00010100000000000000B9 /* ModeCatalogProductionCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeCatalogProductionCoverageTests.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B8 /* TahoeHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TahoeHUD.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B9 /* TahoeHUDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TahoeHUDTests.swift; sourceTree = "<group>"; };
 		B0FA100100000000000000B1 /* ModeFavorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeFavorites.swift; sourceTree = "<group>"; };
 		B0FA100100000000000000B2 /* ModeFavoritesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeFavoritesTests.swift; sourceTree = "<group>"; };
 		DD00010100000000000000B6 /* BetterMonitorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BetterMonitorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE00010100000000000000B1 /* ModeCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeCatalog.swift; sourceTree = "<group>"; };
+		EE00010100000000000000B2 /* ModeListOutputFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeListOutputFormatter.swift; sourceTree = "<group>"; };
+		EE00010100000000000000B4 /* CLICommandParsingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetterMonitorTests/CLICommandParsingTests.swift; sourceTree = SOURCE_ROOT; };
+		EE00010100000000000000B5 /* CLIProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetterMonitorTests/CLIProtocolTests.swift; sourceTree = SOURCE_ROOT; };
+		EE00010100000000000000B6 /* ModeCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeCatalogTests.swift; sourceTree = "<group>"; };
+		EE00010100000000000000B7 /* ModeListOutputFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeListOutputFormatterTests.swift; sourceTree = "<group>"; };
+		EE00010100000000000000B3 /* ModeFavoriteCLIProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeFavoriteCLIProcessorTests.swift; sourceTree = "<group>"; };
+		EE00010100000000000000B8 /* BetterMonitorCLITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BetterMonitorCLITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,6 +281,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EE00010100000000000000C2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -292,6 +321,7 @@
 				F06792E8200A73460066C438 /* BetterMonitorHelper */,
 				CC00010100000000000000D1 /* BetterMonitorCLI */,
 				DD00010100000000000000D1 /* BetterMonitorTests */,
+				EE00010100000000000000D1 /* BetterMonitorCLITests */,
 				56754EAC1D9A4016007BCDC5 /* Products */,
 			);
 			indentWidth = 2;
@@ -304,6 +334,7 @@
 				F06792E7200A73460066C438 /* BetterMonitorHelper.app */,
 				CC00010100000000000000B5 /* bettermonitor */,
 				DD00010100000000000000B6 /* BetterMonitorTests.xctest */,
+				EE00010100000000000000B8 /* BetterMonitorCLITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -379,6 +410,7 @@
 				CC00010100000000000000B1 /* CLIProtocol.swift */,
 				CC00010100000000000000B2 /* CLIRequestHandler.swift */,
 				B0FA100100000000000000B1 /* ModeFavorites.swift */,
+				EE00010100000000000000B1 /* ModeCatalog.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -388,6 +420,7 @@
 			children = (
 				CC00010100000000000000B3 /* main.swift */,
 				CC00010100000000000000B4 /* CLICommand.swift */,
+				EE00010100000000000000B2 /* ModeListOutputFormatter.swift */,
 			);
 			path = BetterMonitorCLI;
 			sourceTree = "<group>";
@@ -454,8 +487,21 @@
 				DD00010100000000000000BA /* AccessibilityConsentTests.swift */,
 				DD00010100000000000000B9 /* TahoeHUDTests.swift */,
 				B0FA100100000000000000B2 /* ModeFavoritesTests.swift */,
+				EE00010100000000000000B9 /* ModeCatalogProductionCoverageTests.swift */,
 			);
 			path = BetterMonitorTests;
+			sourceTree = "<group>";
+		};
+		EE00010100000000000000D1 /* BetterMonitorCLITests */ = {
+			isa = PBXGroup;
+			children = (
+				EE00010100000000000000B4 /* CLICommandParsingTests.swift */,
+				EE00010100000000000000B5 /* CLIProtocolTests.swift */,
+				EE00010100000000000000B6 /* ModeCatalogTests.swift */,
+				EE00010100000000000000B7 /* ModeListOutputFormatterTests.swift */,
+				EE00010100000000000000B3 /* ModeFavoriteCLIProcessorTests.swift */,
+			);
+			path = BetterMonitorCLITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -541,6 +587,22 @@
 			productReference = DD00010100000000000000B6 /* BetterMonitorTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		EE00010100000000000000E1 /* BetterMonitorCLITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EE00010100000000000000F3 /* Build configuration list for PBXNativeTarget "BetterMonitorCLITests" */;
+			buildPhases = (
+				EE00010100000000000000C1 /* Sources */,
+				EE00010100000000000000C2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BetterMonitorCLITests;
+			productName = BetterMonitorCLITests;
+			productReference = EE00010100000000000000B8 /* BetterMonitorCLITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -570,6 +632,9 @@
 						CreatedOnToolsVersion = 15.0;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 56754EAA1D9A4016007BCDC5;
+					};
+					EE00010100000000000000E1 = {
+						CreatedOnToolsVersion = 15.0;
 					};
 				};
 			};
@@ -615,6 +680,7 @@
 				F06792E6200A73460066C438 /* BetterMonitorHelper */,
 				CC00010100000000000000E1 /* BetterMonitorCLI */,
 				DD00010100000000000000E1 /* BetterMonitorTests */,
+				EE00010100000000000000E1 /* BetterMonitorCLITests */,
 			);
 		};
 /* End PBXProject section */
@@ -781,6 +847,7 @@
 				CC00010100000000000000A1 /* CLIProtocol.swift in Sources */,
 				CC00010100000000000000A2 /* CLIRequestHandler.swift in Sources */,
 				B0FA100100000000000000A1 /* ModeFavorites.swift in Sources */,
+				EE00010100000000000000A1 /* ModeCatalog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -800,6 +867,7 @@
 				CC00010100000000000000A4 /* CLICommand.swift in Sources */,
 				CC00010100000000000000A5 /* CLIProtocol.swift in Sources */,
 				B0FA100100000000000000A2 /* ModeFavorites.swift in Sources */,
+				EE00010100000000000000A3 /* ModeListOutputFormatter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -819,6 +887,24 @@
 				DD00010100000000000000A7 /* CLIProtocol.swift in Sources */,
 				B0FA100100000000000000A3 /* ModeFavoritesTests.swift in Sources */,
 				B0FA100100000000000000A4 /* ModeFavorites.swift in Sources */,
+				EE00010100000000000000AE /* ModeCatalogProductionCoverageTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE00010100000000000000C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE00010100000000000000A4 /* CLICommandParsingTests.swift in Sources */,
+				EE00010100000000000000A5 /* CLIProtocolTests.swift in Sources */,
+				EE00010100000000000000A6 /* ModeCatalogTests.swift in Sources */,
+				EE00010100000000000000A7 /* ModeListOutputFormatterTests.swift in Sources */,
+				EE00010100000000000000AD /* ModeFavoriteCLIProcessorTests.swift in Sources */,
+				EE00010100000000000000A8 /* CLICommand.swift in Sources */,
+				EE00010100000000000000A9 /* CLIProtocol.swift in Sources */,
+				EE00010100000000000000AA /* ModeFavorites.swift in Sources */,
+				EE00010100000000000000AB /* ModeCatalog.swift in Sources */,
+				EE00010100000000000000AC /* ModeListOutputFormatter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1240,6 +1326,36 @@
 			};
 			name = Release;
 		};
+		EE00010100000000000000F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = app.bettermonitor.BetterMonitorCLITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.5;
+			};
+			name = Debug;
+		};
+		EE00010100000000000000F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = app.bettermonitor.BetterMonitorCLITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.5;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1284,6 +1400,15 @@
 			buildConfigurations = (
 				DD00010100000000000000F1 /* Debug */,
 				DD00010100000000000000F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EE00010100000000000000F3 /* Build configuration list for PBXNativeTarget "BetterMonitorCLITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE00010100000000000000F1 /* Debug */,
+				EE00010100000000000000F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

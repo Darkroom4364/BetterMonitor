@@ -40,7 +40,7 @@ class ReplyHandler: NSObject {
         print(jsonString)
       }
     } else {
-      formatOutput(action: command.action, property: command.property, data: data)
+      hasErrors = formatOutput(action: command.action, property: command.property, data: data)
     }
     CFRunLoopStop(CFRunLoopGetMain())
   }
@@ -76,10 +76,12 @@ exit(handler.hasErrors ? 1 : 0)
 
 // MARK: - Output Formatting
 
-func formatOutput(action: CLIAction, property: CLIProperty?, data: [[String: Any]]) {
+func formatOutput(action: CLIAction, property: CLIProperty?, data: [[String: Any]]) -> Bool {
+  var hasErrors = false
   for item in data {
     if let error = item["error"] as? String {
       CLICommand.printError(error)
+      hasErrors = true
       continue
     }
 
@@ -126,6 +128,15 @@ func formatOutput(action: CLIAction, property: CLIProperty?, data: [[String: Any
       let mode = item["mode"] as? String ?? "Unknown mode"
       print("\(display): \(name) — \(mode)")
 
+
+    case .modeList:
+      switch ModeListOutputFormatter.line(from: item) {
+      case let .success(line):
+        print(line)
+      case let .failure(error):
+        CLICommand.printError(error.localizedDescription)
+        hasErrors = true
+      }
     case .modeFavoriteSave, .modeFavoriteApply, .modeFavoriteDelete:
       let display = item["display"] as? String ?? "Unknown"
       let name = item["name"] as? String ?? "Unnamed"
@@ -133,4 +144,5 @@ func formatOutput(action: CLIAction, property: CLIProperty?, data: [[String: Any
       print("\(display): \(name) \(operation)")
     }
   }
+  return hasErrors
 }

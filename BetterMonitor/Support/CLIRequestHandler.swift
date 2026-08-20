@@ -16,6 +16,8 @@ private extension CLIProperty {
 
 
 class CLIRequestHandler {
+  private let modeCatalog = ModeCatalog(reader: CoreGraphicsModeFavoriteController())
+
   init() {
     DistributedNotificationCenter.default().addObserver(
       self,
@@ -49,6 +51,8 @@ class CLIRequestHandler {
         result = self.handleGet(userInfo: userInfo)
       case .set:
         result = self.handleSet(userInfo: userInfo)
+      case .modeList:
+        result = self.handleModeList(userInfo: userInfo)
       case .modeFavoriteList, .modeFavoriteSave, .modeFavoriteApply, .modeFavoriteDelete:
         result = self.handleModeFavorite(action: action, userInfo: userInfo)
       }
@@ -217,6 +221,13 @@ class CLIRequestHandler {
       "inputValue": Int(input),
       "queued": true,
     ]]
+  }
+
+  private func handleModeList(userInfo: [AnyHashable: Any]) -> [[String: Any]] {
+    let targets = DisplayManager.shared.getAllDisplays().map {
+      ModeCatalogTarget(identifier: $0.identifier, name: $0.name)
+    }
+    return ModeCatalogRequestProcessor(catalog: self.modeCatalog).handle(userInfo: userInfo, targets: targets)
   }
 
   private func handleModeFavorite(action: CLIAction, userInfo: [AnyHashable: Any]) -> [[String: Any]] {

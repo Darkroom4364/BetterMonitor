@@ -26,6 +26,7 @@ enum CLIAction: String {
   case modeFavoriteSave = "mode-favorite-save"
   case modeFavoriteApply = "mode-favorite-apply"
   case modeFavoriteDelete = "mode-favorite-delete"
+  case modeList = "mode-list"
 }
 
 enum CLIProperty: String {

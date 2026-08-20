@@ -137,9 +137,12 @@ final class UserDefaultsModeFavoriteStorage: ModeFavoriteStoring {
   }
 }
 
-protocol ModeFavoriteModeControlling {
-  func currentModeSignature(displayID: CGDirectDisplayID) -> DisplayModeSignature?
+protocol OfferedDisplayModeReading {
   func offeredModeSignatures(displayID: CGDirectDisplayID) -> [DisplayModeSignature]?
+}
+
+protocol ModeFavoriteModeControlling: OfferedDisplayModeReading {
+  func currentModeSignature(displayID: CGDirectDisplayID) -> DisplayModeSignature?
   func setMode(displayID: CGDirectDisplayID, signature: DisplayModeSignature) -> Bool
 }
 
@@ -452,7 +455,7 @@ final class ModeFavoriteCLIProcessor {
           result = manager.apply(name: name, for: target)
         case .modeFavoriteDelete:
           result = manager.delete(name: name, for: target)
-        case .list, .get, .set, .modeFavoriteList:
+        case .list, .get, .set, .modeFavoriteList, .modeList:
           fatalError("Unexpected action")
         }
         switch result {
@@ -465,7 +468,7 @@ final class ModeFavoriteCLIProcessor {
           case .modeFavoriteSave: operation = "saved"
           case .modeFavoriteApply: operation = "applied"
           case .modeFavoriteDelete: operation = "deleted"
-          case .list, .get, .set, .modeFavoriteList: fatalError("Unexpected action")
+          case .list, .get, .set, .modeFavoriteList, .modeList: fatalError("Unexpected action")
           }
           return [[
             "name": favorite.name,
@@ -477,7 +480,7 @@ final class ModeFavoriteCLIProcessor {
         case let .failure(error):
           return [["name": target.name, "error": error.localizedDescription]]
         }
-      case .list, .get, .set:
+      case .list, .get, .set, .modeList:
         return [["error": "Invalid mode favorite command"]]
       }
     }
