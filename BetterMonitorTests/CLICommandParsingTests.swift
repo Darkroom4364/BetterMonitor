@@ -121,6 +121,38 @@ class CLICommandParsingTests: XCTestCase {
     XCTAssertEqual(cmd?.action, .list)
   }
 
+  func testParseModeListWithDisplayIDAndJSON() {
+    let cmd = CLICommand.parse(["bettermonitor", "mode-list", "--display", "42", "--json"])
+
+    XCTAssertEqual(cmd?.action, .modeList)
+    XCTAssertEqual(cmd?.displayId, 42)
+    XCTAssertNil(cmd?.displayName)
+    XCTAssertNil(cmd?.favoriteName)
+    XCTAssertNil(cmd?.property)
+    XCTAssertNil(cmd?.value)
+    XCTAssertTrue(cmd?.jsonOutput ?? false)
+    XCTAssertEqual(cmd?.userInfo[CLIKey.displayId] as? UInt32, 42)
+  }
+
+  func testParseModeListWithDisplayName() {
+    let cmd = CLICommand.parse(["bettermonitor", "--json", "mode-list", "--display", "Café"])
+
+    XCTAssertEqual(cmd?.action, .modeList)
+    XCTAssertEqual(cmd?.displayName, "Café")
+    XCTAssertNil(cmd?.displayId)
+    XCTAssertTrue(cmd?.jsonOutput ?? false)
+  }
+
+  func testModeListAcceptsDashPrefixedDisplayName() {
+    guard let command = CLICommand.parse(["bettermonitor", "mode-list", "--display", "-Panel"]) else {
+      return XCTFail("parse returned nil")
+    }
+
+    XCTAssertEqual(command.action, .modeList)
+    XCTAssertEqual(command.displayName, "-Panel")
+    XCTAssertNil(command.displayId)
+  }
+
   // MARK: - Error cases
 
   func testEmptyArgs() {
@@ -181,6 +213,23 @@ class CLICommandParsingTests: XCTestCase {
   func testDisplayFlagMissingValue() {
     let cmd = CLICommand.parse(["bettermonitor", "--display"])
     XCTAssertNil(cmd)
+  }
+
+  func testModeListRequiresExactlyOneDisplayTarget() {
+    XCTAssertNil(CLICommand.parse(["bettermonitor", "mode-list"]))
+    XCTAssertNil(CLICommand.parse(["bettermonitor", "mode-list", "--display", "C49", "--display", "42"]))
+    XCTAssertNil(CLICommand.parse(["bettermonitor", "mode-list", "extra", "--display", "C49"]))
+    XCTAssertNil(CLICommand.parse(["bettermonitor", "mode-list", "--display", "   "]))
+  }
+
+  func testDisplayFlagRejectsOptionTokensAsValues() {
+    for option in ["--json", "--display", "--help", "-h"] {
+      XCTAssertNil(CLICommand.parse(["bettermonitor", "list", "--display", option]))
+    }
+  }
+
+  func testModeListRejectsOverflowedDecimalDisplayID() {
+    XCTAssertNil(CLICommand.parse(["bettermonitor", "mode-list", "--display", "4294967296"]))
   }
 
   // MARK: - userInfo serialization

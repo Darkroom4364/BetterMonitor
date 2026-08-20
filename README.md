@@ -64,6 +64,9 @@ bettermonitor set brightness 70
 # JSON output
 bettermonitor list --json
 
+# List currently offered usable desktop modes
+bettermonitor mode-list --display C49
+
 # Inspect or switch an external display input (target required for switching)
 bettermonitor get input --display C49
 bettermonitor set input hdmi1 --display C49
@@ -83,6 +86,7 @@ Mode favorites preserve the current display's exact offered mode (logical and pi
 refresh rate, pixel encoding, desktop usability, IO flags, and HiDPI state). They require a complete,
 non-sentinel vendor/model/serial identity; they are unavailable rather than persisted when it is absent.
 They do not create custom resolutions, unlock additional HiDPI modes, or complete the broader display-mode roadmap.
+`mode-list` is read-only, requires exactly one live display name or numeric ID, lists offered usable desktop modes, and does not save, apply, or change a mode.
 
 ## Getting started
 

@@ -7,13 +7,24 @@ class CLIProtocolTests: XCTestCase {
   // MARK: - CLIAction
 
   func testCLIActionRawValues() {
-    XCTAssertEqual(CLIAction.list.rawValue, "list")
-    XCTAssertEqual(CLIAction.get.rawValue, "get")
-    XCTAssertEqual(CLIAction.set.rawValue, "set")
+    let expected: [(CLIAction, String)] = [
+      (.list, "list"),
+      (.get, "get"),
+      (.set, "set"),
+      (.modeFavoriteList, "mode-favorite-list"),
+      (.modeFavoriteSave, "mode-favorite-save"),
+      (.modeFavoriteApply, "mode-favorite-apply"),
+      (.modeFavoriteDelete, "mode-favorite-delete"),
+      (.modeList, "mode-list"),
+    ]
+
+    for (action, rawValue) in expected {
+      XCTAssertEqual(action.rawValue, rawValue)
+    }
   }
 
   func testCLIActionRoundtrip() {
-    for action: CLIAction in [.list, .get, .set] {
+    for action: CLIAction in [.list, .get, .set, .modeFavoriteList, .modeFavoriteSave, .modeFavoriteApply, .modeFavoriteDelete, .modeList] {
       XCTAssertEqual(CLIAction(rawValue: action.rawValue), action)
     }
   }
