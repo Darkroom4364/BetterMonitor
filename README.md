@@ -76,7 +76,7 @@ Input selection uses DDC VCP 0x60 and queues the request. CLI success confirms t
 
 1. Download and copy BetterMonitor to your Applications folder
 2. Launch the app
-3. Grant Accessibility access when prompted (required for keyboard brightness/media keys)
+3. Accessibility access is requested only when you enable or request native Apple media-key controls; menu sliders and custom shortcuts do not need it.
 4. Use your keyboard or the menubar sliders to control displays
 5. Open Settings for customization (enable `Show advanced settings` for more options)
 
